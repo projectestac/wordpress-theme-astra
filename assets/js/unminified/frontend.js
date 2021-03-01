@@ -135,8 +135,8 @@ var astraTriggerEvent = function astraTriggerEvent( el, typeArg ) {
 
 		mobileHeader = main_header_masthead.querySelector("#ast-mobile-header");
 	}
-	
-	if ( '' !== mobileHeader ) {
+
+	if ( '' !== mobileHeader && null !== mobileHeader ) {
 
 		mobileHeaderType = mobileHeader.dataset.type;
 	}
@@ -244,8 +244,8 @@ var astraTriggerEvent = function astraTriggerEvent( el, typeArg ) {
 	function init( mobileHeaderType ) {
 
 		var popupTrigger = document.querySelectorAll( '.menu-toggle' );
-		
-		if ( undefined === mobileHeaderType ) {
+
+		if ( undefined === mobileHeaderType && null !== main_header_masthead ) {
 
 			mobileHeader = main_header_masthead.querySelector("#ast-mobile-header");
 			if( ! mobileHeader ) {
@@ -305,7 +305,7 @@ var astraTriggerEvent = function astraTriggerEvent( el, typeArg ) {
 		}
 
 		accountPopupTrigger();
-		
+
 	}
 
 	window.addEventListener( 'load', function() {
@@ -411,7 +411,7 @@ var astraTriggerEvent = function astraTriggerEvent( el, typeArg ) {
 
 			var header_account__close_trigger =  document.getElementById( 'ast-hb-login-close' );
 			var login_popup =  document.getElementById( 'ast-hb-account-login-wrap' );
-			
+
 			header_account_trigger.onclick = function( event ) {
 				event.preventDefault();
 				event.stopPropagation();
