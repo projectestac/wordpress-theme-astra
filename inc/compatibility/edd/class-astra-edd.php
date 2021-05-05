@@ -92,7 +92,7 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 		 */
 		public function header_cart_icon_markup() {
 
-			if ( ! Astra_Builder_Helper::$is_header_footer_builder_active && ! defined( 'ASTRA_EXT_VER' ) ) {
+			if ( false === Astra_Builder_Helper::$is_header_footer_builder_active && ! defined( 'ASTRA_EXT_VER' ) ) {
 				return;
 			}
 
@@ -121,14 +121,14 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 			$cart_items          = count( edd_get_cart_contents() );
 			$cart_contents_count = $cart_items;
 
-			// Cart Icon markup with total number of items.
 			$cart_icon = sprintf(
-				'<span class="astra-icon ast-icon-shopping-%1$s %2$s"	
+				'<span class="astra-icon ast-icon-shopping-%1$s %2$s"
 							%3$s
-						></span>',
+						>%4$s</span>',
 				( $icon ) ? $icon : '',
 				( $cart_count_display ) ? '' : 'no-cart-total',
-				( $cart_count_display ) ? 'data-cart-total="' . $cart_contents_count . '"' : ''
+				( $cart_count_display ) ? 'data-cart-total="' . $cart_contents_count . '"' : '',
+				( $icon ) ? ( ( false !== Astra_Icons::is_svg_icons() ) ? Astra_Icons::get_icons( $icon ) : '' ) : ''
 			);
 
 			// Theme's default icon with cart title and cart total.
@@ -163,7 +163,7 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 		 */
 		public function header_cart_icon_class( $classes ) {
 
-			if ( ! Astra_Builder_Helper::$is_header_footer_builder_active && ! defined( 'ASTRA_EXT_VER' ) ) {
+			if ( false === Astra_Builder_Helper::$is_header_footer_builder_active && ! defined( 'ASTRA_EXT_VER' ) ) {
 				return;
 			}
 
@@ -413,7 +413,7 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 			$cart_menu_classes = apply_filters( 'astra_edd_cart_in_menu_class', array( 'ast-menu-cart-with-border' ) );
 
 			ob_start();
-			if ( is_customize_preview() && Astra_Builder_Helper::$is_header_footer_builder_active ) { 
+			if ( is_customize_preview() && ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ) {
 				Astra_Builder_UI_Controller::render_customizer_edit_button();
 			}
 			?>
@@ -444,6 +444,10 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 
 			$view_shopping_cart = apply_filters( 'astra_edd_view_shopping_cart_title', __( 'View your shopping cart', 'astra' ) );
 			$edd_cart_link      = apply_filters( 'astra_edd_cart_link', edd_get_checkout_uri() );
+
+			if ( is_customize_preview() ) {
+				$edd_cart_link = '#';
+			}
 			?>
 			<a class="ast-edd-cart-container" href="<?php echo esc_url( $edd_cart_link ); ?>" title="<?php echo esc_attr( $view_shopping_cart ); ?>">
 
@@ -453,7 +457,7 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 						if ( apply_filters( 'astra_edd_default_header_cart_icon', true ) ) {
 							?>
 							<div class="ast-edd-cart-menu-wrap">
-								<span class="count"> 
+								<span class="count">
 									<?php
 									if ( apply_filters( 'astra_edd_header_cart_total', true ) ) {
 										$cart_items = count( edd_get_cart_contents() );
@@ -480,7 +484,7 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 		 * @since 1.5.5
 		 */
 		public function add_styles( $assets ) {
-			$assets['css']['astra-edd'] = 'compatibility/edd';
+			$assets['css']['astra-edd'] = Astra_Builder_Helper::apply_flex_based_css() ? 'compatibility/edd-grid' : 'compatibility/edd';
 			return $assets;
 		}
 
@@ -493,93 +497,140 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 
 			$is_site_rtl = is_rtl();
 
-			$max_tablet_edd_css = array(
-				'.tablet-columns-1 .ast-edd-archive-article' => array(
-					'width' => '100%',
-				),
-				'.tablet-columns-2 .ast-edd-archive-article' => array(
-					'width' => '47.6%',
-					'width' => 'calc(50% - 10px)',
-				),
-				'.tablet-columns-3 .ast-edd-archive-article, .edd_downloads_list[class*="edd_download_columns_"] .edd_download' => array(
-					'width' => '30.2%',
-					'width' => 'calc(33.33% - 14px)',
-				),
-				'.tablet-columns-4 .ast-edd-archive-article' => array(
-					'width' => '21.5%',
-					'width' => 'calc(25% - 15px)',
-				),
-				'.tablet-columns-5 .ast-edd-archive-article' => array(
-					'width' => '16.2%',
-					'width' => 'calc(20% - 16px)',
-				),
-				'.tablet-columns-6 .ast-edd-archive-article' => array(
-					'width' => '12.7%',
-					'width' => 'calc(16.66% - 16.66px)',
-				),
-			);
-
-			/* Parse CSS from array() -> max-width: (tablet-breakpoint) px & min-width: (mobile-breakpoint + 1) px */
-			$edd_css_output = astra_parse_css( $max_tablet_edd_css, astra_get_mobile_breakpoint( '', 1 ), astra_get_tablet_breakpoint() );
-
-			if ( $is_site_rtl ) {
-				$max_tablet_edd_lang_direction_css = array(
-					'[class*="columns-"] .ast-edd-archive-article:nth-child(n)' => array(
-						'margin-left' => '20px',
-						'clear'       => 'none',
+			if ( ! Astra_Builder_Helper::apply_flex_based_css() ) {
+				$max_tablet_edd_css = array(
+					'.tablet-columns-1 .ast-edd-archive-article' => array(
+						'width' => '100%',
 					),
-					'.tablet-columns-2 .ast-edd-archive-article:nth-child(2n), .tablet-columns-3 .ast-edd-archive-article:nth-child(3n), .tablet-columns-4 .ast-edd-archive-article:nth-child(4n), .tablet-columns-5 .ast-edd-archive-article:nth-child(5n), .tablet-columns-6 .ast-edd-archive-article:nth-child(6n), .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(3n)' => array(
-						'margin-left' => '0',
-						'clear'       => 'left',
+					'.tablet-columns-2 .ast-edd-archive-article' => array(
+						'width' => '47.6%',
+						'width' => 'calc(50% - 10px)',
 					),
-					'.tablet-columns-2 .ast-edd-archive-article:nth-child(2n+1), .tablet-columns-3 .ast-edd-archive-article:nth-child(3n+1), .tablet-columns-4 .ast-edd-archive-article:nth-child(4n+1), .tablet-columns-5 .ast-edd-archive-article:nth-child(5n+1), .tablet-columns-6 .ast-edd-archive-article:nth-child(6n+1), .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(3n+1)' => array(
-						'clear' => 'right',
+					'.tablet-columns-3 .ast-edd-archive-article, .edd_downloads_list[class*="edd_download_columns_"] .edd_download' => array(
+						'width' => '30.2%',
+						'width' => 'calc(33.33% - 14px)',
+					),
+					'.tablet-columns-4 .ast-edd-archive-article' => array(
+						'width' => '21.5%',
+						'width' => 'calc(25% - 15px)',
+					),
+					'.tablet-columns-5 .ast-edd-archive-article' => array(
+						'width' => '16.2%',
+						'width' => 'calc(20% - 16px)',
+					),
+					'.tablet-columns-6 .ast-edd-archive-article' => array(
+						'width' => '12.7%',
+						'width' => 'calc(16.66% - 16.66px)',
 					),
 				);
 			} else {
-				$max_tablet_edd_lang_direction_css = array(
-					'[class*="columns-"] .ast-edd-archive-article:nth-child(n)' => array(
-						'margin-right' => '20px',
-						'clear'        => 'none',
+				$max_tablet_edd_css = array(
+					'.tablet-columns-1 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(1, 1fr)',
 					),
-					'.tablet-columns-2 .ast-edd-archive-article:nth-child(2n), .tablet-columns-3 .ast-edd-archive-article:nth-child(3n), .tablet-columns-4 .ast-edd-archive-article:nth-child(4n), .tablet-columns-5 .ast-edd-archive-article:nth-child(5n), .tablet-columns-6 .ast-edd-archive-article:nth-child(6n), .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(3n)' => array(
-						'margin-right' => '0',
-						'clear'        => 'right',
+					'.tablet-columns-2 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(2, 1fr)',
 					),
-					'.tablet-columns-2 .ast-edd-archive-article:nth-child(2n+1), .tablet-columns-3 .ast-edd-archive-article:nth-child(3n+1), .tablet-columns-4 .ast-edd-archive-article:nth-child(4n+1), .tablet-columns-5 .ast-edd-archive-article:nth-child(5n+1), .tablet-columns-6 .ast-edd-archive-article:nth-child(6n+1), .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(3n+1)' => array(
-						'clear' => 'left',
+					'.tablet-columns-3 .ast-edd-container, .edd_downloads_list[class*="edd_download_columns_"] .edd_download' => array(
+						'grid-template-columns' => 'repeat(3, 1fr)',
+					),
+					'.tablet-columns-4 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(4, 1fr)',
+					),
+					'.tablet-columns-5 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(5, 1fr)',
+					),
+					'.tablet-columns-6 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(6, 1fr)',
 					),
 				);
 			}
 
 			/* Parse CSS from array() -> max-width: (tablet-breakpoint) px & min-width: (mobile-breakpoint + 1) px */
-			$edd_css_output .= astra_parse_css( $max_tablet_edd_lang_direction_css, astra_get_mobile_breakpoint( '', 1 ), astra_get_tablet_breakpoint() );
+			$edd_css_output = astra_parse_css( $max_tablet_edd_css, astra_get_mobile_breakpoint( '', 1 ), astra_get_tablet_breakpoint() );
 
-			$mobile_edd_css = array(
-				'.mobile-columns-1 .ast-edd-archive-article' => array(
-					'width' => '100%',
-				),
-				'.mobile-columns-3 .ast-edd-archive-article' => array(
-					'width' => '28.2%',
-					'width' => 'calc(33.33% - 14px)',
-				),
-				'.mobile-columns-4 .ast-edd-archive-article' => array(
-					'width' => '19%',
-					'width' => 'calc(25% - 15px)',
-				),
-				'.mobile-columns-5 .ast-edd-archive-article' => array(
-					'width' => '13%',
-					'width' => 'calc(20% - 16px)',
-				),
-				'.mobile-columns-6 .ast-edd-archive-article' => array(
-					'width' => '10.2%',
-					'width' => 'calc(16.66% - 16.66px)',
-				),
-				'.edd_downloads_list[class*="edd_download_columns_"] .edd_download, .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(2n+1), .mobile-columns-2 .ast-edd-archive-article' => array(
-					'width' => '46.1%',
-					'width' => 'calc(50% - 10px)',
-				),
-			);
+			if ( ! Astra_Builder_Helper::apply_flex_based_css() ) {
+				if ( $is_site_rtl ) {
+					$max_tablet_edd_lang_direction_css = array(
+						'[class*="columns-"] .ast-edd-archive-article:nth-child(n)' => array(
+							'margin-left' => '20px',
+							'clear'       => 'none',
+						),
+						'.tablet-columns-2 .ast-edd-archive-article:nth-child(2n), .tablet-columns-3 .ast-edd-archive-article:nth-child(3n), .tablet-columns-4 .ast-edd-archive-article:nth-child(4n), .tablet-columns-5 .ast-edd-archive-article:nth-child(5n), .tablet-columns-6 .ast-edd-archive-article:nth-child(6n), .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(3n)' => array(
+							'margin-left' => '0',
+							'clear'       => 'left',
+						),
+						'.tablet-columns-2 .ast-edd-archive-article:nth-child(2n+1), .tablet-columns-3 .ast-edd-archive-article:nth-child(3n+1), .tablet-columns-4 .ast-edd-archive-article:nth-child(4n+1), .tablet-columns-5 .ast-edd-archive-article:nth-child(5n+1), .tablet-columns-6 .ast-edd-archive-article:nth-child(6n+1), .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(3n+1)' => array(
+							'clear' => 'right',
+						),
+					);
+				} else {
+					$max_tablet_edd_lang_direction_css = array(
+						'[class*="columns-"] .ast-edd-archive-article:nth-child(n)' => array(
+							'margin-right' => '20px',
+							'clear'        => 'none',
+						),
+						'.tablet-columns-2 .ast-edd-archive-article:nth-child(2n), .tablet-columns-3 .ast-edd-archive-article:nth-child(3n), .tablet-columns-4 .ast-edd-archive-article:nth-child(4n), .tablet-columns-5 .ast-edd-archive-article:nth-child(5n), .tablet-columns-6 .ast-edd-archive-article:nth-child(6n), .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(3n)' => array(
+							'margin-right' => '0',
+							'clear'        => 'right',
+						),
+						'.tablet-columns-2 .ast-edd-archive-article:nth-child(2n+1), .tablet-columns-3 .ast-edd-archive-article:nth-child(3n+1), .tablet-columns-4 .ast-edd-archive-article:nth-child(4n+1), .tablet-columns-5 .ast-edd-archive-article:nth-child(5n+1), .tablet-columns-6 .ast-edd-archive-article:nth-child(6n+1), .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(3n+1)' => array(
+							'clear' => 'left',
+						),
+					);
+				}   
+				/* Parse CSS from array() -> max-width: (tablet-breakpoint) px & min-width: (mobile-breakpoint + 1) px */
+				$edd_css_output .= astra_parse_css( $max_tablet_edd_lang_direction_css, astra_get_mobile_breakpoint( '', 1 ), astra_get_tablet_breakpoint() );
+			}
+
+			if ( ! Astra_Builder_Helper::apply_flex_based_css() ) {
+				$mobile_edd_css = array(
+					'.mobile-columns-1 .ast-edd-archive-article' => array(
+						'width' => '100%',
+					),
+					'.mobile-columns-3 .ast-edd-archive-article' => array(
+						'width' => '28.2%',
+						'width' => 'calc(33.33% - 14px)',
+					),
+					'.mobile-columns-4 .ast-edd-archive-article' => array(
+						'width' => '19%',
+						'width' => 'calc(25% - 15px)',
+					),
+					'.mobile-columns-5 .ast-edd-archive-article' => array(
+						'width' => '13%',
+						'width' => 'calc(20% - 16px)',
+					),
+					'.mobile-columns-6 .ast-edd-archive-article' => array(
+						'width' => '10.2%',
+						'width' => 'calc(16.66% - 16.66px)',
+					),
+					'.edd_downloads_list[class*="edd_download_columns_"] .edd_download, .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(2n+1), .mobile-columns-2 .ast-edd-archive-article' => array(
+						'width' => '46.1%',
+						'width' => 'calc(50% - 10px)',
+					),
+				);
+			} else {
+				$mobile_edd_css = array(
+					'.mobile-columns-1 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(1, 1fr)',
+					),
+					'.mobile-columns-3 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(3, 1fr)',
+					),
+					'.mobile-columns-4 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(4, 1fr)',
+					),
+					'.mobile-columns-5 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(5, 1fr)',
+					),
+					'.mobile-columns-6 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(6, 1fr)',
+					),
+					'.edd_downloads_list[class*="edd_download_columns_"] .edd_download, .edd_downloads_list[class*="edd_download_columns_"] .edd_download:nth-child(2n+1), .mobile-columns-2 .ast-edd-container' => array(
+						'grid-template-columns' => 'repeat(2, 1fr)',
+					),
+				);
+			}
 
 			/* Parse CSS from array() -> max-width: (mobile-breakpoint) px */
 			$edd_css_output .= astra_parse_css( $mobile_edd_css, '', astra_get_mobile_breakpoint() );
@@ -684,7 +735,6 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 			if ( empty( $btn_h_color ) ) {
 				$btn_h_color = astra_get_foreground_color( $link_h_color );
 			}
-			$btn_bg_color   = astra_get_option( 'button-bg-color', $theme_color );
 			$btn_bg_h_color = astra_get_option( 'button-bg-h-color', $link_h_color );
 
 			$btn_border_radius = astra_get_option( 'button-radius' );
@@ -692,56 +742,63 @@ if ( ! class_exists( 'Astra_Edd' ) ) :
 			$cart_h_color = astra_get_foreground_color( $link_h_color );
 
 			$css_output = array(
-				/**
-				 * Cart in menu
-				 */
-				'.ast-edd-site-header-cart a'          => array(
-					'color' => esc_attr( $text_color ),
-				),
-
-				'.ast-edd-site-header-cart a:focus, .ast-edd-site-header-cart a:hover, .ast-edd-site-header-cart .current-menu-item a' => array(
-					'color' => esc_attr( $text_color ),
-				),
-
-				'.ast-edd-cart-menu-wrap .count, .ast-edd-cart-menu-wrap .count:after' => array(
-					'border-color' => esc_attr( $link_color ),
-					'color'        => esc_attr( $link_color ),
-				),
-
-				'.ast-edd-cart-menu-wrap:hover .count' => array(
-					'color'            => esc_attr( $cart_h_color ),
-					'background-color' => esc_attr( $link_color ),
-				),
 				// Loading effect color.
 				'a.edd-add-to-cart.white .edd-loading, .edd-discount-loader.edd-loading, .edd-loading-ajax.edd-loading' => array(
 					'border-left-color' => esc_attr( $cart_h_color ),
 				),
-
-				'.ast-edd-site-header-cart .widget_edd_cart_widget .cart-total' => array(
-					'color' => esc_attr( $link_color ),
-				),
-
-				'.ast-edd-site-header-cart .widget_edd_cart_widget .edd_checkout a, .widget_edd_cart_widget .edd_checkout a' => array(
-					'color'            => $btn_h_color,
-					'border-color'     => $btn_bg_h_color,
-					'background-color' => $btn_bg_h_color,
-					'border-radius'    => astra_get_css_value( $btn_border_radius, 'px' ),
-				),
-				'.site-header .ast-edd-site-header-cart .ast-edd-site-header-cart-widget .edd_checkout a, .site-header .ast-edd-site-header-cart .ast-edd-site-header-cart-widget .edd_checkout a:hover' => array(
-					'color' => $btn_color,
-				),
-				'.below-header-user-select .ast-edd-site-header-cart .widget, .ast-above-header-section .ast-edd-site-header-cart .widget a, .below-header-user-select .ast-edd-site-header-cart .widget_edd_cart_widget a' => array(
-					'color' => $text_color,
-				),
-				'.below-header-user-select .ast-edd-site-header-cart .widget_edd_cart_widget a:hover, .ast-above-header-section .ast-edd-site-header-cart .widget_edd_cart_widget a:hover, .below-header-user-select .ast-edd-site-header-cart .widget_edd_cart_widget a.remove:hover, .ast-above-header-section .ast-edd-site-header-cart .widget_edd_cart_widget a.remove:hover' => array(
-					'color' => esc_attr( $link_color ),
-				),
-				'.widget_edd_cart_widget a.edd-remove-from-cart:hover:after' => array(
-					'color'            => esc_attr( $link_color ),
-					'border-color'     => esc_attr( $link_color ),
-					'background-color' => esc_attr( '#ffffff' ),
-				),
 			);
+
+			if ( false === Astra_Builder_Helper::$is_header_footer_builder_active ) {
+
+				$compat_css_desktop = array(
+					/**
+					 * Cart in menu
+					 */
+					'.ast-edd-site-header-cart a'          => array(
+						'color' => esc_attr( $text_color ),
+					),
+
+					'.ast-edd-site-header-cart a:focus, .ast-edd-site-header-cart a:hover, .ast-edd-site-header-cart .current-menu-item a' => array(
+						'color' => esc_attr( $text_color ),
+					),
+
+					'.ast-edd-cart-menu-wrap .count, .ast-edd-cart-menu-wrap .count:after' => array(
+						'border-color' => esc_attr( $link_color ),
+						'color'        => esc_attr( $link_color ),
+					),
+
+					'.ast-edd-cart-menu-wrap:hover .count' => array(
+						'color'            => esc_attr( $cart_h_color ),
+						'background-color' => esc_attr( $link_color ),
+					),
+					'.ast-edd-site-header-cart .widget_edd_cart_widget .cart-total' => array(
+						'color' => esc_attr( $link_color ),
+					),
+
+					'.ast-edd-site-header-cart .widget_edd_cart_widget .edd_checkout a, .widget_edd_cart_widget .edd_checkout a' => array(
+						'color'            => $btn_h_color,
+						'border-color'     => $btn_bg_h_color,
+						'background-color' => $btn_bg_h_color,
+						'border-radius'    => astra_get_css_value( $btn_border_radius, 'px' ),
+					),
+					'.site-header .ast-edd-site-header-cart .ast-edd-site-header-cart-widget .edd_checkout a, .site-header .ast-edd-site-header-cart .ast-edd-site-header-cart-widget .edd_checkout a:hover' => array(
+						'color' => $btn_color,
+					),
+					'.below-header-user-select .ast-edd-site-header-cart .widget, .ast-above-header-section .ast-edd-site-header-cart .widget a, .below-header-user-select .ast-edd-site-header-cart .widget_edd_cart_widget a' => array(
+						'color' => $text_color,
+					),
+					'.below-header-user-select .ast-edd-site-header-cart .widget_edd_cart_widget a:hover, .ast-above-header-section .ast-edd-site-header-cart .widget_edd_cart_widget a:hover, .below-header-user-select .ast-edd-site-header-cart .widget_edd_cart_widget a.remove:hover, .ast-above-header-section .ast-edd-site-header-cart .widget_edd_cart_widget a.remove:hover' => array(
+						'color' => esc_attr( $link_color ),
+					),
+					'.widget_edd_cart_widget a.edd-remove-from-cart:hover:after' => array(
+						'color'            => esc_attr( $link_color ),
+						'border-color'     => esc_attr( $link_color ),
+						'background-color' => esc_attr( '#ffffff' ),
+					),
+				);
+
+				$css_output = array_merge( $css_output, $compat_css_desktop );
+			}
 
 			/* Parse CSS from array() */
 			$css_output = astra_parse_css( $css_output );

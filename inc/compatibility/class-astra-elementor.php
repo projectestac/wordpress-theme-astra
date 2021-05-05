@@ -120,6 +120,13 @@ if ( ! class_exists( 'Astra_Elementor' ) ) :
 
 				$dynamic_css .= $parse_css;
 			}
+			
+			$elementor_archive_page_css = array(
+				'.elementor-template-full-width .ast-container' => array(
+					'display' => 'block',
+				),
+			);
+			$dynamic_css               .= astra_parse_css( $elementor_archive_page_css );
 
 			return $dynamic_css;
 		}
@@ -132,7 +139,7 @@ if ( ! class_exists( 'Astra_Elementor' ) ) :
 		 */
 		public function elementor_default_setting() {
 
-			if ( false == astra_enable_page_builder_compatibility() || 'post' == get_post_type() ) {
+			if ( false === astra_enable_page_builder_compatibility() || 'post' == get_post_type() ) {
 				return;
 			}
 

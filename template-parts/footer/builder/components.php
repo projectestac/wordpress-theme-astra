@@ -34,50 +34,94 @@ switch ( $component_slug ) {
 
 	case 'widget-1':
 		?>
-		<aside class="footer-widget-area widget-area site-footer-focus-item" data-section="sidebar-widgets-footer-widget-1">
-			<div class="footer-widget-area-inner site-info-inner">
-				<?php
-				dynamic_sidebar( 'footer-widget-1' );
-				?>
-			</div>
-		</aside>
+		<aside
 		<?php
+		echo astra_attr(
+			'footer-widget-area-inner',
+			array(
+				'class'        => 'footer-widget-area widget-area site-footer-focus-item',
+				'data-section' => 'sidebar-widgets-footer-widget-1',
+				'aria-label'   => 'Footer Widget 1',
+			) 
+		); 
+		?>
+				>
+			<?php
+			astra_markup_open( 'footer-widget-div' );
+			astra_get_sidebar( 'footer-widget-1' );
+			astra_markup_close( 'footer-widget-div' );
+			?>
+		</aside>
+		<?php 
 		break;
 
 	case 'widget-2':
 		?>
-		<aside class="footer-widget-area widget-area site-footer-focus-item" data-section="sidebar-widgets-footer-widget-2">
-			<div class="footer-widget-area-inner site-info-inner">
-				<?php
-				dynamic_sidebar( 'footer-widget-2' );
-				?>
-			</div>
-		</aside>
+		<aside
 		<?php
+		echo astra_attr(
+			'footer-widget-area-inner',
+			array(
+				'class'        => 'footer-widget-area widget-area site-footer-focus-item',
+				'data-section' => 'sidebar-widgets-footer-widget-2',
+				'aria-label'   => 'Footer Widget 2',
+			) 
+		); 
+		?>
+		>
+			<?php
+			astra_markup_open( 'footer-widget-div' );
+			astra_get_sidebar( 'footer-widget-2' );
+			astra_markup_close( 'footer-widget-div' );
+			?>
+		</aside>
+		<?php 
 		break;
 
 	case 'widget-3':
 		?>
-		<aside class="footer-widget-area widget-area site-footer-focus-item" data-section="sidebar-widgets-footer-widget-3">
-			<div class="footer-widget-area-inner site-info-inner">
-				<?php
-				dynamic_sidebar( 'footer-widget-3' );
-				?>
-			</div>
-		</aside>
+		<aside
 		<?php
-		break;
-
-	case 'widget-4':
+		echo astra_attr(
+			'footer-widget-area-inner',
+			array(
+				'class'        => 'footer-widget-area widget-area site-footer-focus-item',
+				'data-section' => 'sidebar-widgets-footer-widget-3',
+				'aria-label'   => 'Footer Widget 3',
+			) 
+		); 
 		?>
-		<aside class="footer-widget-area widget-area site-footer-focus-item" data-section="sidebar-widgets-footer-widget-4">
-			<div class="footer-widget-area-inner site-info-inner">
-				<?php
-				dynamic_sidebar( 'footer-widget-4' );
-				?>
-			</div>
+		>
+			<?php
+			astra_markup_open( 'footer-widget-div' );
+			astra_get_sidebar( 'footer-widget-3' );
+			astra_markup_close( 'footer-widget-div' );
+			?>
 		</aside>
-		<?php
+		<?php 
+		break;
+		
+	case 'widget-4': 
+		?>
+		<aside 
+		<?php 
+		echo astra_attr(
+			'footer-widget-area-inner',
+			array(
+				'class'        => 'footer-widget-area widget-area site-footer-focus-item',
+				'data-section' => 'sidebar-widgets-footer-widget-4',
+				'aria-label'   => 'Footer Widget 4',
+			) 
+		); 
+		?>
+		>
+			<?php
+			astra_markup_open( 'footer-widget-div' );
+			astra_get_sidebar( 'footer-widget-4' );
+			astra_markup_close( 'footer-widget-div' );
+			?>
+		</aside>
+		<?php 
 		break;
 
 	case 'html-1':
@@ -112,7 +156,7 @@ switch ( $component_slug ) {
 		</div>
 		<?php
 		break;
-	
+
 
 	default:
 		do_action( 'astra_render_footer_components', $component_slug );

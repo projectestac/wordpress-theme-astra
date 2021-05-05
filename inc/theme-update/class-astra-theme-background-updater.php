@@ -73,6 +73,14 @@ if ( ! class_exists( 'Astra_Theme_Background_Updater' ) ) {
 			'3.0.1' => array(
 				'astra_clear_assets_cache',
 			),
+			'3.3.0' => array(
+				'astra_gutenberg_pattern_compatibility',
+				'astra_icons_svg_compatibility',
+				'astra_check_flex_based_css',
+			),
+			'3.4.0' => array(
+				'astra_update_cart_style',
+			),
 		);
 
 		/**

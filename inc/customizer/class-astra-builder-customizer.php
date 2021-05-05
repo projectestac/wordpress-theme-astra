@@ -30,7 +30,7 @@ final class Astra_Builder_Customizer {
 		add_action( 'customize_preview_init', array( $this, 'enqueue_customizer_preview_scripts' ) );
 		add_action( 'customize_register', array( $this, 'woo_header_configs' ), 2 );
 
-		if ( ! Astra_Builder_Helper::$is_header_footer_builder_active ) {
+		if ( false === Astra_Builder_Helper::$is_header_footer_builder_active ) {
 			return;
 		}
 
@@ -53,12 +53,11 @@ final class Astra_Builder_Customizer {
 	public function update_default_wp_configs( $wp_customize ) {
 
 		$wp_customize->get_control( 'custom_logo' )->priority     = 2;
-		$wp_customize->get_control( 'blogname' )->priority        = 7;
-		$wp_customize->get_control( 'blogdescription' )->priority = 11;
+		$wp_customize->get_control( 'blogname' )->priority        = 8;
+		$wp_customize->get_control( 'blogdescription' )->priority = 12;
 
 		$wp_customize->get_setting( 'custom_logo' )->transport     = 'postMessage';
 		$wp_customize->get_setting( 'blogdescription' )->transport = 'postMessage';
-		$wp_customize->get_setting( 'blogname' )->transport        = 'postMessage';
 
 		$wp_customize->get_section( 'title_tagline' )->panel = 'panel-header-builder-group';
 
@@ -120,22 +119,6 @@ final class Astra_Builder_Customizer {
 		unregister_sidebar( 'advanced-footer-widget-3' );
 		unregister_sidebar( 'advanced-footer-widget-4' );
 		unregister_sidebar( 'advanced-footer-widget-5' );
-	}
-
-	/**
-	 * Function to remove old Header and Footer panels from Plugin.
-	 *
-	 * @since 3.0.0
-	 * @return void
-	 */
-	public function remove_old_header_footer() {
-
-		self::$removed_panels[] = 'panel-header-group';
-
-		self::$removed_sections[] = 'section-footer-small';
-		self::$removed_sections[] = 'section-footer-group';
-		self::$removed_sections[] = 'section-footer-adv';
-
 	}
 
 	/**
@@ -258,7 +241,7 @@ final class Astra_Builder_Customizer {
 
 		require_once $header_components_path . '/above-header/class-astra-above-header.php';
 		require_once $header_components_path . '/below-header/class-astra-below-header.php';
-		
+
 		if ( class_exists( 'Astra_Woocommerce' ) ) {
 			require_once $header_components_path . '/woo-cart/class-astra-header-woo-cart-component.php';
 		}

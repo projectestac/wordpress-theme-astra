@@ -41,17 +41,16 @@ class Astra_Footer_Social_Icons_Component_Loader {
 		/* Directory and Extension */
 		$dir_name    = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
 		$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
-		wp_enqueue_script( 'astra-footer-social-icons-customizer-preview-js', ASTRA_BUILDER_FOOTER_SOCIAL_ICONS_URI . '/assets/js/customizer-preview.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
+		wp_enqueue_script( 'astra-footer-social-icons-customizer-preview-js', ASTRA_BUILDER_FOOTER_SOCIAL_ICONS_URI . '/assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
 
 		// Localize variables for Astra Breakpoints JS.
 		wp_localize_script(
 			'astra-footer-social-icons-customizer-preview-js',
 			'astraBuilderFooterSocial',
 			array(
-				'tablet_break_point'  => astra_get_tablet_breakpoint(),
-				'mobile_break_point'  => astra_get_mobile_breakpoint(),
-				'footer_social_count' => Astra_Builder_Helper::$num_of_footer_social_icons,
-				'header_social_count' => Astra_Builder_Helper::$num_of_header_social_icons,
+				'tablet_break_point' => astra_get_tablet_breakpoint(),
+				'mobile_break_point' => astra_get_mobile_breakpoint(),
+				'component_limit'    => defined( 'ASTRA_EXT_VER' ) ? Astra_Builder_Helper::$component_limit : Astra_Builder_Helper::$num_of_footer_social_icons,
 			)
 		);
 	}

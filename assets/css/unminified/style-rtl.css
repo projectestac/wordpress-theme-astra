@@ -2162,8 +2162,12 @@ body {
 }
 
 .ast-separate-container .ast-article-post,
-.ast-separate-container .ast-article-single {
+.ast-separate-container .ast-article-single:not(.ast-related-post) {
   background-color: #fff;
+}
+
+.ast-separate-container .ast-article-post,
+.ast-separate-container .ast-article-single {
   border-bottom: 1px solid #eeeeee;
   margin: 0;
   padding: 5.34em 6.67em;
@@ -2171,7 +2175,6 @@ body {
 
 .ast-separate-container .blog-layout-1 {
   padding: 0;
-  /*background-color: $color-background-content;*/
   border-bottom: 0;
 }
 
@@ -2204,10 +2207,6 @@ body {
 .ast-page-builder-template .no-results {
   text-align: center;
   margin: 4em auto;
-}
-
-.ast-page-builder-template .ast-pagination {
-  padding: 2em;
 }
 
 .ast-page-builder-template .entry-header {
@@ -2290,17 +2289,6 @@ body {
  * @import
  */
 /* 1 - Primary Menus */
-.astra-search-icon::before {
-  content: "\e8b6";
-  font-family: 'Astra';
-  font-style: normal;
-  font-weight: normal;
-  text-decoration: inherit;
-  text-align: center;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
 .ast-search-icon .astra-search-icon {
   font-size: 1.3em;
 }
@@ -2386,9 +2374,13 @@ body {
   word-wrap: break-word;
 }
 
-.main-header-menu .sub-menu .menu-item.menu-item-has-children > .menu-link:after {
+.main-header-menu .sub-menu .menu-item:not(.menu-item-has-children) .menu-link .icon-arrow:first-of-type {
+  display: none;
+}
+
+#ast-desktop-header .main-header-menu .sub-menu .menu-item.menu-item-has-children > .menu-link .icon-arrow svg {
   position: absolute;
-  left: 1em;
+  left: .60em;
   top: 50%;
   transform: translate(0, -50%) rotate(-270deg);
 }
@@ -2430,6 +2422,14 @@ body {
   border-color: #eaeaea;
 }
 
+.ast-header-break-point .main-navigation ul .menu-item .menu-link .icon-arrow:first-of-type {
+  margin-left: 5px;
+}
+
+.ast-header-break-point .main-navigation ul .sub-menu .menu-item:not(.menu-item-has-children) .menu-link .icon-arrow:first-of-type {
+  display: inline;
+}
+
 .ast-header-break-point .main-navigation ul .button-custom-menu-item .menu-link {
   padding: 0 20px;
   display: inline-block;
@@ -2437,16 +2437,6 @@ body {
   border-bottom-width: 1px;
   border-style: solid;
   border-color: #eaeaea;
-}
-
-.ast-header-break-point .main-navigation ul.sub-menu .menu-item .menu-link:before {
-  content: "\e900";
-  font-family: 'Astra';
-  font-size: .65em;
-  text-decoration: inherit;
-  display: inline-block;
-  transform: translate(0, -2px) rotateZ(-270deg);
-  margin-left: 5px;
 }
 
 .ast-header-break-point .main-navigation .sub-menu .menu-item .menu-link {
@@ -2465,9 +2455,11 @@ body {
   padding-right: 60px;
 }
 
-.ast-header-break-point .ast-header-custom-item,
 .ast-header-break-point .main-header-menu {
   background-color: #f9f9f9;
+  border-top-width: 1px;
+  border-style: solid;
+  border-color: #eaeaea;
 }
 
 .ast-header-break-point .main-header-menu .sub-menu {
@@ -2491,6 +2483,10 @@ body {
 
 .ast-header-break-point .submenu-with-border .sub-menu {
   border: 0;
+}
+
+.ast-header-break-point .dropdown-menu-toggle {
+  display: none;
 }
 
 /**
@@ -2549,8 +2545,20 @@ body {
   text-decoration: inherit;
 }
 
+.ast-button-wrap .menu-toggle .icon-menu-bars svg:nth-child(2) {
+  display: none;
+}
+
 .ast-button-wrap .menu-toggle.toggled .menu-toggle-icon:before {
   content: "\e5cd";
+}
+
+.ast-button-wrap .menu-toggle.toggled .icon-menu-bars svg:nth-child(1) {
+  display: none;
+}
+
+.ast-button-wrap .menu-toggle.toggled .icon-menu-bars svg:nth-child(2) {
+  display: block;
 }
 
 .ast-button-wrap .menu-toggle .mobile-menu-wrap {
@@ -2573,6 +2581,28 @@ body {
   height: 100%;
 }
 
+.site-header .menu-link * {
+  transition: none;
+}
+
+.ast-icon.icon-arrow svg {
+  height: .6em;
+  width: .6em;
+  position: relative;
+  margin-right: 10px;
+}
+
+.ast-icon.icon-search svg {
+  height: 1em;
+  width: 0.9em;
+  margin-top: 3px;
+  margin-left: 2px;
+}
+
+.ast-mobile-popup-content .ast-icon.icon-search svg {
+  margin-top: 0;
+}
+
 /* Responsive Screen */
 .ast-header-break-point .user-select {
   clear: both;
@@ -2592,6 +2622,13 @@ body {
   width: 100%;
   flex: auto;
   order: 4;
+}
+
+.ast-header-break-point .ast-icon.icon-arrow svg {
+  height: .85em;
+  width: .95em;
+  position: relative;
+  margin-right: 10px;
 }
 
 /**
@@ -2618,6 +2655,19 @@ body {
 .posts-navigation .nav-next,
 .post-navigation .nav-next {
   text-align: left;
+}
+
+.ast-icon svg {
+  fill: currentColor;
+}
+
+.post-navigation a {
+  background: transparent;
+  font-size: 16px;
+  font-size: 1.06666rem;
+  padding: 0 1.5em;
+  height: 2.33333em;
+  line-height: calc(2.33333em - 3px);
 }
 
 /*----------  Header  ----------*/
@@ -3073,19 +3123,19 @@ body {
 /**
  * 10 - Submenu container box shadow 
  */
-.ast-desktop .main-header-menu .astra-full-megamenu-wrapper .sub-menu {
+.ast-desktop .main-header-menu:not(#ast-hf-mobile-menu) .astra-full-megamenu-wrapper .sub-menu {
   box-shadow: none;
 }
 
-.ast-desktop .main-header-menu .astra-megamenu .sub-menu {
+.ast-desktop .main-header-menu:not(#ast-hf-mobile-menu) .astra-megamenu .sub-menu {
   box-shadow: none;
 }
 
-.ast-desktop .main-header-menu .sub-menu {
+.ast-desktop .main-header-menu:not(#ast-hf-mobile-menu) .sub-menu {
   box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1);
 }
 
-.ast-desktop .main-header-menu .astra-full-megamenu-wrapper {
+.ast-desktop .main-header-menu:not(#ast-hf-mobile-menu) .astra-full-megamenu-wrapper {
   box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1);
 }
 
@@ -3194,16 +3244,6 @@ body {
 }
 
 .main-header-bar .main-header-bar-navigation .menu-item-has-children > .menu-link:after {
-  content: "\e900";
-  display: inline-block;
-  font-family: 'Astra';
-  font-size: 9px;
-  font-size: .6rem;
-  font-weight: bold;
-  text-rendering: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin-right: 10px;
   line-height: normal;
 }
 
@@ -3211,10 +3251,6 @@ body {
   display: block;
   z-index: 4;
   position: relative;
-}
-
-.main-header-bar .main-header-bar-navigation.toggle-on {
-  padding-top: 1em;
 }
 
 .main-header-bar .ast-search-menu-icon .search-form {
@@ -3460,15 +3496,8 @@ li.ast-masthead-custom-menu-items .ast-search-icon .astra-search-icon {
   transition: all .2s;
 }
 
-.ast-header-break-point .main-header-bar .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle::before {
-  font-weight: bold;
-  content: "\e900";
-  font-family: 'Astra';
-  text-decoration: inherit;
-  display: inline-block;
-}
-
-.ast-header-break-point .main-header-bar .main-header-bar-navigation .ast-submenu-expanded > .ast-menu-toggle::before {
+.ast-header-break-point .main-header-bar .main-header-bar-navigation .ast-submenu-expanded > .ast-menu-toggle::before,
+.ast-header-break-point .main-header-bar .main-header-bar-navigation .ast-submenu-expanded > .ast-menu-toggle .icon-arrow svg {
   transform: rotateX(180deg);
 }
 
@@ -4045,11 +4074,6 @@ body .entry-content .wp-block-latest-posts li {
   color: #40464d;
 }
 
-.ast-page-builder-template.ast-no-sidebar .entry-content .alignwide {
-  margin-right: 0;
-  margin-left: 0;
-}
-
 /*----------  Secondary  ----------*/
 .widget-title {
   font-weight: normal;
@@ -4106,19 +4130,22 @@ body .entry-content .wp-block-latest-posts li {
   color: inherit;
 }
 
-.widget_search .search-form:after {
-  font-family: "Astra";
-  font-size: 1.2em;
-  font-weight: normal;
-  content: "\e8b6";
-  position: absolute;
-  top: 50%;
-  left: 15px;
-  transform: translate(0, -50%);
-}
-
 .widget_search .search-form > label {
   position: relative;
+}
+
+.widget_search .search-form i {
+  color: #3a3a3a;
+}
+
+.widget_search .search-form button {
+  position: absolute;
+  top: 0;
+  left: 15px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
 }
 
 .widget_search .search-form input[type="submit"],
@@ -4821,7 +4848,6 @@ input[type="color"]::-webkit-color-swatch {
 */
 .single {
   /* 1 - Single Post Navigation Styles */
-  /*Page builder single post meta*/
 }
 
 .single .entry-header {
@@ -4874,11 +4900,6 @@ input[type="color"]::-webkit-color-swatch {
   .single .post-navigation .nav-previous {
     margin-bottom: 1em;
   }
-}
-
-.single.ast-page-builder-template .entry-header {
-  padding-right: 20px;
-  padding-left: 20px;
 }
 
 /* 2 - Single Post Article Header */
@@ -4937,10 +4958,6 @@ input[type="color"]::-webkit-color-swatch {
   .ast-separate-container .entry-header {
     margin-bottom: 1em;
   }
-}
-
-.ast-page-builder-template.single-post .site-content > .ast-container {
-  max-width: 100%;
 }
 
 /*----------  404  ----------*/

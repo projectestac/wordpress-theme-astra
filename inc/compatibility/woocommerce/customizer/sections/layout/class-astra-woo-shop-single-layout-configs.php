@@ -40,10 +40,11 @@ if ( ! class_exists( 'Astra_Woo_Shop_Single_Layout_Configs' ) ) {
 					'name'     => ASTRA_THEME_SETTINGS . '[single-product-breadcrumb-disable]',
 					'section'  => 'section-woo-shop-single',
 					'type'     => 'control',
-					'control'  => 'checkbox',
+					'control'  => 'ast-toggle-control',
 					'default'  => astra_get_option( 'single-product-breadcrumb-disable' ),
 					'title'    => __( 'Disable Breadcrumb', 'astra' ),
 					'priority' => 16,
+					'divider'  => array( 'ast_class' => 'ast-bottom-divider' ),
 				),
 
 				/**
@@ -64,7 +65,8 @@ if ( ! class_exists( 'Astra_Woo_Shop_Single_Layout_Configs' ) ) {
 						),
 					),
 					'priority' => 26,
-					'control'  => 'checkbox',
+					'control'  => 'ast-toggle-control',
+					'divider'  => array( 'ast_class' => 'ast-bottom-divider' ),
 				),
 			);
 

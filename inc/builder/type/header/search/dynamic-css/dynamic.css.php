@@ -45,7 +45,7 @@ function astra_hb_search_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' )
 	$icon_color_mobile  = astra_get_prop( astra_get_option( 'header-search-icon-color' ), 'mobile' );
 
 	$margin          = astra_get_option( $_section . '-margin' );
-	$margin_selector = '.astra-hfb-header .site-header-section > .ast-header-search, .astra-hfb-header .ast-header-search';
+	$margin_selector = '.ast-hfb-header .site-header-section > .ast-header-search, .ast-hfb-header .ast-header-search';
 	
 	/**
 	 * Search CSS.

@@ -31,7 +31,7 @@ if ( ! function_exists( 'astra_register_menu_locations' ) ) {
 			)
 		);
 
-		if ( Astra_Builder_Helper::$is_header_footer_builder_active ) {
+		if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
 
 			/**
 			 * Register the Secondary & Mobile menus.
@@ -39,19 +39,26 @@ if ( ! function_exists( 'astra_register_menu_locations' ) ) {
 			register_nav_menus(
 				array(
 					'secondary_menu' => __( 'Secondary Menu', 'astra' ),
-					'mobile_menu'    => __( 'Mobile Menu', 'astra' ),
+					'mobile_menu'    => __( 'Off-Canvas Menu', 'astra' ),
 				)
 			);
 
 
-			for ( $index = 3; $index <= Astra_Builder_Helper::$num_of_header_menu; $index++ ) {
+			$component_limit = defined( 'ASTRA_EXT_VER' ) ? Astra_Builder_Helper::$component_limit : Astra_Builder_Helper::$num_of_header_menu;
+
+			for ( $index = 3; $index <= $component_limit; $index++ ) {
+
+				if ( ! is_customize_preview() && ! Astra_Builder_Helper::is_component_loaded( 'menu-' . $index ) ) {
+					continue;
+				}
+
 				register_nav_menus(
 					array(
 						'menu_' . $index => __( 'Menu ', 'astra' ) . $index,
 					)
 				);
 			}
-				
+
 			/**
 			 * Register the Account menus.
 			 */

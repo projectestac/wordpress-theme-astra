@@ -36,7 +36,6 @@ class Astra_Customizer_Header_Widget_Configs extends Astra_Customizer_Config_Bas
 	public function register_configuration( $configurations, $wp_customize ) {
 
 		$html_config    = Astra_Builder_Base_Configuration::prepare_widget_options( 'header' );
-		$html_config    = call_user_func_array( 'array_merge', $html_config + array( array() ) );
 		$configurations = array_merge( $configurations, $html_config );
 		return $configurations;
 	}

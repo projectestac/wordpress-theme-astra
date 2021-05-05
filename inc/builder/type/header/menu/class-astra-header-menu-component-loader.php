@@ -38,7 +38,8 @@ class Astra_Header_Menu_Component_Loader {
 	 */
 	public function add_fonts() {
 
-		for ( $index = 1; $index <= Astra_Builder_Helper::$num_of_header_menu; $index++ ) {
+		$component_limit = defined( 'ASTRA_EXT_VER' ) ? Astra_Builder_Helper::$component_limit : Astra_Builder_Helper::$num_of_header_menu;
+		for ( $index = 1; $index <= $component_limit; $index++ ) {
 
 			$_prefix = 'menu' . $index;
 
@@ -66,14 +67,15 @@ class Astra_Header_Menu_Component_Loader {
 		/* Directory and Extension */
 		$dir_name    = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
 		$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
-		wp_enqueue_script( 'astra-heading-menu-customizer-preview-js', ASTRA_HEADER_MENU_URI . '/assets/js/customizer-preview.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
+		wp_enqueue_script( 'astra-heading-menu-customizer-preview-js', ASTRA_HEADER_MENU_URI . '/assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
 
 		// Localize variables for Menu JS.
 		wp_localize_script(
 			'astra-heading-menu-customizer-preview-js',
 			'AstraBuilderMenuData',
 			array(
-				'header_menu_count'  => Astra_Builder_Helper::$num_of_header_menu,
+				'component_limit'    => defined( 'ASTRA_EXT_VER' ) ? Astra_Builder_Helper::$component_limit : Astra_Builder_Helper::$num_of_header_menu,
+				'nav_menu_enabled'   => ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'nav-menu' ) ) ? true : false,
 				'tablet_break_point' => astra_get_tablet_breakpoint(),
 				'mobile_break_point' => astra_get_mobile_breakpoint(),
 			)

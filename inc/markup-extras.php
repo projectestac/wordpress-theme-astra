@@ -329,7 +329,7 @@ function astra_get_site_title_tagline( $display_site_title, $display_site_taglin
 				'<div class="ast-site-title-wrap">
 						%1$s
 						%2$s
-					</div>',
+				</div>',
 				( $display_site_title ) ? $site_title_markup : '',
 				( $display_site_tagline ) ? $site_tagline_markup : ''
 			);
@@ -403,6 +403,7 @@ if ( ! function_exists( 'astra_get_search' ) ) {
 			<div class="ast-search-icon">
 				<a class="slide-search astra-search-icon" aria-label="<?php esc_attr_e( 'Search icon link', 'astra' ); ?>" href="#">
 					<span class="screen-reader-text"><?php esc_html_e( 'Search', 'astra' ); ?></span>
+					<?php Astra_Icons::get_icons( 'search', true ); ?>
 				</a>
 			</div>
 			<?php astra_get_search_form(); ?>
@@ -648,13 +649,13 @@ if ( ! function_exists( 'astra_header_markup' ) ) {
 				);
 		?>
 		>
-			<?php 
+			<?php
 			astra_masthead_top();
 
 			astra_masthead();
 
 			astra_masthead_bottom();
-			
+
 			do_action( 'astra_sticky_header_markup' );
 			do_action( 'astra_bottom_header_after_markup' );
 			?>
@@ -682,7 +683,7 @@ if ( ! function_exists( 'astra_site_branding_markup' ) ) {
 		?>
 
 		<div class="site-branding">
-			<div 
+			<div
 			<?php
 				echo astra_attr(
 					'site-identity',
@@ -978,7 +979,7 @@ if ( ! function_exists( 'astra_footer_markup' ) ) {
 	function astra_footer_markup() {
 		?>
 
-		<footer 
+		<footer
 		<?php
 				echo astra_attr(
 					'footer',
@@ -1016,7 +1017,7 @@ if ( ! function_exists( 'astra_header_break_point' ) ) {
 	 * @return number
 	 */
 	function astra_header_break_point() {
-		$mobile_header_brakpoint = ( Astra_Builder_Helper::$is_header_footer_builder_active ) ? astra_get_tablet_breakpoint() : astra_get_option( 'mobile-header-breakpoint', 921 );
+		$mobile_header_brakpoint = ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? astra_get_tablet_breakpoint() : astra_get_option( 'mobile-header-breakpoint', 921 );
 		return absint( apply_filters( 'astra_header_break_point', $mobile_header_brakpoint ) );
 	}
 }
@@ -1074,7 +1075,6 @@ function astra_get_header_classes() {
 		$primary_menu_custom_item      = astra_get_option( 'header-main-rt-section' );
 		$logo_title_inline             = astra_get_option( 'logo-title-inline' );
 		$mobile_header_logo            = astra_get_option( 'mobile-header-logo' );
-		$mobile_header_order           = astra_get_option( 'mobile-header-order' );
 		$different_mobile_header_order = astra_get_option( 'different-mobile-logo' );
 		$hide_custom_menu_mobile       = astra_get_option( 'hide-custom-menu-mobile', false );
 		$menu_mobile_target            = astra_get_option( 'mobile-header-toggle-target', 'icon' );
@@ -1114,7 +1114,7 @@ function astra_get_header_classes() {
 		$classes[] = 'ast-hide-custom-menu-mobile';
 	}
 
-	if ( Astra_Builder_Helper::$is_header_footer_builder_active ) {
+	if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
 		$classes[] = 'ast-builder-menu-toggle-' . $builder_menu_mobile_target;
 	} else {
 		$classes[] = 'ast-menu-toggle-' . $menu_mobile_target;
@@ -1175,13 +1175,13 @@ if ( ! function_exists( 'astra_comment_form_default_fields_markup' ) ) {
 		$req       = get_option( 'require_name_email' );
 		$aria_req  = ( $req ? " aria-required='true'" : '' );
 
-		$fields['author'] = '<div class="ast-comment-formwrap ast-row"><p class="comment-form-author ast-col-xs-12 ast-col-sm-12 ast-col-md-4 ast-col-lg-4">' .
+		$fields['author'] = '<div class="ast-comment-formwrap ast-row"><p class="comment-form-author ' . astra_attr( 'comment-form-grid-class' ) . '">' .
 					'<label for="author" class="screen-reader-text">' . esc_html( astra_default_strings( 'string-comment-label-name', false ) ) . '</label><input id="author" name="author" type="text" value="' . esc_attr( $commenter['comment_author'] ) .
 					'" placeholder="' . esc_attr( astra_default_strings( 'string-comment-label-name', false ) ) . '" size="30"' . $aria_req . ' /></p>';
-		$fields['email']  = '<p class="comment-form-email ast-col-xs-12 ast-col-sm-12 ast-col-md-4 ast-col-lg-4">' .
+		$fields['email']  = '<p class="comment-form-email ' . astra_attr( 'comment-form-grid-class' ) . '">' .
 					'<label for="email" class="screen-reader-text">' . esc_html( astra_default_strings( 'string-comment-label-email', false ) ) . '</label><input id="email" name="email" type="text" value="' . esc_attr( $commenter['comment_author_email'] ) .
 					'" placeholder="' . esc_attr( astra_default_strings( 'string-comment-label-email', false ) ) . '" size="30"' . $aria_req . ' /></p>';
-		$fields['url']    = '<p class="comment-form-url ast-col-xs-12 ast-col-sm-12 ast-col-md-4 ast-col-lg-4"><label for="url">' .
+		$fields['url']    = '<p class="comment-form-url ' . astra_attr( 'comment-form-grid-class' ) . '"><label for="url">' .
 					'<label for="url" class="screen-reader-text">' . esc_html( astra_default_strings( 'string-comment-label-website', false ) ) . '</label><input id="url" name="url" type="text" value="' . esc_url( $commenter['comment_author_url'] ) .
 					'" placeholder="' . esc_attr( astra_default_strings( 'string-comment-label-website', false ) ) . '" size="30" /></label></p></div>';
 
@@ -1217,7 +1217,7 @@ if ( ! function_exists( 'astra_comment_form_default_markup' ) ) {
 			$args['title_reply']       = astra_default_strings( 'string-comment-title-reply', false );
 			$args['cancel_reply_link'] = astra_default_strings( 'string-comment-cancel-reply-link', false );
 			$args['label_submit']      = astra_default_strings( 'string-comment-label-submit', false );
-			$args['comment_field']     = '<div class="ast-row comment-textarea"><fieldset class="comment-form-comment"><div class="comment-form-textarea ast-col-lg-12"><label for="comment" class="screen-reader-text">' . esc_html( astra_default_strings( 'string-comment-label-message', false ) ) . '</label><textarea id="comment" name="comment" placeholder="' . esc_attr( astra_default_strings( 'string-comment-label-message', false ) ) . '" cols="45" rows="8" aria-required="true"></textarea></div></fieldset></div>';
+			$args['comment_field']     = '<div class="ast-row comment-textarea"><fieldset class="comment-form-comment"><div class="comment-form-textarea ' . astra_attr( 'ast-grid-lg-12' ) . '"><label for="comment" class="screen-reader-text">' . esc_html( astra_default_strings( 'string-comment-label-message', false ) ) . '</label><textarea id="comment" name="comment" placeholder="' . esc_attr( astra_default_strings( 'string-comment-label-message', false ) ) . '" cols="45" rows="8" aria-required="true"></textarea></div></fieldset></div>';
 		}
 		return apply_filters( 'astra_comment_form_default_markup', $args );
 
