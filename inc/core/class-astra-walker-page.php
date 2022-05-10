@@ -116,7 +116,7 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 				$css_class[] = 'current-menu-parent';
 			}
 
-			$css_classes = implode( ' ', apply_filters( 'page_css_class', $css_class, $page, $depth, $args, $current_page ) );
+			$css_classes = implode( ' ', apply_filters( 'page_css_class', $css_class, $page, $depth, $args, $current_page ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 			$args['link_before'] = empty( $args['link_before'] ) ? '' : $args['link_before'];
 			$args['link_after']  = empty( $args['link_after'] ) ? '' : $args['link_after'];
@@ -126,7 +126,7 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 				$css_classes,
 				get_permalink( $page->ID ),
 				$args['link_before'],
-				apply_filters( 'the_title', $page->post_title, $page->ID ),
+				apply_filters( 'the_title', $page->post_title, $page->ID ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				$args['link_after'],
 				$icon,
 				$mobile_icon

@@ -68,6 +68,7 @@ if ( ! class_exists( 'Astra_Woo_Shop_Sidebar_Configs' ) ) {
 						'left-sidebar'  => __( 'Left Sidebar', 'astra' ),
 						'right-sidebar' => __( 'Right Sidebar', 'astra' ),
 					),
+					'divider'  => array( 'ast_class' => 'ast-bottom-divider' ),
 				),
 			);
 

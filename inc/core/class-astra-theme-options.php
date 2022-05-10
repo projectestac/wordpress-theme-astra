@@ -96,6 +96,14 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 				return self::$defaults;
 			}
 
+			$palette_css_var_prefix = Astra_Global_Palette::get_css_variable_prefix();
+			/**
+			 * Update Astra customizer default values. To not update directly on existing users site, added backwards.
+			 *
+			 * @since 3.6.3
+			 */
+			$apply_new_default_values = astra_button_default_padding_updated();
+
 			// Defaults list of options.
 			self::$defaults = apply_filters(
 				'astra_theme_defaults',
@@ -113,87 +121,6 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 						'category',
 						'author',
 					),
-					// Related Posts.
-					'enable-related-posts'                 => false,
-					'related-posts-total-count'            => 2,
-					'enable-related-posts-excerpt'         => false,
-					'related-posts-excerpt-count'          => 25,
-					'related-posts-based-on'               => 'categories',
-					'related-posts-order-by'               => 'date',
-					'related-posts-order'                  => 'asc',
-					'related-posts-grid'                   => '2',
-					'related-posts-structure'              => array(
-						'featured-image',
-						'title-meta',
-					),
-					'related-posts-meta-structure'         => array(
-						'comments',
-						'category',
-						'author',
-					),
-					// Related Posts - Color styles.
-					'related-posts-text-color'             => '',
-					'related-posts-link-color'             => '',
-					'related-posts-title-color'            => '',
-					'related-posts-background-color'       => '',
-					'related-posts-meta-color'             => '',
-					'related-posts-link-hover-color'       => '',
-					'related-posts-meta-link-hover-color'  => '',
-					// Related Posts - Title typo.
-					'related-posts-section-title-font-family' => 'inherit',
-					'related-posts-section-title-font-weight' => 'inherit',
-					'related-posts-section-title-text-transform' => '',
-					'related-posts-section-title-line-height' => '',
-					'related-posts-section-title-font-size' => array(
-						'desktop'      => '30',
-						'tablet'       => '',
-						'mobile'       => '',
-						'desktop-unit' => 'px',
-						'tablet-unit'  => 'px',
-						'mobile-unit'  => 'px',
-					),
-
-					// Related Posts - Title typo.
-					'related-posts-title-font-family'      => 'inherit',
-					'related-posts-title-font-weight'      => 'inherit',
-					'related-posts-title-text-transform'   => '',
-					'related-posts-title-line-height'      => '1',
-					'related-posts-title-font-size'        => array(
-						'desktop'      => '20',
-						'tablet'       => '',
-						'mobile'       => '',
-						'desktop-unit' => 'px',
-						'tablet-unit'  => 'px',
-						'mobile-unit'  => 'px',
-					),
-
-					// Related Posts - Meta typo.
-					'related-posts-meta-font-family'       => 'inherit',
-					'related-posts-meta-font-weight'       => 'inherit',
-					'related-posts-meta-text-transform'    => '',
-					'related-posts-meta-line-height'       => '',
-					'related-posts-meta-font-size'         => array(
-						'desktop'      => '14',
-						'tablet'       => '',
-						'mobile'       => '',
-						'desktop-unit' => 'px',
-						'tablet-unit'  => 'px',
-						'mobile-unit'  => 'px',
-					),
-
-					// Related Posts - Content typo.
-					'related-posts-content-font-family'    => 'inherit',
-					'related-posts-content-font-weight'    => 'inherit',
-					'related-posts-content-text-transform' => '',
-					'related-posts-content-line-height'    => '',
-					'related-posts-content-font-size'      => array(
-						'desktop'      => '',
-						'tablet'       => '',
-						'mobile'       => '',
-						'desktop-unit' => 'px',
-						'tablet-unit'  => 'px',
-						'mobile-unit'  => 'px',
-					),
 					// Blog.
 					'blog-post-structure'                  => array(
 						'image',
@@ -208,10 +135,11 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 						'author',
 					),
 					// Colors.
-					'text-color'                           => '#3a3a3a',
-					'link-color'                           => '#0274be',
-					'theme-color'                          => '#0274be',
-					'link-h-color'                         => '#3a3a3a',
+					'text-color'                           => 'var(' . $palette_css_var_prefix . '3)',
+					'link-color'                           => 'var(' . $palette_css_var_prefix . '0)',
+					'theme-color'                          => 'var(' . $palette_css_var_prefix . '0)',
+					'link-h-color'                         => 'var(' . $palette_css_var_prefix . '1)',
+					'heading-base-color'                   => 'var(' . $palette_css_var_prefix . '2)',
 
 					// Footer Bar Background.
 					'footer-bg-obj'                        => array(
@@ -251,22 +179,22 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 					'button-bg-h-color'                    => '',
 					'theme-button-padding'                 => array(
 						'desktop'      => array(
-							'top'    => 10,
-							'right'  => 40,
-							'bottom' => 10,
-							'left'   => 40,
+							'top'    => $apply_new_default_values ? 15 : 10,
+							'right'  => $apply_new_default_values ? 30 : 40,
+							'bottom' => $apply_new_default_values ? 15 : 10,
+							'left'   => $apply_new_default_values ? 30 : 40,
 						),
 						'tablet'       => array(
-							'top'    => '',
-							'right'  => '',
-							'bottom' => '',
-							'left'   => '',
+							'top'    => $apply_new_default_values ? 14 : '',
+							'right'  => $apply_new_default_values ? 28 : '',
+							'bottom' => $apply_new_default_values ? 14 : '',
+							'left'   => $apply_new_default_values ? 28 : '',
 						),
 						'mobile'       => array(
-							'top'    => '',
-							'right'  => '',
-							'bottom' => '',
-							'left'   => '',
+							'top'    => $apply_new_default_values ? 12 : '',
+							'right'  => $apply_new_default_values ? 24 : '',
+							'bottom' => $apply_new_default_values ? 12 : '',
+							'left'   => $apply_new_default_values ? 24 : '',
 						),
 						'desktop-unit' => 'px',
 						'tablet-unit'  => 'px',
@@ -297,8 +225,19 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 						'tablet'  => '',
 						'mobile'  => '',
 					),
-					'display-site-title'                   => 1,
-					'display-site-tagline'                 => 0,
+					'header-color-site-title'              => '',
+					'header-color-h-site-title'            => '',
+					'header-color-site-tagline'            => '',
+					'display-site-title-responsive'        => array(
+						'desktop' => 1,
+						'tablet'  => 1,
+						'mobile'  => 1,
+					),
+					'display-site-tagline-responsive'      => array(
+						'desktop' => 0,
+						'tablet'  => 0,
+						'mobile'  => 0,
+					),
 					'logo-title-inline'                    => 1,
 					// Header - Primary.
 					'disable-primary-nav'                  => false,
@@ -414,6 +353,63 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 							'background-media'      => '',
 						),
 					),
+					'content-bg-obj-responsive'            => array(
+						'desktop' => array(
+							'background-color'      => 'var(' . $palette_css_var_prefix . '5)',
+							'background-image'      => '',
+							'background-repeat'     => 'repeat',
+							'background-position'   => 'center center',
+							'background-size'       => 'auto',
+							'background-attachment' => 'scroll',
+							'background-type'       => '',
+							'background-media'      => '',
+						),
+						'tablet'  => array(
+							'background-color'      => 'var(' . $palette_css_var_prefix . '5)',
+							'background-image'      => '',
+							'background-repeat'     => 'repeat',
+							'background-position'   => 'center center',
+							'background-size'       => 'auto',
+							'background-attachment' => 'scroll',
+							'background-type'       => '',
+							'background-media'      => '',
+						),
+						'mobile'  => array(
+							'background-color'      => 'var(' . $palette_css_var_prefix . '5)',
+							'background-image'      => '',
+							'background-repeat'     => 'repeat',
+							'background-position'   => 'center center',
+							'background-size'       => 'auto',
+							'background-attachment' => 'scroll',
+							'background-type'       => '',
+							'background-media'      => '',
+						),
+					),
+					// Entry Content.
+					'wp-blocks-ui'                         => 'custom',
+					'wp-blocks-global-padding'             => array(
+						'desktop'      => array(
+							'top'    => '',
+							'right'  => '',
+							'bottom' => '',
+							'left'   => '',
+						),
+						'tablet'       => array(
+							'top'    => '',
+							'right'  => '',
+							'bottom' => '',
+							'left'   => '',
+						),
+						'mobile'       => array(
+							'top'    => '',
+							'right'  => '',
+							'bottom' => '',
+							'left'   => '',
+						),
+						'desktop-unit' => 'em',
+						'tablet-unit'  => 'em',
+						'mobile-unit'  => 'em',
+					),
 					// Container.
 					'site-content-layout'                  => 'content-boxed-container',
 					'single-page-content-layout'           => 'default',
@@ -434,6 +430,7 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 
 					'body-line-height'                     => '',
 					'para-margin-bottom'                   => '',
+					'underline-content-links'              => true,
 					'body-text-transform'                  => '',
 					'headings-font-family'                 => 'inherit',
 					'headings-font-weight'                 => 'inherit',
@@ -546,6 +543,10 @@ if ( ! class_exists( 'Astra_Theme_Options' ) ) {
 
 					// toogle menu target.
 					'mobile-header-toggle-target'          => 'icon',
+
+					// Performance.
+					'load-google-fonts-locally'            => false,
+					'preload-local-fonts'                  => false,
 				)
 			);
 

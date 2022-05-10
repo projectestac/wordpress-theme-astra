@@ -40,7 +40,6 @@ if ( ! class_exists( 'Astra_Edd_Sidebar_Configs' ) ) {
 					'type'     => 'control',
 					'control'  => 'ast-select',
 					'section'  => 'section-sidebars',
-					'divider'  => array( 'ast_class' => 'ast-top-divider' ),
 					'default'  => astra_get_option( 'edd-sidebar-layout' ),
 					'priority' => 5,
 					'title'    => __( 'Easy Digital Downloads', 'astra' ),
@@ -69,6 +68,7 @@ if ( ! class_exists( 'Astra_Edd_Sidebar_Configs' ) ) {
 						'left-sidebar'  => __( 'Left Sidebar', 'astra' ),
 						'right-sidebar' => __( 'Right Sidebar', 'astra' ),
 					),
+					'divider'  => array( 'ast_class' => 'ast-bottom-divider' ),
 				),
 			);
 

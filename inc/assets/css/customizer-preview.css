@@ -121,10 +121,10 @@ body.customize-partial-edit-shortcuts-shown .customize-partial-edit-shortcut but
 /**
  * Customizer Edit pencil - Set Position
  */
- .customize-partial-edit-shortcut-blogname button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-blogdescription button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-astra-settings-display-site-title button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-astra-settings-display-site-tagline button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-custom_logo button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-astra-settings-disable-primary-nav button.customize-partial-edit-shortcut-button {
+ .customize-partial-edit-shortcut-blogname button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-blogdescription button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-astra-settings-display-site-title-responsive button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-astra-settings-display-site-tagline-responsive button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-custom_logo button.customize-partial-edit-shortcut-button, .customize-partial-edit-shortcut-astra-settings-disable-primary-nav button.customize-partial-edit-shortcut-button, .ast-related-posts-title .customize-partial-edit-shortcut-button {
 	display: none;
 }
-.ast-site-title-wrap:hover .customize-partial-edit-shortcut-blogname button.customize-partial-edit-shortcut-button, .ast-site-title-wrap:hover .customize-partial-edit-shortcut-blogdescription button.customize-partial-edit-shortcut-button, .site-logo-img:hover .customize-partial-edit-shortcut-custom_logo button.customize-partial-edit-shortcut-button, .main-navigation:hover .customize-partial-edit-shortcut-astra-settings-disable-primary-nav button.customize-partial-edit-shortcut-button {
+.ast-site-title-wrap:hover .customize-partial-edit-shortcut-blogname button.customize-partial-edit-shortcut-button, .ast-site-title-wrap:hover .customize-partial-edit-shortcut-blogdescription button.customize-partial-edit-shortcut-button, .site-logo-img:hover .customize-partial-edit-shortcut-custom_logo button.customize-partial-edit-shortcut-button, .main-navigation:hover .customize-partial-edit-shortcut-astra-settings-disable-primary-nav button.customize-partial-edit-shortcut-button, .ast-related-posts-title:hover .customize-partial-edit-shortcut-button {
 	display: inline-block;
 }
 

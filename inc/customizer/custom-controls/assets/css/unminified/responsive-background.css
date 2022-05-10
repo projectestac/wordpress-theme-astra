@@ -232,6 +232,10 @@
   border-radius: 100%;
 }
 
+.astra-popover-color .ast-color-palette .components-button.is-pressed:focus:not(:disabled) {
+	box-shadow: none;
+}
+
 .astra-popover-color .components-custom-gradient-picker {
   margin-top: 0;
 }

@@ -60,9 +60,9 @@
 	 */
 	ASTCustomizerToggles = {
 
-		'astra-settings[display-site-title]' : [],
+		'astra-settings[display-site-title-responsive]' : [],
 
-		'astra-settings[display-site-tagline]' : [],
+		'astra-settings[display-site-tagline-responsive]' : [],
 
 		'astra-settings[ast-header-retina-logo]' :[],
 

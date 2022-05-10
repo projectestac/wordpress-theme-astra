@@ -34,12 +34,14 @@ class Astra_Button_Component_Dynamic_CSS {
 		$generated_css = '';
 
 		$number_of_button = ( 'header' === $builder_type ) ? Astra_Builder_Helper::$num_of_header_button : Astra_Builder_Helper::$num_of_footer_button;
+		$hb_button_flag   = false;
 
 		for ( $index = 1; $index <= $number_of_button; $index++ ) {
 
 			if ( ! Astra_Builder_Helper::is_component_loaded( 'button-' . $index, $builder_type ) ) {
 				continue;
 			}
+			$hb_button_flag = ( 'header' === $builder_type ) ? true : false;
 
 			$_section = ( 'header' === $builder_type ) ? 'section-hb-button-' . $index : 'section-fb-button-' . $index;
 			$context  = ( 'header' === $builder_type ) ? 'hb' : 'fb';
@@ -75,6 +77,13 @@ class Astra_Button_Component_Dynamic_CSS {
 			$button_border_h_color_tablet  = astra_get_prop( astra_get_option( $builder_type . '-' . $_prefix . '-border-h-color' ), 'tablet' );
 			$button_border_h_color_mobile  = astra_get_prop( astra_get_option( $builder_type . '-' . $_prefix . '-border-h-color' ), 'mobile' );
 
+			// Typography controls.
+			$button_font_family    = astra_get_option( $builder_type . '-' . $_prefix . '-font-family', 'inherit' );
+			$button_font_weight    = astra_get_option( $builder_type . '-' . $_prefix . '-font-weight', 'inherit' );
+			$button_text_transform = astra_get_option( $builder_type . '-' . $_prefix . '-text-transform' );
+			$button_line_height    = astra_get_option( $builder_type . '-' . $_prefix . '-line-height' );
+			$button_letter_spacing = astra_get_option( $builder_type . '-' . $_prefix . '-letter-spacing' );
+
 			/**
 			 * Button CSS.
 			 */
@@ -85,7 +94,12 @@ class Astra_Button_Component_Dynamic_CSS {
 				 */
 				$selector . '[data-section*="section-' . $context . '-button-"] .ast-builder-button-wrap .ast-custom-button' => array(
 					// Typography.
-					'font-size' => astra_responsive_font( $button_font_size, 'desktop' ),
+					'font-family'    => astra_get_css_value( $button_font_family, 'font' ),
+					'font-weight'    => astra_get_css_value( $button_font_weight, 'font' ),
+					'line-height'    => esc_attr( $button_line_height ),
+					'text-transform' => esc_attr( $button_text_transform ),
+					'letter-spacing' => astra_get_css_value( $button_letter_spacing, 'px' ),
+					'font-size'      => astra_responsive_font( $button_font_size, 'desktop' ),
 				),
 
 				/**
@@ -118,7 +132,6 @@ class Astra_Button_Component_Dynamic_CSS {
 			 */
 			$css_output_tablet = array(
 
-				
 				/**
 				 * Button font size.
 				 */
@@ -151,7 +164,7 @@ class Astra_Button_Component_Dynamic_CSS {
 			 * Button CSS.
 			 */
 			$css_output_mobile = array(
-				
+
 				/**
 				 * Button font size.
 				 */
@@ -191,6 +204,15 @@ class Astra_Button_Component_Dynamic_CSS {
 
 			$visibility_selector = '.ast-' . $builder_type . '-button-' . $index . '[data-section="' . $_section . '"]';
 			$generated_css      .= Astra_Builder_Base_Dynamic_CSS::prepare_visibility_css( $_section, $visibility_selector );
+		}
+
+		if ( true === $hb_button_flag ) {
+			$static_hb_css = array(
+				'[data-section*="section-hb-button-"] .menu-link' => array(
+					'display' => 'none',
+				),
+			);
+			return astra_parse_css( $static_hb_css ) . $generated_css;
 		}
 
 		return $generated_css;

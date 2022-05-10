@@ -284,7 +284,6 @@
 
 .woocommerce ul.products, .woocommerce-page ul.products {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   column-gap: 20px;
 }
 
@@ -296,25 +295,29 @@
   position: relative;
 }
 
-.woocommerce ul.products.columns-1, .woocommerce-page ul.products.columns-1 {
+.woocommerce ul.products:not(.elementor-grid), .woocommerce-page ul.products:not(.elementor-grid) {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.woocommerce ul.products:not(.elementor-grid).columns-1, .woocommerce-page ul.products:not(.elementor-grid).columns-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
   width: 100%;
   margin-right: 0;
 }
 
-.woocommerce ul.products.columns-2, .woocommerce-page ul.products.columns-2 {
+.woocommerce ul.products:not(.elementor-grid).columns-2, .woocommerce-page ul.products:not(.elementor-grid).columns-2 {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.woocommerce ul.products.columns-3, .woocommerce-page ul.products.columns-3 {
+.woocommerce ul.products:not(.elementor-grid).columns-3, .woocommerce-page ul.products:not(.elementor-grid).columns-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.woocommerce ul.products.columns-5, .woocommerce-page ul.products.columns-5 {
+.woocommerce ul.products:not(.elementor-grid).columns-5, .woocommerce-page ul.products:not(.elementor-grid).columns-5 {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
-.woocommerce ul.products.columns-6, .woocommerce-page ul.products.columns-6 {
+.woocommerce ul.products:not(.elementor-grid).columns-6, .woocommerce-page ul.products:not(.elementor-grid).columns-6 {
   grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
@@ -426,7 +429,7 @@
 }
 
 .woocommerce .cart-collaterals .cross-sells ul.products li, .woocommerce-page .cart-collaterals .cross-sells ul.products li {
-  width: 48%;
+  width: calc(50% - 10px);
 }
 
 .woocommerce .cart-collaterals .cross-sells ul.products li.first, .woocommerce-page .cart-collaterals .cross-sells ul.products li.first {

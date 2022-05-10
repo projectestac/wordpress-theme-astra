@@ -56,12 +56,8 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 			 * Builder - Header & Footer Markup.
 			 */
 			require_once ASTRA_THEME_DIR . 'inc/builder/markup/class-astra-builder-header.php';
+			require_once ASTRA_THEME_DIR . 'inc/builder/markup/class-astra-builder-footer.php';
 
-			if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
-
-				require_once ASTRA_THEME_DIR . 'inc/builder/markup/class-astra-builder-footer.php';
-
-			}
 			/**
 			 * Builder Controllers.
 			 */

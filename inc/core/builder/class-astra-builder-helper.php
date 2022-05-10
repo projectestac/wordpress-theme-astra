@@ -647,7 +647,7 @@ final class Astra_Builder_Helper {
 			'astra_header_desktop_items',
 			array(
 				'logo'    => array(
-					'name'    => __( 'Logo', 'astra' ),
+					'name'    => __( 'Site Title & Logo', 'astra' ),
 					'icon'    => 'admin-appearance',
 					'section' => 'title_tagline',
 					'delete'  => false,
@@ -710,7 +710,7 @@ final class Astra_Builder_Helper {
 			'astra_header_mobile_items',
 			array(
 				'logo'           => array(
-					'name'    => __( 'Logo', 'astra' ),
+					'name'    => __( 'Site Title & Logo', 'astra' ),
 					'icon'    => 'admin-appearance',
 					'section' => 'title_tagline',
 				),
@@ -808,12 +808,12 @@ final class Astra_Builder_Helper {
 	 * @return array $args Updated arguments as per the filter.
 	 */
 	public function deprecate_old_header_and_footer( $args ) {
-
 		if ( self::$is_header_footer_builder_active ) {
 			unset( $args['mobile-header'] );
 			unset( $args['header-sections'] );
 			unset( $args['advanced-footer'] );
 		}
+
 		return $args;
 	}
 
@@ -915,6 +915,9 @@ final class Astra_Builder_Helper {
 	 * Adds support to render Mobile Popup Markup.
 	 */
 	public static function render_mobile_popup_markup() {
+		if ( ! self::is_component_loaded( 'mobile-trigger', 'header' ) && ! is_customize_preview() ) {
+			return;
+		}
 
 		$off_canvas_slide   = astra_get_option( 'off-canvas-slide' );
 		$mobile_header_type = astra_get_option( 'mobile-header-type' );
@@ -1066,9 +1069,9 @@ final class Astra_Builder_Helper {
 	/**
 	 * Check if component placed on the builder.
 	 *
-	 * @param integer $component_id component id.
-	 * @param string  $builder_type builder type.
-	 * @param string  $device Device type (mobile, desktop and both).
+	 * @param string $component_id component id.
+	 * @param string $builder_type builder type.
+	 * @param string $device Device type (mobile, desktop and both).
 	 * @return bool
 	 */
 	public static function is_component_loaded( $component_id, $builder_type = 'header', $device = 'both' ) {

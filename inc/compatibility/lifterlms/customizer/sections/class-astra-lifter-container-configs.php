@@ -52,6 +52,7 @@ if ( ! class_exists( 'Astra_Lifter_Container_Configs' ) ) {
 						'plain-container'         => __( 'Full Width / Contained', 'astra' ),
 						'page-builder'            => __( 'Full Width / Stretched', 'astra' ),
 					),
+					'divider'  => array( 'ast_class' => 'ast-top-divider' ),
 				),
 			);
 

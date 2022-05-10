@@ -52,6 +52,7 @@ class Astra_Header_Widget_Component_Loader {
 				'tablet_break_point'  => astra_get_tablet_breakpoint(),
 				'mobile_break_point'  => astra_get_mobile_breakpoint(),
 				'is_flex_based_css'   => Astra_Builder_Helper::apply_flex_based_css(),
+				'has_block_editor'    => astra_has_widgets_block_editor(),
 			)
 		);
 	}

@@ -211,7 +211,6 @@ if ( class_exists( 'Astra_Customizer_Config_Base' ) ) {
 					'transport' => 'postMessage',
 					'priority'  => 28,
 					'context'   => Astra_Builder_Helper::$design_tab,
-					'divider'   => array( 'ast_class' => 'ast-bottom-divider' ),
 				),
 
 				// Option Group: Off-Canvas Colors Group.

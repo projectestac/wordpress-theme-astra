@@ -61,7 +61,7 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 		 * @return array
 		 */
 		public function add_body_class( $classes ) {
-
+			/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$inherit_desk_logo              = astra_get_option( 'different-transparent-logo', false );
 			$transparent_header_logo        = astra_get_option( 'transparent-header-logo', true );
 			$transparent_header_logo_retina = astra_get_option( 'transparent-header-retina-logo', true );
@@ -141,7 +141,7 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 		 * @since 1.0.0
 		 */
 		public function transparent_header_logo() {
-
+			/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$inherit_desk_logo       = astra_get_option( 'different-transparent-logo', false );
 			$transparent_header_logo = astra_get_option( 'transparent-header-logo' );
 
@@ -180,7 +180,7 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 				}
 
 				$html = sprintf(
-					'<a href="%1$s" class="custom-logo-link transparent-custom-logo" rel="home" itemprop="url">%2$s</a>',
+					'<a href="%1$s" class="custom-logo-link transparent-custom-logo" rel="home" itemprop="url" aria-label="%3$s">%2$s</a>',
 					esc_url( home_url( '/' ) ),
 					wp_get_attachment_image(
 						$custom_logo_id,
@@ -189,7 +189,8 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 						array(
 							'class' => 'custom-logo',
 						)
-					)
+					),
+					get_bloginfo()
 				);
 
 				if ( 'mobile' === $transparent_header_devices ) {

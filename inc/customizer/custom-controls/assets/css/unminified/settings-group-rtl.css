@@ -1,6 +1,6 @@
 .ast-adv-toggle-icon {
   left: 2px;
-  top: -2px;
+  top: 0;
   position: absolute;
   width: 18px;
   height: 18px;
@@ -101,7 +101,7 @@
 
 .ast-field-settings-wrap .ast-field-settings-modal {
   border-radius: 3px;
-  margin-top: 9px;
+  margin-top: 15px;
   margin-bottom: 20px;
 }
 
@@ -311,4 +311,11 @@
  */
 .ast-top-divider.customize-control-ast-settings-group .ast-toggle-desc-wrap .ast-adv-toggle-icon {
     top: 23px;
+}
+/**
+ * Responsive slider control inside settings-group, case: body-font, headings-font.
+ */
+.ast-fields-wrap .customize-control-ast-responsive-slider .ast-responsive-slider-btns {
+	top: 0;
+	left: 42px;
 }

@@ -26,6 +26,8 @@ if ( ! function_exists( 'astra_get_foreground_color' ) ) {
 	 */
 	function astra_get_foreground_color( $hex ) {
 
+		$hex = apply_filters( 'astra_before_foreground_color_generation', $hex );
+
 		// bail early if color's not set.
 		if ( 'transparent' == $hex || 'false' == $hex || '#' == $hex || empty( $hex ) ) {
 			return 'transparent';
@@ -151,8 +153,8 @@ if ( ! function_exists( 'astra_get_font_css_value' ) ) {
 	 */
 	function astra_get_font_css_value( $value, $unit = 'px', $device = 'desktop' ) {
 
-		// If value is empty or 0 then return blank.
-		if ( '' == $value || 0 == $value ) {
+		// If value is empty then return blank.
+		if ( '' == $value || ( 0 == $value && ! astra_zero_font_size_case() ) ) {
 			return '';
 		}
 
@@ -465,9 +467,9 @@ if ( ! function_exists( 'astra_get_option' ) ) {
 	 * Return Theme options.
 	 *
 	 * @param  string $option       Option key.
-	 * @param  string $default      Option default value.
+	 * @param  mixed  $default      Option default value.
 	 * @param  string $deprecated   Option default value.
-	 * @return Mixed               Return option value.
+	 * @return mixed               Return option value.
 	 */
 	function astra_get_option( $option, $default = '', $deprecated = '' ) {
 
@@ -1149,14 +1151,22 @@ if ( ! function_exists( 'astra_get_pro_url' ) ) :
 		}
 		// Set up our URL if we have a medium.
 		if ( isset( $medium ) ) {
-			$astra_pro_url = add_query_arg( 'utm_medium', sanitize_text_field( $medium ), $url );
+			$astra_pro_url = add_query_arg( 'utm_medium', sanitize_text_field( $medium ), $astra_pro_url );
 		}
 		// Set up our URL if we have a campaign.
 		if ( isset( $campaign ) ) {
-			$astra_pro_url = add_query_arg( 'utm_campaign', sanitize_text_field( $campaign ), $url );
+			$astra_pro_url = add_query_arg( 'utm_campaign', sanitize_text_field( $campaign ), $astra_pro_url );
 		}
 
-		return esc_url( apply_filters( 'astra_get_pro_url', $astra_pro_url, $url ) );
+		$astra_pro_url = esc_url( apply_filters( 'astra_get_pro_url', $astra_pro_url, $url ) );
+		$astra_pro_url = remove_query_arg( 'bsf', $astra_pro_url );
+
+		$ref = get_option( 'astra_partner_url_param', '' );
+		if ( ! empty( $ref ) ) {
+			$astra_pro_url = add_query_arg( 'bsf', sanitize_text_field( $ref ), $astra_pro_url );
+		}
+
+		return $astra_pro_url;
 	}
 
 endif;
@@ -1174,13 +1184,14 @@ if ( ! function_exists( 'astra_get_search_form' ) ) :
 	 */
 	function astra_get_search_form( $echo = true ) {
 
-		$form = '<form role="search" method="get" class="search-form" action="' . esc_url( home_url( '/' ) ) . '">
-			<label>
-				<span class="screen-reader-text">' . _x( 'Search for:', 'label', 'astra' ) . '</span>
-				<input type="search" class="search-field" ' . apply_filters( 'astra_search_field_toggle_data_attrs', '' ) . ' placeholder="' . apply_filters( 'astra_search_field_placeholder', esc_attr_x( 'Search &hellip;', 'placeholder', 'astra' ) ) . '" value="' . get_search_query() . '" name="s" role="search" tabindex="-1"/>
-			</label>
-			<button type="submit" class="search-submit" value="' . esc_attr__( 'Search', 'astra' ) . '"  aria-label="search submit">' . ( Astra_Icons::is_svg_icons() ? Astra_Icons::get_icons( 'search' ) : '<i class="astra-search-icon"></i>' ) . '</button>
-		</form>';
+		$form = get_search_form(
+			array(
+				'input_placeholder' => apply_filters( 'astra_search_field_placeholder', esc_attr_x( 'Search &hellip;', 'placeholder', 'astra' ) ),
+				'data_attributes'   => apply_filters( 'astra_search_field_toggle_data_attrs', '' ),
+				'input_value'       => get_search_query(),
+				'show_input_submit' => false,
+			)
+		);
 
 		/**
 		 * Filters the HTML output of the search form.
@@ -1504,22 +1515,57 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 
 /**
  * Common function to check is pagination is enabled on current page.
- * 
+ *
  * @since 3.0.1
  * @return boolean
  */
-function is_astra_pagination_enabled() {
+function astra_check_pagination_enabled() {
 	global  $wp_query;
 
 	return ( $wp_query->max_num_pages > 1 && apply_filters( 'astra_pagination_enabled', true ) );
 }
 
-/** 
+/**
  * Verify is current post comments are enabled or not for applying dynamic CSS.
  *
  * @since 3.0.1
  * @return boolean
  */
-function is_current_post_comment_enabled() {
+function astra_check_current_post_comment_enabled() {
 	return ( is_singular() && comments_open() );
+}
+
+/**
+ * Dont apply zero size to existing user.
+ *
+ * @since 3.6.9
+ * @return boolean false if it is an existing user , true if not.
+ */
+function astra_zero_font_size_case() {
+	$astra_settings                                  = get_option( ASTRA_THEME_SETTINGS );
+	$astra_settings['astra-zero-font-size-case-css'] = isset( $astra_settings['astra-zero-font-size-case-css'] ) ? false : true;
+	return apply_filters( 'astra_zero_font_size_case', $astra_settings['astra-zero-font-size-case-css'] );
+}
+
+/**
+ * Check the WordPress version.
+ *
+ * @since  2.5.4
+ * @param string $version   WordPress version to compare with the current version.
+ * @param mixed  $compare   Comparison value i.e > or < etc.
+ * @return bool|null            True/False based on the  $version and $compare value.
+ */
+function astra_wp_version_compare( $version, $compare ) {
+	return version_compare( get_bloginfo( 'version' ), $version, $compare );
+}
+
+/**
+ * Check if existing setup is live with old block editor compatibilities.
+ *
+ * @return bool true|false.
+ */
+function astra_block_based_legacy_setup() {
+	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+	$legacy_setup   = ( isset( $astra_settings['blocks-legacy-setup'] ) && isset( $astra_settings['wp-blocks-ui'] ) && 'legacy' === $astra_settings['wp-blocks-ui'] ) ? true : false;
+	return $legacy_setup;
 }

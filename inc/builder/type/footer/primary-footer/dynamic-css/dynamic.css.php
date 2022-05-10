@@ -66,7 +66,10 @@ function astra_fb_primary_footer_dynamic_css( $dynamic_css, $dynamic_css_filtere
 	$inner_spacing_mobile  = ( isset( $inner_spacing['mobile'] ) ) ? $inner_spacing['mobile'] : '';
 
 	$css_output_desktop = array(
-
+		'.site-primary-footer-wrap'          => array(
+			'padding-top'    => '45px',
+			'padding-bottom' => '45px',
+		),
 		$selector                            => astra_get_responsive_background_obj( $footer_bg, 'desktop' ),
 		$selector . ' .ast-builder-grid-row' => array(
 			'grid-column-gap' => astra_get_css_value( $inner_spacing_desktop, 'px' ),

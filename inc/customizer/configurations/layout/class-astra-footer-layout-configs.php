@@ -45,7 +45,6 @@ if ( ! class_exists( 'Astra_Footer_Layout_Configs' ) ) {
 					'section'           => 'section-footer-small',
 					'priority'          => 5,
 					'title'             => __( 'Layout', 'astra' ),
-					'divider'           => array( 'ast_class' => 'ast-bottom-divider' ),
 					'choices'           => array(
 						'disabled'            => array(
 							'label' => __( 'Disabled', 'astra' ),
@@ -85,6 +84,7 @@ if ( ! class_exists( 'Astra_Footer_Layout_Configs' ) ) {
 					'section'    => 'section-footer-small',
 					'priority'   => 15,
 					'title'      => __( 'Section 1', 'astra' ),
+					'divider'    => array( 'ast_class' => 'ast-top-divider' ),
 					'choices'    => array(
 						''       => __( 'None', 'astra' ),
 						'custom' => __( 'Text', 'astra' ),

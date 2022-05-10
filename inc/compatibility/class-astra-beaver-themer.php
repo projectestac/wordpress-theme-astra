@@ -272,7 +272,7 @@ if ( ! class_exists( 'Astra_Beaver_Themer' ) ) :
 							remove_action( 'astra_masthead', 'astra_masthead_primary_template' );
 						} else {
 							add_filter(
-								'ast_main_header_display',
+								'astra_main_header_display',
 								function( $display_header ) {// phpcs:ignore PHPCompatibility.FunctionDeclarations.NewClosure.Found
 
 									return 'disabled';
@@ -285,7 +285,7 @@ if ( ! class_exists( 'Astra_Beaver_Themer' ) ) :
 					if ( 'disabled' === $footer_layout ) {
 
 						add_filter(
-							'ast_footer_sml_layout',
+							'astra_footer_sml_layout',
 							function( $is_footer ) {// phpcs:ignore PHPCompatibility.FunctionDeclarations.NewClosure.Found
 
 								return 'disabled';

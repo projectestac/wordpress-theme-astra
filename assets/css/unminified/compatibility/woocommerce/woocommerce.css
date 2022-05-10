@@ -1418,7 +1418,7 @@ p.demo_store a,
 .woocommerce nav.woocommerce-pagination ul {
   display: inline-block;
   text-align: center;
-  white-space: nowrap;
+  white-space: normal;
   padding: 0;
   clear: both;
   border: 0;
@@ -2306,13 +2306,6 @@ p.demo_store a,
   padding: 0;
 }
 
-.woocommerce ul#shipping_method li {
-  margin: 0;
-  padding: 0.25em 0 0.25em 22px;
-  text-indent: -22px;
-  list-style: none outside;
-}
-
 .woocommerce ul#shipping_method li input {
   margin: 3px 0.5ex;
 }
@@ -2690,6 +2683,10 @@ p.demo_store a,
 .woocommerce .select2-search--dropdown .select2-search__field,
 .woocommerce .select2-results__option {
   padding: 6px 0.75em;
+}
+
+.woocommerce .variations th {
+  text-align: left;
 }
 
 .woocommerce,
@@ -3977,32 +3974,6 @@ button.pswp__button--zoom:hover {
   border-bottom-width: 1px;
 }
 
-.woocommerce.woocommerce-checkout #customer_details h3,
-.woocommerce-page.woocommerce-checkout #customer_details h3 {
-  font-size: 1.2rem;
-  padding: 20px 0 14px;
-  margin: 0 0 20px;
-  border-bottom: 1px solid #ebebeb;
-}
-
-.woocommerce.woocommerce-checkout form #order_review_heading,
-.woocommerce-page.woocommerce-checkout form #order_review_heading {
-  border-width: 2px 2px 0 2px;
-  border-style: solid;
-  font-size: 1.2rem;
-  margin: 0;
-  padding: 1.5em 1.5em 1em;
-  border-color: #ebebeb;
-}
-
-.woocommerce.woocommerce-checkout form #order_review,
-.woocommerce-page.woocommerce-checkout form #order_review {
-  padding: 0 2em;
-  border-width: 0 2px 2px;
-  border-style: solid;
-  border-color: #ebebeb;
-}
-
 .woocommerce.woocommerce-checkout form #order_review table,
 .woocommerce-page.woocommerce-checkout form #order_review table {
   border-width: 0;
@@ -4297,16 +4268,6 @@ button.pswp__button--zoom:hover {
 
 .woocommerce ul.product-categories > li {
   padding: 2px 0px;
-}
-
-.woocommerce ul.product-categories > li ul li:before {
-  content: "\e900";
-  padding: 0 5px 0 5px;
-  display: inline-block;
-  font-family: Astra;
-  transform: rotate(-90deg);
-  font-size: 11px;
-  font-size: 0.7rem;
 }
 
 .woocommerce ul.product-categories > li:first-child {

@@ -86,7 +86,7 @@
 	.ast-color-multiple-group-reset.ast-color-group-reset {
 		right: 132px;
 	}
-	.ast-responsive-btns.ast-multiple-colors-group {
+	.ast-responsive-btns.ast-multiple-colors-group, .ast-color-multiple-group-reset.ast-color-group-reset.ast-single-color-group-set {
 		right: 112px;
 	}
 }
@@ -133,4 +133,7 @@
 			}
 		}
 	}
+}
+.astra-color-picker-wrap.picker-open + span {
+    display: none;
 }

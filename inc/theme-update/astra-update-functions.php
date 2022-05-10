@@ -55,7 +55,7 @@ function astra_vertical_horizontal_padding_migration() {
 
 	$btn_vertical_padding   = isset( $theme_options['button-v-padding'] ) ? $theme_options['button-v-padding'] : 10;
 	$btn_horizontal_padding = isset( $theme_options['button-h-padding'] ) ? $theme_options['button-h-padding'] : 40;
-
+	/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 	if ( false === astra_get_db_option( 'theme-button-padding', false ) ) {
 
 		// Migrate button vertical padding to the new padding param for button.
@@ -2924,9 +2924,7 @@ function astra_check_flex_based_css() {
  * @return void.
  */
 function astra_update_cart_style() {
-
 	$theme_options = get_option( 'astra-settings', array() );
-
 	if ( isset( $theme_options['woo-header-cart-icon-style'] ) && 'none' === $theme_options['woo-header-cart-icon-style'] ) {
 		$theme_options['woo-header-cart-icon-style']  = 'outline';
 		$theme_options['header-woo-cart-icon-color']  = '';
@@ -2941,4 +2939,388 @@ function astra_update_cart_style() {
 	}
 
 	update_option( 'astra-settings', $theme_options );
+}
+
+/**
+ * Update existing 'Grid Column Layout' option in responsive way in Related Posts.
+ * Till this update 3.5.0 we have 'Grid Column Layout' only for singular option, but now we are improving it as responsive.
+ *
+ * @since 3.5.0
+ * @return void.
+ */
+function astra_update_related_posts_grid_layout() {
+
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['related-posts-grid-responsive'] ) && isset( $theme_options['related-posts-grid'] ) ) {
+
+		/**
+		 * Managed here switch case to reduce further conditions in dynamic-css to get CSS value based on grid-template-columns. Because there are following CSS props used.
+		 *
+		 * '1' = grid-template-columns: 1fr;
+		 * '2' = grid-template-columns: repeat(2,1fr);
+		 * '3' = grid-template-columns: repeat(3,1fr);
+		 * '4' = grid-template-columns: repeat(4,1fr);
+		 *
+		 * And we already have Astra_Builder_Helper::$grid_size_mapping (used for footer layouts) for getting CSS values based on grid layouts. So migrating old value of grid here to new grid value.
+		 */
+		switch ( $theme_options['related-posts-grid'] ) {
+			case '1':
+				$grid_layout = 'full';
+				break;
+
+			case '2':
+				$grid_layout = '2-equal';
+				break;
+
+			case '3':
+				$grid_layout = '3-equal';
+				break;
+
+			case '4':
+				$grid_layout = '4-equal';
+				break;
+		}
+
+		$theme_options['related-posts-grid-responsive'] = array(
+			'desktop' => $grid_layout,
+			'tablet'  => $grid_layout,
+			'mobile'  => 'full',
+		);
+
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Migrate Site Title & Site Tagline options to new responsive array.
+ *
+ * @since 3.5.0
+ *
+ * @return void
+ */
+function astra_site_title_tagline_responsive_control_migration() {
+
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( false === get_option( 'display-site-title-responsive', false ) && isset( $theme_options['display-site-title'] ) ) {
+		$theme_options['display-site-title-responsive']['desktop'] = $theme_options['display-site-title'];
+		$theme_options['display-site-title-responsive']['tablet']  = $theme_options['display-site-title'];
+		$theme_options['display-site-title-responsive']['mobile']  = $theme_options['display-site-title'];
+	}
+
+	if ( false === get_option( 'display-site-tagline-responsive', false ) && isset( $theme_options['display-site-tagline'] ) ) {
+		$theme_options['display-site-tagline-responsive']['desktop'] = $theme_options['display-site-tagline'];
+		$theme_options['display-site-tagline-responsive']['tablet']  = $theme_options['display-site-tagline'];
+		$theme_options['display-site-tagline-responsive']['mobile']  = $theme_options['display-site-tagline'];
+	}
+
+	update_option( 'astra-settings', $theme_options );
+}
+
+/**
+ * Do not apply new font-weight heading support CSS in editor/frontend directly.
+ *
+ * 1. Adding Font-weight support to widget titles.
+ * 2. Customizer font CSS not supporting in editor.
+ *
+ * @since 3.6.0
+ *
+ * @return void
+ */
+function astra_headings_font_support() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['can-support-widget-and-editor-fonts'] ) ) {
+		$theme_options['can-support-widget-and-editor-fonts'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
+ *
+ * @since 3.6.0
+ * @return void.
+ */
+function astra_remove_logo_max_width() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['can-remove-logo-max-width-css'] ) ) {
+		$theme_options['can-remove-logo-max-width-css'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set flag to maintain backward compatibility for existing users for Transparent Header border bottom default value i.e from '' to 0.
+ *
+ * @since 3.6.0
+ * @return void.
+ */
+function astra_transparent_header_default_value() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['transparent-header-default-border'] ) ) {
+		$theme_options['transparent-header-default-border'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Clear Astra + Astra Pro assets cache.
+ *
+ * @since 3.6.1
+ * @return void.
+ */
+function astra_clear_all_assets_cache() {
+	if ( ! class_exists( 'Astra_Cache_Base' ) ) {
+		return;
+	}
+	// Clear Astra theme asset cache.
+	$astra_cache_base_instance = new Astra_Cache_Base( 'astra' );
+	$astra_cache_base_instance->refresh_assets( 'astra' );
+
+	// Clear Astra Addon's static and dynamic CSS asset cache.
+	astra_clear_assets_cache();
+	$astra_addon_cache_base_instance = new Astra_Cache_Base( 'astra-addon' );
+	$astra_addon_cache_base_instance->refresh_assets( 'astra-addon' );
+}
+
+/**
+ * Set flag for updated default values for buttons & add GB Buttons padding support.
+ *
+ * @since 3.6.3
+ * @return void
+ */
+function astra_button_default_values_updated() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['btn-default-padding-updated'] ) ) {
+		$theme_options['btn-default-padding-updated'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set flag for old users, to not directly apply underline to content links.
+ *
+ * @since 3.6.4
+ * @return void
+ */
+function astra_update_underline_link_setting() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['underline-content-links'] ) ) {
+		$theme_options['underline-content-links'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Add compatibility support for WP-5.8. as some of settings & blocks already their in WP-5.7 versions, that's why added backward here.
+ *
+ * @since 3.6.5
+ * @return void
+ */
+function astra_support_block_editor() {
+	$theme_options = get_option( 'astra-settings' );
+
+	// Set flag on existing user's site to not reflect changes directly.
+	if ( ! isset( $theme_options['support-block-editor'] ) ) {
+		$theme_options['support-block-editor'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set flag to maintain backward compatibility for existing users.
+ * Fixing the case where footer widget's right margin space not working.
+ *
+ * @since 3.6.7
+ * @return void
+ */
+function astra_fix_footer_widget_right_margin_case() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['support-footer-widget-right-margin'] ) ) {
+		$theme_options['support-footer-widget-right-margin'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
+ *
+ * @since 3.6.7
+ * @return void
+ */
+function astra_remove_elementor_toc_margin() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['remove-elementor-toc-margin-css'] ) ) {
+		$theme_options['remove-elementor-toc-margin-css'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
+ * Use: Setting flag for removing widget specific design options when WordPress 5.8 & above activated on site.
+ *
+ * @since 3.6.8
+ * @return void
+ */
+function astra_set_removal_widget_design_options_flag() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['remove-widget-design-options'] ) ) {
+		$theme_options['remove-widget-design-options'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Apply zero font size for new users.
+ *
+ * @since 3.6.9
+ * @return void
+ */
+function astra_zero_font_size_comp() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['astra-zero-font-size-case-css'] ) ) {
+		$theme_options['astra-zero-font-size-case-css'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/** Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
+ *
+ * @since 3.6.9
+ * @return void
+ */
+function astra_unset_builder_elements_underline() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['unset-builder-elements-underline'] ) ) {
+		$theme_options['unset-builder-elements-underline'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Migrating Builder > Account > transparent resonsive menu color options to single color options.
+ * Because we do not show menu on resonsive devices, whereas we trigger login link on responsive devices instead of showing menu.
+ *
+ * @since 3.6.9
+ *
+ * @return void
+ */
+function astra_remove_responsive_account_menu_colors_support() {
+
+	$theme_options = get_option( 'astra-settings', array() );
+
+	$account_menu_colors = array(
+		'transparent-account-menu-color',                // Menu color.
+		'transparent-account-menu-bg-obj',               // Menu background color.
+		'transparent-account-menu-h-color',              // Menu hover color.
+		'transparent-account-menu-h-bg-color',           // Menu background hover color.
+		'transparent-account-menu-a-color',              // Menu active color.
+		'transparent-account-menu-a-bg-color',           // Menu background active color.
+	);
+
+	foreach ( $account_menu_colors as $color_option ) {
+		if ( ! isset( $theme_options[ $color_option ] ) && isset( $theme_options[ $color_option . '-responsive' ]['desktop'] ) ) {
+			$theme_options[ $color_option ] = $theme_options[ $color_option . '-responsive' ]['desktop'];
+		}
+	}
+
+	update_option( 'astra-settings', $theme_options );
+}
+
+/**
+ * Link default color compatibility.
+ *
+ * @since 3.7.0
+ * @return void
+ */
+function astra_global_color_compatibility() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['support-global-color-format'] ) ) {
+		$theme_options['support-global-color-format'] = false;
+	}
+
+	// Set Footer copyright text color for existing users to #3a3a3a.
+	if ( ! isset( $theme_options['footer-copyright-color'] ) ) {
+		$theme_options['footer-copyright-color'] = '#3a3a3a';
+	}
+
+	update_option( 'astra-settings', $theme_options );
+}
+
+/**
+ * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
+ *
+ * @since 3.7.4
+ * @return void
+ */
+function astra_improve_gutenberg_editor_ui() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['improve-gb-editor-ui'] ) ) {
+		$theme_options['improve-gb-editor-ui'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
+ *
+ * Starting supporting content-background color for Full Width Contained & Full Width Stretched layouts.
+ *
+ * @since 3.7.8
+ * @return void
+ */
+function astra_fullwidth_layouts_apply_content_background() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['apply-content-background-fullwidth-layouts'] ) ) {
+		$theme_options['apply-content-background-fullwidth-layouts'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Sets the default breadcrumb separator selector value if the current user is an exsisting user
+ *
+ * @since 3.7.8
+ * @return void
+ */
+function astra_set_default_breadcrumb_separator_option() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['breadcrumb-separator-selector'] ) ) {
+		$theme_options['breadcrumb-separator-selector'] = 'unicode';
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set flag to avoid direct reflections on live site & to maintain backward compatibility for existing users.
+ *
+ * Backward flag purpose - To initiate modern & updated UI of block editor & frontend.
+ *
+ * @since 3.8.0
+ * @return void
+ */
+function astra_apply_modern_block_editor_ui() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['wp-blocks-ui'] ) ) {
+		$theme_options['blocks-legacy-setup'] = true;
+		$theme_options['wp-blocks-ui']        = 'legacy';
+		update_option( 'astra-settings', $theme_options );
+	}
 }

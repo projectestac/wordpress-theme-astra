@@ -26,15 +26,17 @@ add_filter( 'astra_dynamic_theme_css', 'astra_fb_html_dynamic_css' );
  */
 function astra_fb_html_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 
-	$dynamic_css .= Astra_Html_Component_Dynamic_CSS::astra_html_dynamic_css( 'footer' );
-
+	$dynamic_css     .= Astra_Html_Component_Dynamic_CSS::astra_html_dynamic_css( 'footer' );
+	$static_css_flg   = false;
+	$stati_css_output = '';
 	for ( $index = 1; $index <= Astra_Builder_Helper::$num_of_footer_html; $index++ ) {
 
 		if ( ! Astra_Builder_Helper::is_component_loaded( 'html-' . $index, 'footer' ) ) {
 			continue;
 		}
 
-		$selector = '.footer-widget-area[data-section="section-fb-html-' . $index . '"]';
+		$static_css_flg = true;
+		$selector       = '.footer-widget-area[data-section="section-fb-html-' . $index . '"]';
 
 		$alignment = astra_get_option( 'footer-html-' . $index . '-alignment' );
 
@@ -71,5 +73,14 @@ function astra_fb_html_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 		$dynamic_css .= $css_output;
 	}
 
-	return $dynamic_css;
+	if ( true === $static_css_flg ) {
+		$stati_css_output .= astra_parse_css(
+			array(
+				'.footer-widget-area[data-section^="section-fb-html-"] .ast-builder-html-element' => array(
+					'text-align' => 'center',
+				),
+			)
+		);
+	}
+	return $stati_css_output . $dynamic_css;
 }

@@ -344,7 +344,7 @@ if ( ! function_exists( 'astra_get_audios_from_post' ) ) {
 
 		// for audio post type - grab.
 		$post    = get_post( $post_id );
-		$content = do_shortcode( apply_filters( 'the_content', $post->post_content ) );
+		$content = do_shortcode( apply_filters( 'the_content', $post->post_content ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$embeds  = apply_filters( 'astra_get_post_audio', get_media_embedded_in_content( $content ) );
 
 		if ( empty( $embeds ) ) {
@@ -375,7 +375,7 @@ if ( ! function_exists( 'astra_get_video_from_post' ) ) {
 	function astra_get_video_from_post( $post_id ) {
 
 		$post    = get_post( $post_id );
-		$content = do_shortcode( apply_filters( 'the_content', $post->post_content ) );
+		$content = do_shortcode( apply_filters( 'the_content', $post->post_content ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 		$embeds  = apply_filters( 'astra_get_post_audio', get_media_embedded_in_content( $content ) );
 
 		if ( empty( $embeds ) ) {

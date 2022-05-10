@@ -73,7 +73,7 @@ function astra_get_selected_breadcrumb( $echo = true ) {
 	if ( ! is_array( $wpseo_option ) ) {
 		unset( $wpseo_option );
 		$wpseo_option = array(
-			'breadcrumbs-enable' => $breadcrumb_enable 
+			'breadcrumbs-enable' => $breadcrumb_enable
 		);
 	}
 
@@ -83,10 +83,10 @@ function astra_get_selected_breadcrumb( $echo = true ) {
 	} elseif ( function_exists( 'bcn_display' ) && $breadcrumb_source && 'breadcrumb-navxt' == $breadcrumb_source ) {
 
 		if( true === $echo ) {
-			?> 
+			?>
 				<div class="breadcrumbs" typeof="BreadcrumbList" vocab="https://schema.org/">
-					<?php bcn_display() ?> 
-				</div> 
+					<?php bcn_display() ?>
+				</div>
 			<?php
 			return;
 		}
@@ -100,6 +100,14 @@ function astra_get_selected_breadcrumb( $echo = true ) {
 			return ob_get_clean();
 		}
 		rank_math_the_breadcrumbs();
+	} elseif ( function_exists( 'seopress_display_breadcrumbs' ) && $breadcrumb_source && 'seopress' == $breadcrumb_source ) {
+		// Check if breadcrumb is turned on from SEOPress plugin.
+		if ( ! $echo ) {
+			ob_start();
+			seopress_display_breadcrumbs( false );
+			return ob_get_clean();
+		}
+		seopress_display_breadcrumbs();
 	} else {
 		// Load default Astra breadcrumb if none selected.
 		return astra_get_breadcrumb_trail( $echo );
@@ -302,7 +310,7 @@ class Astra_Breadcrumb_Trail {
 				tag_escape( $this->args['list_tag'] ),
 				( $this->args['schema'] ? 'itemscope itemtype="http://schema.org/BreadcrumbList"' : '' )
 			);
-				
+
 			if ( $this->args['schema'] ) {
 				// Add the number of items and item list order schema.
 				$breadcrumb .= sprintf( '<meta content="%1$d" %2$s />', absint( $item_count ), astra_attr(
@@ -354,12 +362,12 @@ class Astra_Breadcrumb_Trail {
 				$attributes = $this->args['schema'] ? $item_schema_attr : '';
 
 				$attributes .= ' class="' . $item_class . '"';
-				
+
 				if ( $this->args['schema'] ) {
 					// Build the meta position HTML.
 					$meta = sprintf( '<meta itemprop="position" content="%s" />', absint( $item_position ) );
 				}
-				
+
 				if ( $item_count === $item_position ) {
 					$meta = '';
 				}
@@ -384,7 +392,7 @@ class Astra_Breadcrumb_Trail {
 
 		// Allow developers to filter the breadcrumb trail HTML.
 		$breadcrumb = apply_filters( 'astra_breadcrumb_trail', $breadcrumb, $this->args );
-		
+
 		if ( false === $this->args['echo'] ) {
 			return $breadcrumb;
 		}
@@ -979,6 +987,7 @@ class Astra_Breadcrumb_Trail {
 
 		// Add the week item.
 		if ( is_paged() ) {
+			/** @psalm-suppress InvalidArgument **/
 			$this->items[] = esc_url( get_archives_link( add_query_arg( array( 'm' => get_the_time( 'Y' ), 'w' => get_the_time( 'W' ) ), home_url() ), $week, false ) );
 		}
 		elseif ( true === $this->args['show_title'] ) {

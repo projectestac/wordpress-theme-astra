@@ -55,14 +55,14 @@ if ( ! class_exists( 'Astra_Header_Account_Component' ) ) {
 			 * @since  3.0.0
 			 * @var Array
 			 */
-			$menu_classes = apply_filters( 'astra_menu_classes', array( 'main-header-menu', 'ast-nav-menu', 'ast-account-nav-menu' ) );
+			$menu_classes = apply_filters( 'astra_menu_classes', array( 'main-header-menu', 'ast-menu-shadow', 'ast-nav-menu', 'ast-account-nav-menu' ) );
 
 			$items_wrap  = '<nav ';
 			$items_wrap .= astra_attr(
 				'site-navigation',
 				array(
-					'id'         => 'site-navigation',
-					'class'      => 'ast-flex-grow-1 navigation-accessibility site-header-focus-item',
+					'id'         => 'account-site-navigation',
+					'class'      => 'site-navigation ast-flex-grow-1 navigation-accessibility site-header-focus-item',
 					'aria-label' => esc_attr__( 'Site Navigation', 'astra' ),
 				)
 			);
@@ -130,10 +130,10 @@ if ( ! class_exists( 'Astra_Header_Account_Component' ) ) {
 							echo astra_attr(
 								'site-navigation',
 								array(
-									'id' => 'site-navigation',
+									'id' => 'account-site-navigation',
 								)
 							);
-							echo ' class="ast-flex-grow-1 navigation-accessibility" aria-label="' . esc_attr__( 'Site Navigation', 'astra' ) . '">';
+							echo ' class="site-navigation ast-flex-grow-1 navigation-accessibility" aria-label="' . esc_attr__( 'Site Navigation', 'astra' ) . '">';
 							wp_page_menu( $fallback_menu_args );
 						echo '</nav>';
 					echo '</div>';

@@ -284,7 +284,6 @@ function astra_hb_edd_cart_dynamic_css( $dynamic_css, $dynamic_css_filtered = ''
 			// Outline icon colors.
 			'.ast-edd-menu-cart-outline .ast-addon-cart-wrap' => array(
 				'background' => '#ffffff',
-				'border'     => '1px solid ' . $header_cart_icon_color,
 				'color'      => esc_attr( $header_cart_icon_color ),
 			),
 			// Outline Info colors.
@@ -323,7 +322,6 @@ function astra_hb_edd_cart_dynamic_css( $dynamic_css, $dynamic_css_filtered = ''
 			// Transparent Header - Outline icon colors.
 			'.ast-theme-transparent-header .ast-edd-menu-cart-outline .ast-addon-cart-wrap' => array(
 				'background' => '#ffffff',
-				'border'     => '1px solid ' . $trans_header_cart_icon_color,
 				'color'      => esc_attr( $trans_header_cart_icon_color ),
 			),
 			// Transparent Header - Outline Info colors.
@@ -341,6 +339,22 @@ function astra_hb_edd_cart_dynamic_css( $dynamic_css, $dynamic_css_filtered = ''
 				'border-radius' => astra_get_css_value( $header_cart_icon_radius, 'px' ),
 			),
 		);
+
+		// We adding this conditional CSS only to maintain backwards. Remove this condition after 2-3 updates of add-on.
+		if ( defined( 'ASTRA_EXT_VER' ) && version_compare( ASTRA_EXT_VER, '3.4.2', '<' ) ) {
+			// Outline cart style border.
+			$header_cart_icon['.ast-edd-menu-cart-outline .ast-addon-cart-wrap'] = array(
+				'background' => '#ffffff',
+				'border'     => '1px solid ' . $header_cart_icon_color,
+				'color'      => esc_attr( $header_cart_icon_color ),
+			);
+			// Transparent Header outline cart style border.
+			$header_cart_icon['.ast-theme-transparent-header .ast-edd-menu-cart-outline .ast-addon-cart-wrap'] = array(
+				'background' => '#ffffff',
+				'border'     => '1px solid ' . $trans_header_cart_icon_color,
+				'color'      => esc_attr( $trans_header_cart_icon_color ),
+			);
+		}
 
 		$header_cart_icon = astra_parse_css( $header_cart_icon );
 	}

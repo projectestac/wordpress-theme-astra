@@ -22,12 +22,12 @@ add_filter( 'astra_dynamic_theme_css', 'astra_pagination_css', 11 );
  */
 function astra_pagination_css( $dynamic_css ) {
 
-	if ( is_astra_pagination_enabled() || false !== apply_filters( 'astra_enable_pagination_css', false ) ) {
-		
+	if ( astra_check_pagination_enabled() || false !== apply_filters( 'astra_enable_pagination_css', false ) ) {
+
 		$theme_color      = astra_get_option( 'theme-color' );
 		$link_color       = astra_get_option( 'link-color', $theme_color );
 		$link_hover_color = astra_get_option( 'link-h-color' );
-		
+
 		$pagination_color_output = array(
 			'.ast-pagination .next.page-numbers' => array(
 				'display' => 'inherit',
@@ -41,7 +41,7 @@ function astra_pagination_css( $dynamic_css ) {
 			),
 		);
 		$dynamic_css            .= astra_parse_css( $pagination_color_output );
-		
+
 		$pagination_static_css = '
             .ast-pagination .prev.page-numbers,
             .ast-pagination .next.page-numbers {
@@ -70,9 +70,17 @@ function astra_pagination_css( $dynamic_css ) {
             @media (max-width: 420px) {
                 .ast-pagination .prev.page-numbers,
                 .ast-pagination .next.page-numbers {
-                width: 100%;
-                text-align: center;
-                margin: 0;
+                    width: 100%;
+                    text-align: center;
+                    margin: 0;
+                }
+                .ast-pagination-circle .ast-pagination .next.page-numbers,
+                .ast-pagination-square .ast-pagination .next.page-numbers{
+                    margin-top: 10px;
+                }
+                .ast-pagination-circle .ast-pagination .prev.page-numbers,
+                .ast-pagination-square .ast-pagination .prev.page-numbers{
+                    margin-bottom: 10px;
                 }
             }
             .ast-pagination .prev,
@@ -109,7 +117,7 @@ function astra_pagination_css( $dynamic_css ) {
                     border: 2px solid #eaeaea;
                     background: transparent;
                 }
-                
+
                 .ast-pagination .prev.page-numbers.dots,
                 .ast-pagination .prev.page-numbers:visited.dots,
                 .ast-pagination .prev.page-numbers:focus.dots,
@@ -119,7 +127,7 @@ function astra_pagination_css( $dynamic_css ) {
                     cursor: default;
                 }';
 		}
-			
+
 		if ( is_rtl() ) {
 			$pagination_static_css .= '
             @media (min-width: 993px) {
@@ -127,16 +135,19 @@ function astra_pagination_css( $dynamic_css ) {
                     padding-right: 3.33333em;
                     padding-left: 3.33333em;
                 }
+				.ast-pagination .prev.page-numbers {
+					float: right;
+				}
                 .ast-pagination .next.page-numbers {
                     float: left;
                     text-align: left;
-                } 
+                }
                 @media (max-width: 768px) {
                     .ast-pagination .next.page-numbers .page-navigation {
                         padding-left: 0;
                     }
                 }';
-					
+
 			if ( ! Astra_Builder_Helper::apply_flex_based_css() ) {
 				$pagination_static_css .= '
                     @media (min-width: 769px) {
@@ -149,7 +160,7 @@ function astra_pagination_css( $dynamic_css ) {
                         margin-left: 0;
                     }
                 }';
-			}           
+			}
 		} else {
 			$pagination_static_css .= '
                 @media (min-width: 993px) {
@@ -158,10 +169,13 @@ function astra_pagination_css( $dynamic_css ) {
                         padding-right: 3.33333em;
                     }
                 }
+				.ast-pagination .prev.page-numbers {
+					float: left;
+				}
                 .ast-pagination .next.page-numbers {
                     float: right;
                 }
-                    
+
                 @media (max-width: 768px) {
                     .ast-pagination .next.page-numbers .page-navigation {
                         padding-right: 0;
@@ -180,10 +194,10 @@ function astra_pagination_css( $dynamic_css ) {
                           margin-right: 0;
                         }
                     }';
-			}           
+			}
 		}
 		return $dynamic_css .= Astra_Enqueue_Scripts::trim_css( $pagination_static_css );
 	}
 	return $dynamic_css;
-	
+
 }

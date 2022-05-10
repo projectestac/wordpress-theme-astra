@@ -62,12 +62,11 @@
 .ast-alignment-wrapper .ast-alignment-inner-wrap:not(:first-child) .components-button {
     margin-left: -1px;
 }
-.ast-alignment-wrapper .ast-alignment-inner-wrap:nth-child(2):not(:last-child) .components-button {
+
+.ast-alignment-wrapper .ast-alignment-inner-wrap:not(:first-child):not(:last-child) .components-button{
     border-right: none;
 }
-.ast-alignment-wrapper .ast-alignment-inner-wrap:nth-child(3):not(:last-child) .components-button {
-    border-right: none;
-}
+
 .customize-control-ast-selector .ast-alignment-inner-wrap .components-button {
     border-radius: unset;
     font-size: 12px;
@@ -89,4 +88,7 @@
 }
 .customize-control-ast-selector {
     margin-bottom: 1px;
+}
+.ast-alignment-inner-wrap.active button.components-button.is-primary {
+    border-color: #007cba;
 }

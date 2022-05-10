@@ -43,6 +43,7 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 		public function __construct() {
 
 			add_filter( 'astra_dynamic_theme_css', array( $this, 'footer_dynamic_css' ) );
+			add_filter( 'astra_dynamic_theme_css', array( $this, 'mobile_header_logo_css' ) );
 		}
 
 		/**
@@ -373,6 +374,36 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 
 			$dynamic_css .= $css_output;
 
+			return $dynamic_css;
+		}
+
+		/**
+		 * Different logo for mobile static CSS.
+		 *
+		 * @param string $dynamic_css Appended dynamic CSS.
+		 * @since 3.5.0
+		 * @return string
+		 */
+		public static function mobile_header_logo_css( $dynamic_css ) {
+
+			$mobile_header_logo            = astra_get_option( 'mobile-header-logo' );
+			$different_mobile_header_order = astra_get_option( 'different-mobile-logo' );
+
+			if ( '' !== $mobile_header_logo && '1' == $different_mobile_header_order ) {
+				$mobile_header_css = '
+				.ast-header-break-point .ast-has-mobile-header-logo .custom-logo-link {
+					display: none;
+				}
+				.ast-header-break-point .ast-has-mobile-header-logo .custom-mobile-logo-link {
+					display: inline-block;
+				}
+				.ast-header-break-point.ast-mobile-inherit-site-logo .ast-has-mobile-header-logo .custom-logo-link,
+				.ast-header-break-point.ast-mobile-inherit-site-logo .ast-has-mobile-header-logo .astra-logo-svg {
+					display: block;
+				}';
+
+				$dynamic_css .= Astra_Enqueue_Scripts::trim_css( $mobile_header_css );
+			}
 			return $dynamic_css;
 		}
 

@@ -162,6 +162,9 @@ if ( ! class_exists( 'Astra_After_Setup_Theme' ) ) {
 			// WooCommerce.
 			add_theme_support( 'woocommerce' );
 
+			// Rank Math Breadcrumb.
+			add_theme_support( 'rank-math-breadcrumbs' );
+
 			// Native AMP Support.
 			if ( true === apply_filters( 'astra_amp_support', true ) ) {
 				add_theme_support(
@@ -175,6 +178,8 @@ if ( ! class_exists( 'Astra_After_Setup_Theme' ) ) {
 				);
 			}
 
+			// Remove Template Editor support until WP 5.9 since more Theme Blocks are going to be introduced.
+			remove_theme_support( 'block-templates' );
 		}
 
 		/**
@@ -246,7 +251,7 @@ if ( ! class_exists( 'Astra_After_Setup_Theme' ) ) {
 
 			if ( astra_strposa( $url, $allowed_providers ) ) {
 				if ( $add_astra_oembed_wrapper ) {
-					$html = ( '' !== $html ) ? '<div class="ast-oembed-container">' . $html . '</div>' : '';
+					$html = ( '' !== $html ) ? '<div class="ast-oembed-container" style="height: 100%;">' . $html . '</div>' : '';
 				}
 			}
 

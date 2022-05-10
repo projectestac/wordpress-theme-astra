@@ -41,18 +41,26 @@ class Astra_Mobile_Menu_Component {
 	/**
 	 * Secondary navigation markup
 	 *
+	 * @param string $device Checking where mobile-menu is dropped.
+	 *
 	 * @since 3.0.0.
 	 */
-	public static function menu_markup() {
+	public static function menu_markup( $device = 'mobile' ) {
 
 		$theme_location        = 'mobile_menu';
-		$submenu_class         = apply_filters( 'secondary_submenu_border_class', ' submenu-with-border' );
+		$submenu_class         = apply_filters( 'astra_secondary_submenu_border_class', ' submenu-with-border' );
 		$stack_on_mobile_class = 'stack-on-mobile';
 
 		// Menu Animation.
 		$menu_animation = astra_get_option( 'header-mobile-menu-submenu-container-animation' );
 		if ( ! empty( $menu_animation ) ) {
 			$submenu_class .= ' astra-menu-animation-' . esc_attr( $menu_animation ) . ' ';
+		}
+
+		// Resolving duplicate ID for 'ast-hf-mobile-menu' in W3C Validator.
+		$menu_id = 'ast-hf-mobile-menu';
+		if ( 'desktop' === $device ) {
+			$menu_id = 'ast-desktop-toggle-menu';
 		}
 
 		/**
@@ -67,8 +75,8 @@ class Astra_Mobile_Menu_Component {
 		$items_wrap .= astra_attr(
 			'site-navigation',
 			array(
-				'id'         => 'site-navigation',
-				'class'      => 'ast-flex-grow-1 navigation-accessibility site-header-focus-item',
+				'id'         => 'ast-' . esc_attr( $device ) . '-site-navigation',
+				'class'      => 'site-navigation ast-flex-grow-1 navigation-accessibility site-header-focus-item',
 				'aria-label' => esc_attr__( 'Site Navigation', 'astra' ),
 			)
 		);
@@ -81,7 +89,7 @@ class Astra_Mobile_Menu_Component {
 		// Fallback Menu if primary menu not set.
 		$fallback_menu_args = array(
 			'theme_location' => $theme_location,
-			'menu_id'        => 'ast-hf-mobile-menu',
+			'menu_id'        => $menu_id,
 			'menu_class'     => 'main-navigation',
 			'container'      => 'div',
 			'before'         => '<ul class="' . esc_attr( implode( ' ', $menu_classes ) ) . '">',
@@ -99,7 +107,7 @@ class Astra_Mobile_Menu_Component {
 		if ( has_nav_menu( $theme_location ) ) {
 			wp_nav_menu(
 				array(
-					'menu_id'         => 'ast-hf-mobile-menu',
+					'menu_id'         => $menu_id,
 					'menu_class'      => esc_attr( implode( ' ', $menu_classes ) ),
 					'container'       => 'div',
 					'container_class' => 'main-header-bar-navigation',
@@ -113,10 +121,10 @@ class Astra_Mobile_Menu_Component {
 					echo astra_attr(
 						'site-navigation',
 						array(
-							'id' => 'site-navigation',
+							'id' => 'ast-' . esc_attr( $device ) . '-site-navigation',
 						)
 					);
-					echo ' class="ast-flex-grow-1 navigation-accessibility" aria-label="' . esc_attr__( 'Site Navigation', 'astra' ) . '">';
+					echo ' class="site-navigation ast-flex-grow-1 navigation-accessibility" aria-label="' . esc_attr__( 'Site Navigation', 'astra' ) . '">';
 						wp_page_menu( $fallback_menu_args );
 					echo '</nav>';
 				echo '</div>';

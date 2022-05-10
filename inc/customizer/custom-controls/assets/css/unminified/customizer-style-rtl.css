@@ -24,7 +24,7 @@
   display: block !important;
 }
 
-.customize-control {
+.customize-control:not(.customize-control-nav_menu_item) {
   position: relative;
   margin-bottom: 0;
   margin-top: 25px;
@@ -62,15 +62,12 @@
 .customize-control-title {
   display: inline-block;
   margin-bottom: 20px;
+  vertical-align: middle;
 }
 
 .customize-control-ast-color .customize-control-title, .customize-control-ast-responsive-background .customize-control-title,
 .customize-control-ast-background .customize-control-title, .customize-control-ast-responsive-color .customize-control-title {
   display: contents;
-}
-
-.customize-control-ast-font-variant .select2 {
-  margin-bottom: 12px;
 }
 
 .customize-control .ast-control-tooltip {
@@ -150,4 +147,31 @@ input[type="text"].select2-search__field {
     margin-right: 0px;
     margin-left: 20px;
   }
+}
+
+.wp-customizer li:not(.customize-control-sidebar_block_editor) h1,
+.wp-customizer li:not(.customize-control-sidebar_block_editor) h2,
+.wp-customizer li:not(.customize-control-sidebar_block_editor) h3,
+.wp-customizer li:not(.customize-control-sidebar_block_editor) h4,
+.wp-customizer li:not(.customize-control-sidebar_block_editor) h5,
+.wp-customizer li:not(.customize-control-sidebar_block_editor) h6 {
+  font-weight: 600;
+}
+
+/* Customizer - widget appender bottom space CSS */
+.block-list-appender {
+  margin-bottom: 20px;
+}
+
+.block-editor-block-inspector .block-editor-block-card {
+  margin-top: 12px;
+}
+
+/* Customizer - builder widget area's block gets round shapes in more-settings tab */
+.components-circular-option-picker__option-wrapper::before {
+  background: unset;
+}
+
+.block-editor-panel-color-gradient-settings .components-circular-option-picker__option-wrapper {
+  position: relative;
 }

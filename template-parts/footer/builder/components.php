@@ -5,16 +5,13 @@
  * @package Astra
  */
 
+$astra_component_slug = get_query_var( 'type' );
 if ( astra_wp_version_compare( '5.4.99', '>=' ) ) {
-
-	$component_slug = wp_parse_args( $args, array( 'type' => '' ) );
-	$component_slug = $component_slug['type'];
-} else {
-
-	$component_slug = get_query_var( 'type' );
+	$astra_component_slug = wp_parse_args( $args, array( 'type' => '' ) );
+	$astra_component_slug = isset( $astra_component_slug['type'] ) ? $astra_component_slug['type'] : '';
 }
 
-switch ( $component_slug ) {
+switch ( $astra_component_slug ) {
 
 	case 'copyright':
 		?>
@@ -42,8 +39,8 @@ switch ( $component_slug ) {
 				'class'        => 'footer-widget-area widget-area site-footer-focus-item',
 				'data-section' => 'sidebar-widgets-footer-widget-1',
 				'aria-label'   => 'Footer Widget 1',
-			) 
-		); 
+			)
+		);
 		?>
 				>
 			<?php
@@ -52,7 +49,7 @@ switch ( $component_slug ) {
 			astra_markup_close( 'footer-widget-div' );
 			?>
 		</aside>
-		<?php 
+		<?php
 		break;
 
 	case 'widget-2':
@@ -65,8 +62,8 @@ switch ( $component_slug ) {
 				'class'        => 'footer-widget-area widget-area site-footer-focus-item',
 				'data-section' => 'sidebar-widgets-footer-widget-2',
 				'aria-label'   => 'Footer Widget 2',
-			) 
-		); 
+			)
+		);
 		?>
 		>
 			<?php
@@ -75,7 +72,7 @@ switch ( $component_slug ) {
 			astra_markup_close( 'footer-widget-div' );
 			?>
 		</aside>
-		<?php 
+		<?php
 		break;
 
 	case 'widget-3':
@@ -88,8 +85,8 @@ switch ( $component_slug ) {
 				'class'        => 'footer-widget-area widget-area site-footer-focus-item',
 				'data-section' => 'sidebar-widgets-footer-widget-3',
 				'aria-label'   => 'Footer Widget 3',
-			) 
-		); 
+			)
+		);
 		?>
 		>
 			<?php
@@ -98,21 +95,21 @@ switch ( $component_slug ) {
 			astra_markup_close( 'footer-widget-div' );
 			?>
 		</aside>
-		<?php 
+		<?php
 		break;
-		
-	case 'widget-4': 
+
+	case 'widget-4':
 		?>
-		<aside 
-		<?php 
+		<aside
+		<?php
 		echo astra_attr(
 			'footer-widget-area-inner',
 			array(
 				'class'        => 'footer-widget-area widget-area site-footer-focus-item',
 				'data-section' => 'sidebar-widgets-footer-widget-4',
 				'aria-label'   => 'Footer Widget 4',
-			) 
-		); 
+			)
+		);
 		?>
 		>
 			<?php
@@ -121,7 +118,7 @@ switch ( $component_slug ) {
 			astra_markup_close( 'footer-widget-div' );
 			?>
 		</aside>
-		<?php 
+		<?php
 		break;
 
 	case 'html-1':
@@ -149,9 +146,9 @@ switch ( $component_slug ) {
 		break;
 
 	case 'divider-1':
-		$layout_class = astra_get_option( 'footer-divider-1-layout' );
+		$astra_fb_divider_layout_class = astra_get_option( 'footer-divider-1-layout' );
 		?>
-		<div class="footer-widget-area widget-area ast-flex site-footer-focus-item ast-footer-divider-element ast-footer-divider-1 ast-fb-divider-layout-<?php echo esc_attr( $layout_class ); ?>" data-section="section-fb-divider-1">
+		<div class="footer-widget-area widget-area ast-flex site-footer-focus-item ast-footer-divider-element ast-footer-divider-1 ast-fb-divider-layout-<?php echo esc_attr( $astra_fb_divider_layout_class ); ?>" data-section="section-fb-divider-1">
 			<?php do_action( 'astra_footer_divider_1' ); ?>
 		</div>
 		<?php
@@ -159,7 +156,7 @@ switch ( $component_slug ) {
 
 
 	default:
-		do_action( 'astra_render_footer_components', $component_slug );
+		do_action( 'astra_render_footer_components', $astra_component_slug );
 		break;
 
 }

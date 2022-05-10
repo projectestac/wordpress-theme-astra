@@ -63,33 +63,9 @@
         } );
     } );
 
-    var selector = '.ast-builder-layout-element .ast-site-identity';
 	var section = 'title_tagline';
-
-    // Title Color.
-    astra_css(
-        'astra-settings[header-color-site-title]',
-        'color',
-        selector + ' .site-title a, ' + selector + ' .site-title'
-    );
-
-    // Title Hover Color.
-    astra_css(
-        'astra-settings[header-color-h-site-title]',
-        'color',
-        selector + ' .site-title a:hover, ' + selector + ' .site-title:hover'
-    );
-
-    // Tagline Color.
-    astra_css(
-        'astra-settings[header-color-site-tagline]',
-        'color',
-        selector + ' .site-description'
-    );
-
     var visibility_selector = '.ast-builder-layout-element[data-section="title_tagline"]';
 
     // Advanced Visibility CSS Generation.
     astra_builder_visibility_css( section, visibility_selector );
-    
 } )( jQuery );

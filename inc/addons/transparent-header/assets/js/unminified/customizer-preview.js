@@ -120,7 +120,7 @@
 	astra_color_responsive_css( 'transparent-primary-header', 'astra-settings[transparent-header-color-h-site-title-responsive]', 'color', '.ast-theme-transparent-header .site-header .site-title a:hover' );
 
 	// Primary Menu
-	astra_color_responsive_css( 'transparent-primary-header', 'astra-settings[transparent-menu-bg-color-responsive]', 'background-color', '.ast-theme-transparent-header .ast-builder-menu .main-header-menu, .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item .sub-menu, .ast-theme-transparent-header .ast-builder-menu .main-header-menu, .ast-theme-transparent-header.ast-header-break-point .ast-builder-menu .main-header-bar-wrap .main-header-menu, .ast-flyout-menu-enable.ast-header-break-point.ast-theme-transparent-header .main-header-bar-navigation #site-navigation, .ast-fullscreen-menu-enable.ast-header-break-point.ast-theme-transparent-header .main-header-bar-navigation #site-navigation, .ast-flyout-above-menu-enable.ast-header-break-point.ast-theme-transparent-header .ast-above-header-navigation-wrap .ast-above-header-navigation, .ast-flyout-below-menu-enable.ast-header-break-point.ast-theme-transparent-header .ast-below-header-navigation-wrap .ast-below-header-actual-nav, .ast-fullscreen-above-menu-enable.ast-header-break-point.ast-theme-transparent-header .ast-above-header-navigation-wrap, .ast-fullscreen-below-menu-enable.ast-header-break-point.ast-theme-transparent-header .ast-below-header-navigation-wrap, .ast-theme-transparent-header .main-header-menu .menu-link' );
+	astra_color_responsive_css( 'transparent-primary-header', 'astra-settings[transparent-menu-bg-color-responsive]', 'background-color', '.ast-theme-transparent-header .ast-builder-menu .main-header-menu, .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item .sub-menu, .ast-theme-transparent-header .ast-builder-menu .main-header-menu, .ast-theme-transparent-header.ast-header-break-point .ast-builder-menu .main-header-bar-wrap .main-header-menu, .ast-flyout-menu-enable.ast-header-break-point.ast-theme-transparent-header .main-header-bar-navigation .site-navigation, .ast-fullscreen-menu-enable.ast-header-break-point.ast-theme-transparent-header .main-header-bar-navigation .site-navigation, .ast-flyout-above-menu-enable.ast-header-break-point.ast-theme-transparent-header .ast-above-header-navigation-wrap .ast-above-header-navigation, .ast-flyout-below-menu-enable.ast-header-break-point.ast-theme-transparent-header .ast-below-header-navigation-wrap .ast-below-header-actual-nav, .ast-fullscreen-above-menu-enable.ast-header-break-point.ast-theme-transparent-header .ast-above-header-navigation-wrap, .ast-fullscreen-below-menu-enable.ast-header-break-point.ast-theme-transparent-header .ast-below-header-navigation-wrap, .ast-theme-transparent-header .main-header-menu .menu-link' );
 
 	astra_color_responsive_css( 'transparent-primary-header-menu-colors', 'astra-settings[transparent-menu-color-responsive]', 'color', '.ast-theme-transparent-header .ast-builder-menu .main-header-menu, .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-link, .ast-theme-transparent-header [CLASS*="ast-builder-menu-"] .main-header-menu .menu-item > .menu-link, .ast-theme-transparent-header .ast-masthead-custom-menu-items, .ast-theme-transparent-header .ast-masthead-custom-menu-items a, .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item > .ast-menu-toggle, .ast-theme-transparent-header .ast-builder-menu .main-header-menu .menu-item > .ast-menu-toggle, .ast-theme-transparent-header .main-header-menu .menu-link' );
 
@@ -219,7 +219,7 @@
 	astra_css( 'astra-settings[transparent-header-html-text-color]', 'color', '.ast-theme-transparent-header [CLASS*="ast-header-html-"] .ast-builder-html-element' );
 	astra_css( 'astra-settings[transparent-header-html-link-color]', 'color', '.ast-theme-transparent-header [CLASS*="ast-header-html-"] .ast-builder-html-element a' );
 	astra_css( 'astra-settings[transparent-header-html-link-h-color]', 'color', '.ast-theme-transparent-header [CLASS*="ast-header-html-"] .ast-builder-html-element a:hover' );
-	astra_css( 'astra-settings[transparent-header-search-icon-color]', 'color', '.ast-theme-transparent-header .ast-header-search .astra-search-icon, .ast-theme-transparent-header .ast-header-search .search-field::placeholder' );
+	astra_css( 'astra-settings[transparent-header-search-icon-color]', 'color', '.ast-theme-transparent-header .ast-header-search .astra-search-icon, .ast-theme-transparent-header .ast-header-search .ast-icon' );
 	astra_css( 'astra-settings[transparent-header-search-box-placeholder-color]', 'color', '.ast-theme-transparent-header .ast-header-search .ast-search-menu-icon .search-field, .ast-theme-transparent-header .ast-header-search .ast-search-menu-icon .search-field::placeholder' );
 	astra_css( 'astra-settings[transparent-header-search-box-background-color]', 'background-color', '.ast-theme-transparent-header .ast-header-search .ast-search-menu-icon .search-field, .ast-theme-transparent-header .ast-header-search .ast-search-menu-icon .search-form, .ast-theme-transparent-header .ast-header-search .ast-search-menu-icon .search-submit' );
 	astra_color_responsive_css( 'transparent-header-social-color', 'astra-settings[transparent-header-social-icons-bg-color]', 'background', '.ast-theme-transparent-header .ast-header-social-wrap .ast-social-color-type-custom .ast-builder-social-element' );
@@ -292,51 +292,45 @@
 	);
 
 	// Menu - Normal Color
-	astra_color_responsive_css(
-		'transparent-astra-account-menu-color-preview',
-		'astra-settings[transparent-account-menu-color-responsive]',
+	astra_css(
+		'astra-settings[transparent-account-menu-color]',
 		'color',
 		'.ast-theme-transparent-header .ast-header-account-wrap .main-header-menu .menu-item > .menu-link'
 	);
 
 	// Menu - Hover Color
-	astra_color_responsive_css(
-		'transparent-astra-account-menu-h-color-preview',
-		'astra-settings[transparent-account-menu-h-color-responsive]',
+	astra_css(
+		'astra-settings[transparent-account-menu-h-color]',
 		'color',
-		'.ast-theme-transparent-header .ast-header-account-wrap .menu-item:hover > .menu-link'
+		'.ast-theme-transparent-header .ast-header-account-wrap .main-header-menu .menu-item:hover > .menu-link'
 	);
 
 	// Menu - Active Color
-	astra_color_responsive_css(
-		'transparent-astra-account-menu-active-color-preview',
-		'astra-settings[transparent-account-menu-a-color-responsive]',
+	astra_css(
+		'astra-settings[transparent-account-menu-a-color]',
 		'color',
-		'.ast-theme-transparent-header .ast-header-account-wrap .menu-item.current-menu-item > .menu-link'
+		'.ast-theme-transparent-header .ast-header-account-wrap .main-header-menu .menu-item.current-menu-item > .menu-link'
 	);
 
 	// Menu - Hover Background
-	astra_color_responsive_css(
-		'transparent-astra-account-menu-bg-preview',
-		'astra-settings[transparent-account-menu-bg-obj-responsive]',
+	astra_css(
+		'astra-settings[transparent-account-menu-bg-obj]',
 		'background',
 		'.ast-theme-transparent-header .ast-header-account-wrap .account-main-navigation ul'
 	);
 
 	// Menu - Hover Background
-	astra_color_responsive_css(
-		'transparent-astra-account-menu-bg-preview',
-		'astra-settings[transparent-account-menu-h-bg-color-responsive]',
+	astra_css(
+		'astra-settings[transparent-account-menu-h-bg-color]',
 		'background',
-		'.ast-theme-transparent-header .ast-header-account-wrap .menu-item:hover > .menu-link'
+		'.ast-theme-transparent-header .ast-header-account-wrap .account-main-navigation .menu-item:hover > .menu-link'
 	);
 
 	// Menu - Active Background
-	astra_color_responsive_css(
-		'transparent-astra-account-menu',
-		'astra-settings[transparent-account-menu-a-bg-color-responsive]',
+	astra_css(
+		'astra-settings[transparent-account-menu-a-bg-color]',
 		'background',
-		'.ast-theme-transparent-header .ast-header-account-wrap .menu-item.current-menu-item > .menu-link'
+		'.ast-theme-transparent-header .ast-header-account-wrap .account-main-navigation .menu-item.current-menu-item > .menu-link'
 	);
 
 } )( jQuery );

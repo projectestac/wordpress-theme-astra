@@ -88,7 +88,6 @@ if ( ! class_exists( 'Astra_Woo_Shop_Layout_Configs' ) ) {
 					'default'           => astra_get_option( 'shop-product-structure' ),
 					'priority'          => 15,
 					'title'             => __( 'Shop Product Structure', 'astra' ),
-					'divider'           => array( 'ast_class' => 'ast-bottom-divider' ),
 					'choices'           => array(
 						'title'      => __( 'Title', 'astra' ),
 						'price'      => __( 'Price', 'astra' ),

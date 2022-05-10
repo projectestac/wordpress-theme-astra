@@ -506,7 +506,7 @@
 }
 
 .woocommerce .cart-collaterals .cross-sells ul.products li, .woocommerce-page .cart-collaterals .cross-sells ul.products li {
-  width: 48%;
+  width: calc(50% - 10px);
 }
 
 .woocommerce .cart-collaterals .cross-sells ul.products li.first, .woocommerce-page .cart-collaterals .cross-sells ul.products li.first {

@@ -26,12 +26,14 @@ add_filter( 'astra_dynamic_theme_css', 'astra_fb_button_dynamic_css' );
  */
 function astra_fb_button_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 
-	$dynamic_css .= Astra_Button_Component_Dynamic_CSS::astra_button_dynamic_css( 'footer' );
+	$dynamic_css   .= Astra_Button_Component_Dynamic_CSS::astra_button_dynamic_css( 'footer' );
+	$fb_button_flag = false;
 	for ( $index = 1; $index <= Astra_Builder_Helper::$num_of_footer_button; $index++ ) {
 
 		if ( ! Astra_Builder_Helper::is_component_loaded( 'button-' . $index, 'footer' ) ) {
 			continue;
 		}
+		$fb_button_flag = true;
 
 		$selector = '.ast-footer-button-' . $index . '[data-section="section-fb-button-' . $index . '"]';
 
@@ -68,6 +70,20 @@ function astra_fb_button_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' )
 		$css_output .= astra_parse_css( $css_output_mobile, '', astra_get_mobile_breakpoint() );
 
 		$dynamic_css .= $css_output;
+	}
+	if ( true === $fb_button_flag ) {
+		$static_css = array(
+			'[data-section*="section-fb-button-"] .menu-link' => array(
+				'display' => 'none',
+			),
+			'[CLASS*="ast-footer-button-"][data-section^="section-fb-button-"]' => array(
+				'justify-content' => 'center',
+			),
+			'.site-footer-focus-item[CLASS*="ast-footer-button-"]' => array(
+				'display' => 'flex',
+			),
+		);
+		return astra_parse_css( $static_css ) . $dynamic_css;
 	}
 
 	return $dynamic_css;

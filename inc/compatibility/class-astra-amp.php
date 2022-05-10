@@ -792,7 +792,7 @@ if ( ! class_exists( 'Astra_AMP' ) ) :
 						'-ms-flex-pack'           => 'center',
 						'justify-content'         => 'center',
 					),
-					'.ast-amp .ast-mobile-header-stack .main-header-bar-wrap .site-branding' => array(
+					'.ast-amp .ast-mobile-header-stack.header-main-layout-1 .main-header-bar-wrap .site-branding' => array(
 						'-webkit-box-flex' => '1',
 						'-webkit-flex'     => '1 1 auto',
 						'-moz-box-flex'    => '1',
@@ -826,7 +826,7 @@ if ( ! class_exists( 'Astra_AMP' ) ) :
 					),
 				);
 
-				$parse_css .= astra_parse_css( $astra_small_break_point_navigation, astra_get_mobile_breakpoint() );
+				$parse_css .= astra_parse_css( $astra_small_break_point_navigation, '', astra_get_mobile_breakpoint() );
 			}
 
 			$parse_css .= astra_parse_css( $astra_break_point_navigation, '', astra_header_break_point() );

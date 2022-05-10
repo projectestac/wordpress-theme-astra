@@ -5,78 +5,75 @@
  * @package Astra Builder
  */
 
+$astra_row = get_query_var( 'row' );
 if ( astra_wp_version_compare( '5.4.99', '>=' ) ) {
-
-	$row = wp_parse_args( $args, array( 'row' => '' ) );
-	$row = $row['row'];
-} else {
-
-	$row = get_query_var( 'row' );
+	$astra_row = wp_parse_args( $args, array( 'row' => '' ) );
+	$astra_row = isset( $astra_row['row'] ) ? $astra_row['row'] : '';
 }
 
-if ( Astra_Builder_Helper::is_row_empty( $row, 'header', 'mobile' ) ) {
+if ( Astra_Builder_Helper::is_row_empty( $astra_row, 'header', 'mobile' ) ) {
 
-	$customizer_editor_row        = 'section-' . esc_attr( $row ) . '-header-builder';
-	$is_transparent_header_enable = astra_get_option( 'transparent-header-enable' );
+	$astra_customizer_editor_row        = 'section-' . esc_attr( $astra_row ) . '-header-builder';
+	$astra_is_transparent_header_enable = astra_get_option( 'transparent-header-enable' );
 
-	if ( 'primary' === $row && $is_transparent_header_enable ) {
-		$customizer_editor_row = 'section-transparent-header';
+	if ( 'primary' === $astra_row && $astra_is_transparent_header_enable ) {
+		$astra_customizer_editor_row = 'section-transparent-header';
 	}
 
-	$row_label = ( 'primary' === $row ) ? 'main' : $row;
+	$astra_row_label = ( 'primary' === $astra_row ) ? 'main' : $astra_row;
 	?>
-	<div class="ast-<?php echo esc_attr( $row_label ); ?>-header-wrap <?php echo 'primary' === $row ? 'main-header-bar-wrap' : ''; ?>" >
-		<div class="<?php echo esc_attr( 'ast-' . $row . '-header-bar ast-' . $row . '-header ' ); ?><?php echo 'primary' === $row ? 'main-header-bar ' : ''; ?>site-<?php echo esc_attr( $row ); ?>-header-wrap site-header-focus-item ast-builder-grid-row-layout-default ast-builder-grid-row-tablet-layout-default ast-builder-grid-row-mobile-layout-default" data-section="<?php echo esc_attr( $customizer_editor_row ); ?>">
+	<div class="ast-<?php echo esc_attr( $astra_row_label ); ?>-header-wrap <?php echo 'primary' === $astra_row ? 'main-header-bar-wrap' : ''; ?>" >
+		<div class="<?php echo esc_attr( 'ast-' . $astra_row . '-header-bar ast-' . $astra_row . '-header ' ); ?><?php echo 'primary' === $astra_row ? 'main-header-bar ' : ''; ?>site-<?php echo esc_attr( $astra_row ); ?>-header-wrap site-header-focus-item ast-builder-grid-row-layout-default ast-builder-grid-row-tablet-layout-default ast-builder-grid-row-mobile-layout-default" data-section="<?php echo esc_attr( $astra_customizer_editor_row ); ?>">
 				<?php
 				if ( is_customize_preview() ) {
-					Astra_Builder_UI_Controller::render_grid_row_customizer_edit_button( 'Header', $row );
+					Astra_Builder_UI_Controller::render_grid_row_customizer_edit_button( 'Header', $astra_row );
 				}
 				/**
 				 * Astra Render before Site Content.
 				 */
-				do_action( "astra_header_{$row}_container_before" );
+				do_action( "astra_header_{$astra_row}_container_before" );
 				?>
-					<div class="ast-builder-grid-row <?php echo Astra_Builder_Helper::has_mobile_side_columns( $row, 'header', 'mobile' ) ? 'ast-builder-grid-row-has-sides' : 'ast-grid-center-col-layout-only ast-flex'; ?> <?php echo Astra_Builder_Helper::has_mobile_center_column( $row, 'header', 'mobile' ) ? 'ast-grid-center-col-layout' : 'ast-builder-grid-row-no-center'; ?>">
-						<?php if ( Astra_Builder_Helper::has_mobile_side_columns( $row, 'header', 'mobile' ) ) { ?>
-							<div class="site-header-<?php echo esc_attr( $row ); ?>-section-left site-header-section ast-flex site-header-section-left">
+					<div class="ast-builder-grid-row <?php echo Astra_Builder_Helper::has_mobile_side_columns( $astra_row ) ? 'ast-builder-grid-row-has-sides' : 'ast-grid-center-col-layout-only ast-flex'; ?> <?php echo Astra_Builder_Helper::has_mobile_center_column( $astra_row ) ? 'ast-grid-center-col-layout' : 'ast-builder-grid-row-no-center'; ?>">
+						<?php if ( Astra_Builder_Helper::has_mobile_side_columns( $astra_row ) ) { ?>
+							<div class="site-header-<?php echo esc_attr( $astra_row ); ?>-section-left site-header-section ast-flex site-header-section-left">
 								<?php
 								/**
 								 * Astra Render Header Column
 								 */
-								do_action( 'astra_render_mobile_header_column', $row, 'left' );
+								do_action( 'astra_render_mobile_header_column', $astra_row, 'left' );
 
-								if ( Astra_Builder_Helper::has_mobile_center_column( $row, 'header', 'mobile' ) ) {
+								if ( Astra_Builder_Helper::has_mobile_center_column( $astra_row ) ) {
 									/**
 									 * Astra Render Header Column
 									 */
-									do_action( 'astra_render_mobile_header_column', $row, 'left_center' );
+									do_action( 'astra_render_mobile_header_column', $astra_row, 'left_center' );
 								}
 								?>
 							</div>
 						<?php } ?>
-						<?php if ( Astra_Builder_Helper::has_mobile_center_column( $row, 'header', 'mobile' ) ) { ?>
-							<div class="site-header-<?php echo esc_attr( $row ); ?>-section-center site-header-section ast-flex ast-grid-section-center">
+						<?php if ( Astra_Builder_Helper::has_mobile_center_column( $astra_row ) ) { ?>
+							<div class="site-header-<?php echo esc_attr( $astra_row ); ?>-section-center site-header-section ast-flex ast-grid-section-center">
 								<?php
 								/**
 								 * Astra Render Header Column
 								 */
-								do_action( 'astra_render_mobile_header_column', $row, 'center' );
+								do_action( 'astra_render_mobile_header_column', $astra_row, 'center' );
 								?>
 							</div>
 						<?php } ?>
-						<?php if ( Astra_Builder_Helper::has_mobile_side_columns( $row, 'header', 'mobile' ) ) { ?>
-							<div class="site-header-<?php echo esc_attr( $row ); ?>-section-right site-header-section ast-flex ast-grid-right-section">
+						<?php if ( Astra_Builder_Helper::has_mobile_side_columns( $astra_row ) ) { ?>
+							<div class="site-header-<?php echo esc_attr( $astra_row ); ?>-section-right site-header-section ast-flex ast-grid-right-section">
 								<?php
-								if ( Astra_Builder_Helper::has_mobile_center_column( $row, 'header', 'mobile' ) ) {
+								if ( Astra_Builder_Helper::has_mobile_center_column( $astra_row ) ) {
 									/**
 									 * Astra Render Header Column
 									 */
-									do_action( 'astra_render_mobile_header_column', $row, 'right_center' );
+									do_action( 'astra_render_mobile_header_column', $astra_row, 'right_center' );
 								}
 								/**
 								 * Astra Render Header Column
 								 */
-								do_action( 'astra_render_mobile_header_column', $row, 'right' );
+								do_action( 'astra_render_mobile_header_column', $astra_row, 'right' );
 								?>
 							</div>
 						<?php } ?>
@@ -85,7 +82,7 @@ if ( Astra_Builder_Helper::is_row_empty( $row, 'header', 'mobile' ) ) {
 				/**
 				 * Astra Render after Site Content.
 				 */
-				do_action( "astra_header_{$row}_container_after" );
+				do_action( "astra_header_{$astra_row}_container_after" );
 				?>
 		</div>
 	</div>

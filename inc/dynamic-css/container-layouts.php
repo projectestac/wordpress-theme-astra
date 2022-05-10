@@ -17,9 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function astra_container_layout_css() {
 	$container_layout = astra_get_content_layout();
-   
+
 	$page_container_css = '';
-   
+
 	if ( 'page-builder' === $container_layout ) {
 
 		$page_container_css = '
@@ -41,7 +41,7 @@ function astra_container_layout_css() {
           .ast-page-builder-template .ast-pagination {
             padding: 2em;
           }
-         
+
           .ast-page-builder-template .entry-header.ast-no-title.ast-no-thumbnail {
             margin-top: 0;
           }
@@ -49,15 +49,12 @@ function astra_container_layout_css() {
             margin-top: 0;
             margin-bottom: 0;
           }
-          
+
           .ast-page-builder-template .entry-header.ast-no-title.ast-no-meta {
             margin-bottom: 0;
           }
           .ast-page-builder-template.single .post-navigation {
             padding-bottom: 2em;
-          }
-          .ast-page-builder-template.single-post .site-content > .ast-container {
-            max-width: 100%;
           }
           .ast-page-builder-template.single-post .site-content > .ast-container {
             max-width: 100%;
@@ -80,17 +77,9 @@ function astra_container_layout_css() {
                 padding-right: 20px;
                 padding-left: 20px;
             }
-            .ast-page-builder-template.ast-no-sidebar .entry-content .alignwide {
-                margin-right: 0;
-                margin-left: 0;
-            }
             .single.ast-page-builder-template .entry-header {
                 padding-right: 20px;
                 padding-left: 20px;
-            }
-            .ast-page-builder-template.ast-no-sidebar .entry-content .alignwide {
-                margin-right: 0;
-                margin-left: 0;
             }';
 
 		} else {
@@ -109,19 +98,21 @@ function astra_container_layout_css() {
                 padding-left: 20px;
                 padding-right: 20px;
             }
-            .ast-page-builder-template.ast-no-sidebar .entry-content .alignwide {
-                margin-left: 0;
-                margin-right: 0;
-            }
             .single.ast-page-builder-template .entry-header {
                 padding-left: 20px;
                 padding-right: 20px;
-            }
-            .ast-page-builder-template.ast-no-sidebar .entry-content .alignwide {
+            }';
+		}
+
+		/** @psalm-suppress InvalidScalarArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		if ( false === astra_get_option( 'improve-gb-editor-ui', true ) ) {
+			/** @psalm-suppress InvalidScalarArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$page_container_css .= '.ast-page-builder-template.ast-no-sidebar .entry-content .alignwide {
                 margin-left: 0;
                 margin-right: 0;
-            }';  
+            }';
 		}
+
 		return Astra_Enqueue_Scripts::trim_css( $page_container_css );
 	}
 	return $page_container_css;

@@ -53,7 +53,7 @@ final class Astra_Builder_Admin {
 			add_filter( 'astra_quick_settings', array( $this, 'update_customizer_header_footer_link' ) );
 			return;
 		}
-
+		/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$status            = astra_get_option( 'is-header-footer-builder', false );
 		$astra_theme_title = Astra_Admin_Settings::$page_title;
 
@@ -136,8 +136,9 @@ final class Astra_Builder_Admin {
 			wp_send_json_error( __( 'You don\'t have the access', 'astra' ) );
 		}
 
-		$migrate        = isset( $_POST['value'] ) ? sanitize_key( $_POST['value'] ) : '';
-		$migrate        = ( $migrate ) ? true : false;
+		$migrate = isset( $_POST['value'] ) ? sanitize_key( $_POST['value'] ) : '';
+		$migrate = ( $migrate ) ? true : false;
+		/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migration_flag = astra_get_option( 'v3-option-migration', false );
 		astra_update_option( 'is-header-footer-builder', $migrate );
 		if ( $migrate && false === $migration_flag ) {

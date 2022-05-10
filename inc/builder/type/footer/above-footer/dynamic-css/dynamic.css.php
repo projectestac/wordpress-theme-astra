@@ -53,7 +53,10 @@ function astra_fb_above_footer_dynamic_css( $dynamic_css, $dynamic_css_filtered 
 	$inner_spacing_mobile  = ( isset( $inner_spacing['mobile'] ) ) ? $inner_spacing['mobile'] : '';
 
 	$css_output_desktop = array(
-
+		'.site-above-footer-wrap'            => array(
+			'padding-top'    => '20px',
+			'padding-bottom' => '20px',
+		),
 		$selector                            => astra_get_responsive_background_obj( $footer_bg, 'desktop' ),
 		$selector . ' .ast-builder-grid-row' => array(
 			'grid-column-gap' => astra_get_css_value( $inner_spacing_desktop, 'px' ),
@@ -143,5 +146,6 @@ function astra_fb_above_footer_dynamic_css( $dynamic_css, $dynamic_css_filtered 
 	$dynamic_css .= $css_output;
 
 	$dynamic_css .= Astra_Builder_Base_Dynamic_CSS::prepare_advanced_margin_padding_css( $_section, $selector );
+	$dynamic_css .= Astra_Builder_Base_Dynamic_CSS::prepare_visibility_css( $_section, $selector, 'grid' );
 	return $dynamic_css;
 }

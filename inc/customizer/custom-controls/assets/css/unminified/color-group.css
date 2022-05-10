@@ -95,7 +95,7 @@
   right: 132px;
 }
 
-.customize-control-ast-color-group .ast-responsive-btns.ast-multiple-colors-group {
+.customize-control-ast-color-group .ast-responsive-btns.ast-multiple-colors-group, .customize-control-ast-color-group .ast-color-multiple-group-reset.ast-color-group-reset.ast-single-color-group-set {
   right: 112px;
 }
 
@@ -134,4 +134,8 @@
 
 .customize-control-ast-color-group .ast-divider-title + .ast-control-wrap .astra-color-picker-wrap {
   top: 73px;
+}
+
+.astra-color-picker-wrap.picker-open + span {
+  display: none;
 }

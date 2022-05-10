@@ -288,7 +288,6 @@ class Astra_Social_Icon_Component_Configs {
 						),
 					),
 					'responsive' => true,
-					'divider'    => array( 'ast_class' => 'ast-bottom-divider' ),
 				),
 
 				/**

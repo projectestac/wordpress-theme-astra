@@ -74,6 +74,7 @@ if ( ! class_exists( 'Astra_Theme_Update' ) ) {
 			do_action( 'astra_update_before' );
 
 			// Get auto saved version number.
+			/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$saved_version = astra_get_option( 'theme-auto-version', false );
 
 			// If there is no saved version in the database then return.

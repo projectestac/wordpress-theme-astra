@@ -51,18 +51,28 @@ function astra_hb_search_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' )
 	 * Search CSS.
 	 */
 	$css_output_desktop = array(
-
-		$selector . ' .astra-search-icon'         => array(
+		$selector . ' .ast-search-menu-icon .search-form .search-field:-ms-input-placeholder,' . $selector . ' .ast-search-menu-icon .search-form .search-field:-ms-input-placeholder' => array(
+			'opacity' => '0.5',
+		),
+		$selector . ' .ast-search-menu-icon.slide-search .search-form, .ast-header-search .ast-search-menu-icon.ast-inline-search .search-form' => array(
+			'-js-display' => 'flex',
+			'display'     => 'flex',
+			'align-items' => 'center',
+		),
+		'.ast-builder-layout-element.ast-header-search' => array(
+			'height' => 'auto',
+		),
+		$selector . ' .astra-search-icon'               => array(
 			'color'     => esc_attr( $icon_color_desktop ),
 			'font-size' => astra_get_css_value( $icon_size_desktop, 'px' ),
 		),
-		$selector . ' .search-field::placeholder' => array(
+		$selector . ' .search-field::placeholder,' . $selector . ' .ast-icon' => array(
 			'color' => esc_attr( $icon_color_desktop ),
 		),
 		$selector . ' .ast-search-menu-icon.ast-dropdown-active .search-field' => array(
 			'margin-right' => astra_get_css_value( $icon_size_desktop - 10, 'px' ),
 		),
-		$margin_selector                          => array(
+		$margin_selector                                => array(
 			// Margin CSS.
 			'margin-top'    => astra_responsive_spacing( $margin, 'top', 'desktop' ),
 			'margin-bottom' => astra_responsive_spacing( $margin, 'bottom', 'desktop' ),
@@ -114,7 +124,8 @@ function astra_hb_search_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' )
 	);
 
 	/* Parse CSS from array() */
-	$css_output  = astra_parse_css( $css_output_desktop );
+	$css_output  = astra_search_static_css();
+	$css_output .= astra_parse_css( $css_output_desktop );
 	$css_output .= astra_parse_css( $css_output_tablet, '', astra_get_tablet_breakpoint() );
 	$css_output .= astra_parse_css( $css_output_mobile, '', astra_get_mobile_breakpoint() );
 

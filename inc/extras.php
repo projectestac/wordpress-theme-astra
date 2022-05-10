@@ -119,7 +119,7 @@ if ( ! function_exists( 'astra_get_content_layout' ) ) {
 	 * Return current content layout
 	 *
 	 * @since 1.0.0
-	 * @return boolean  content layout.
+	 * @return mixed content layout.
 	 */
 	function astra_get_content_layout() {
 
@@ -316,19 +316,6 @@ function astra_attr( $context, $attributes = array(), $args = array() ) {
 }
 
 /**
- * Check the WordPress version.
- *
- * @since  2.5.4
- * @param string $version   WordPress version to compare with the current version.
- * @param string $compare   Comparison value i.e > or < etc.
- * @return bool            True/False based on the  $version and $compare value.
- */
-function astra_wp_version_compare( $version, $compare ) {
-
-	return version_compare( get_bloginfo( 'version' ), $version, $compare );
-}
-
-/**
  * Get the theme author details
  *
  * @since  3.1.0
@@ -388,9 +375,8 @@ add_filter( 'astra_customizer_configurations', 'astra_remove_controls', 99 );
  * @return string The menu item.
  */
 function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
-	$role     = 'presentation';
-	$tabindex = '0';
-	$icon     = '';
+	$role = 'presentation';
+	$icon = '';
 
 	/**
 	 * These menus are not overriden by the 'Astra_Custom_Nav_Walker' class present in Addon - Nav Menu module.
@@ -399,8 +385,9 @@ function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 	 *
 	 * @since 3.3.0
 	 */
-	$skip_menu_locations = array(
-		'ast-hf-account-menu',
+	$astra_menu_locations = array(
+		'ast-hf-menu-1',        // Builder - Primary menu.
+		'ast-hf-menu-2',        // Builder - Secondary menu.
 		'ast-hf-menu-3',
 		'ast-hf-menu-4',
 		'ast-hf-menu-5',
@@ -408,15 +395,36 @@ function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 		'ast-hf-menu-7',
 		'ast-hf-menu-8',
 		'ast-hf-menu-9',
-		'ast-hf-menu-10',
+		'ast-hf-menu-10',           // Cloned builder menus.
+		'ast-hf-mobile-menu',       // Builder - Mobile Menu.
+		'ast-desktop-toggle-menu',  // Builder - Toggle for Desktop Menu.
+		'ast-hf-account-menu',      // Builder - Login Account Menu.
+		'primary-menu',             // Old header - Primary Menu.
+		'above_header-menu',        // Old header - Above Menu.
+		'below_header-menu',        // Old header - Below Menu.
 	);
 
-	if ( ! ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'nav-menu' ) && ( isset( $args->container_class ) && ! in_array( $args->menu_id, $skip_menu_locations ) ) ) ) {
+	$load_svg_menu_icons = false;
+
+	if ( defined( 'ASTRA_EXT_VER' ) ) {
+		// Check whether Astra Pro is active + Nav menu addon is deactivate + menu registered by Astra only.
+		if ( ! Astra_Ext_Extension::is_active( 'nav-menu' ) && in_array( $args->menu_id, $astra_menu_locations ) ) {
+			$load_svg_menu_icons = true;
+		}
+	} else {
+		// Check menu registered by Astra only.
+		if ( in_array( $args->menu_id, $astra_menu_locations ) ) {
+			$load_svg_menu_icons = true;
+		}
+	}
+
+	if ( $load_svg_menu_icons ) {
+		// Assign icons to only those menu which are registered by Astra.
 		$icon = Astra_Icons::get_icons( 'arrow' );
 	}
 	foreach ( $item->classes as $value ) {
 		if ( 'menu-item-has-children' === $value ) {
-			$title = $title . '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle" tabindex="' . esc_attr( $tabindex ) . '" >' . $icon . '</span>';
+			$title = $title . '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle" >' . $icon . '</span>';
 		}
 	}
 	if ( 0 < $depth ) {
@@ -553,4 +561,406 @@ function astra_target_rules_for_related_posts() {
 	}
 
 	return apply_filters( 'astra_showcase_related_posts', $allow_related_posts );
+}
+
+/**
+ * Check if elementor plugin is active on the site.
+ *
+ * @since 3.7.0
+ * @return bool
+ */
+function astra_is_elemetor_active() {
+	return class_exists( '\Elementor\Plugin' );
+}
+
+/**
+ * Check the Astra addon 3.5.0 version is using or not.
+ * As this is major update and frequently we used version_compare, added a function for this for easy maintenance.
+ *
+ * @since  3.5.0
+ */
+function astra_addon_has_3_5_0_version() {
+	return defined( 'ASTRA_EXT_VER' ) && version_compare( ASTRA_EXT_VER, '3.5.0', '<' );
+}
+
+/**
+ * Get a stylesheet URL for a webfont.
+ *
+ * @since 3.6.0
+ *
+ * @param string $url    The URL of the remote webfont.
+ * @param string $format The font-format. If you need to support IE, change this to "woff".
+ *
+ * @return string Returns the CSS.
+ */
+function astra_get_webfont_url( $url, $format = 'woff2' ) {
+
+	// Check if already Google font URL present or not. Basically avoiding 'Astra_WebFont_Loader' class rendering.
+	/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+	$astra_font_url = astra_get_option( 'astra_font_url', false );
+	if ( $astra_font_url ) {
+		return json_decode( $astra_font_url );
+	}
+
+	// Now create font URL if its not present.
+	$font = astra_webfont_loader_instance( $url );
+	$font->set_font_format( $format );
+	return $font->get_url();
+}
+
+/**
+ * Get the file preloads.
+ *
+ * @param string $url    The URL of the remote webfont.
+ * @param string $format The font-format. If you need to support IE, change this to "woff".
+ */
+function astra_load_preload_local_fonts( $url, $format = 'woff2' ) {
+
+	// Check if cached font files data preset present or not. Basically avoiding 'Astra_WebFont_Loader' class rendering.
+	$astra_local_font_files = get_site_option( 'astra_local_font_files', false );
+
+	if ( is_array( $astra_local_font_files ) && ! empty( $astra_local_font_files ) ) {
+		$font_format = apply_filters( 'astra_local_google_fonts_format', $format );
+		foreach ( $astra_local_font_files as $key => $local_font ) {
+			if ( $local_font ) {
+				echo '<link rel="preload" href="' . esc_url( $local_font ) . '" as="font" type="font/' . esc_attr( $font_format ) . '" crossorigin>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+		}
+		return;
+	}
+
+	// Now preload font data after processing it, as we didn't get stored data.
+	$font = astra_webfont_loader_instance( $url );
+	$font->set_font_format( $format );
+	$font->preload_local_fonts();
+}
+
+/**
+ * Set flag to manage backward compatibility for v3.5.0 earlier users for the transparent header border bottom default value changed.
+ *
+ * @since 3.6.0
+ */
+function astra_get_transparent_header_default_value() {
+	$astra_settings                                      = get_option( ASTRA_THEME_SETTINGS );
+	$astra_settings['transparent-header-default-border'] = isset( $astra_settings['transparent-header-default-border'] ) ? false : true;
+	return apply_filters( 'astra_transparent_header_default_border', $astra_settings['transparent-header-default-border'] );
+}
+
+/**
+ * Check compatibility for content background and typography options.
+ *
+ * @since 3.7.0
+ */
+function astra_has_gcp_typo_preset_compatibility() {
+	if ( defined( 'ASTRA_EXT_VER' ) && version_compare( ASTRA_EXT_VER, '3.6.0', '<' ) ) {
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Check whether user is exising or new to apply the updated default values for button padding & support GB button paddings with global button padding options.
+ *
+ * @since 3.6.3
+ * @return string
+ */
+function astra_button_default_padding_updated() {
+	$astra_settings                                = get_option( ASTRA_THEME_SETTINGS );
+	$astra_settings['btn-default-padding-updated'] = isset( $astra_settings['btn-default-padding-updated'] ) ? $astra_settings['btn-default-padding-updated'] : true;
+	return apply_filters( 'astra_update_button_padding_defaults', $astra_settings['btn-default-padding-updated'] );
+}
+
+/**
+ * Check is WordPress version is greater than or equal to beta 5.8 version.
+ *
+ * @since 3.6.5
+ * @return boolean
+ */
+function astra_has_widgets_block_editor() {
+	if ( ( defined( 'GUTENBERG_VERSION' ) && version_compare( GUTENBERG_VERSION, '10.6.2', '>' ) )
+	|| version_compare( get_bloginfo( 'version' ), '5.8-alpha', '>=' ) ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Check whether user is exising or new to override the default margin space added to Elementor-TOC widget.
+ *
+ * @since 3.6.7
+ * @return boolean
+ */
+function astra_can_remove_elementor_toc_margin_space() {
+	$astra_settings                                    = get_option( ASTRA_THEME_SETTINGS );
+	$astra_settings['remove-elementor-toc-margin-css'] = isset( $astra_settings['remove-elementor-toc-margin-css'] ) ? false : true;
+	return apply_filters( 'astra_remove_elementor_toc_margin', $astra_settings['remove-elementor-toc-margin-css'] );
+}
+
+/**
+ * This will check if user is new and apply global color format. This is to manage backward compatibility for colors.
+ *
+ * @since 3.7.0
+ * @return boolean false if it is an existing user, true for new user.
+ */
+function astra_has_global_color_format_support() {
+	$astra_settings                                = get_option( ASTRA_THEME_SETTINGS );
+	$astra_settings['support-global-color-format'] = isset( $astra_settings['support-global-color-format'] ) ? false : true;
+	return apply_filters( 'astra_apply_global_color_format_support', $astra_settings['support-global-color-format'] );
+}
+
+/**
+ * Check whether widget specific config, dynamic CSS, preview JS needs to remove or not. Following cases considered while implementing this.
+ *
+ * 1. Is user is from old Astra setup.
+ * 2. Check if user is new but on lesser WordPress 5.8 versions.
+ * 3. User is new with block widget editor.
+ *
+ * @since 3.6.8
+ * @return boolean
+ */
+function astra_remove_widget_design_options() {
+	$astra_settings               = get_option( ASTRA_THEME_SETTINGS );
+	$remove_widget_design_options = isset( $astra_settings['remove-widget-design-options'] ) ? false : true;
+
+	// True -> Hide widget sections, False -> Display widget sections.
+	$is_widget_design_sections_hidden = true;
+
+	if ( ! $remove_widget_design_options ) {
+		// For old users we will show widget design options by anyways.
+		return apply_filters( 'astra_remove_widget_design_options', false );
+	}
+
+	// Considering the user is new now.
+	if ( isset( $astra_settings['remove-widget-design-options'] ) && $astra_settings['remove-widget-design-options'] ) {
+		// User was on WP-5.8 lesser version previously and he may update their WordPress to 5.8 in future. So we display the options in this case.
+		$is_widget_design_sections_hidden = false;
+	} elseif ( astra_has_widgets_block_editor() ) {
+		// User is new & having block widgets active. So we will hide those options.
+		$is_widget_design_sections_hidden = true;
+	} else {
+		// Setting up flag because user is on lesser WP versions and may update WP to 5.8.
+		astra_update_option( 'remove-widget-design-options', true );
+	}
+
+	return apply_filters( 'astra_remove_widget_design_options', $is_widget_design_sections_hidden );
+}
+
+/**
+ * Get Global Color Palettes
+ *
+ * @return array color palettes array.
+ * @since 3.7.0
+ */
+function astra_get_palette_colors() {
+	return get_option( 'astra-color-palettes', Astra_Global_Palette::get_default_color_palette() );
+}
+
+/**
+ * Get typography presets data.
+ *
+ * @return array Typography Presets data array.
+ * @since 3.7.0
+ */
+function astra_get_typography_presets() {
+	return get_option( 'astra-typography-presets', '' );
+}
+
+/**
+ * Clear Astra + Astra Pro assets cache.
+ *
+ * @since 3.6.9
+ * @return void
+ */
+function astra_clear_theme_addon_asset_cache() {
+	astra_clear_all_assets_cache();
+}
+
+add_action( 'astra_theme_update_after', 'astra_clear_theme_addon_asset_cache', 10 );
+
+/**
+ * Check if Theme Global Colors need to be disable in Elementor global color settings.
+ *
+ * @since 3.7.4
+ * @return bool
+ */
+function astra_maybe_disable_global_color_in_elementor() {
+	return apply_filters( 'astra_disable_global_colors_in_elementor', false );
+}
+
+/**
+ * Check is Elementor Pro version is greater than or equal to beta 3.5 version.
+ *
+ * @since 3.7.5
+ * @return boolean
+ */
+function astra_check_elementor_pro_3_5_version() {
+	if ( defined( 'ELEMENTOR_PRO_VERSION' ) && version_compare( ELEMENTOR_PRO_VERSION, '3.5', '>=' ) ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Should Content BG settings apply to Fullwidth Contained/Stretched layout or not?
+ *
+ * Do not apply content background to fullwidth layouts in following cases -
+ * 1. For backward compatibility.
+ * 2. When site layout is Max-width.
+ * 3. When site layout is Padded.
+ *
+ * @since 3.7.8
+ * @return boolean
+ */
+function astra_apply_content_background_fullwidth_layouts() {
+	$astra_site_layout              = astra_get_option( 'site-layout' );
+	$astra_apply_content_background = astra_get_option( 'apply-content-background-fullwidth-layouts', true );
+
+	return ( $astra_apply_content_background && 'ast-box-layout' !== $astra_site_layout && 'ast-padded-layout' !== $astra_site_layout );
+}
+
+/**
+ * Search Component static CSS.
+ * 
+ * @return string
+ * @since 3.5.0
+ */
+function astra_search_static_css() {
+	$search_css = '
+	
+	.main-header-bar .main-header-bar-navigation .ast-search-icon {
+		display: block;
+		z-index: 4;
+		position: relative;
+	}
+	.ast-search-icon .ast-icon {
+		z-index: 4;
+	}
+	.ast-search-icon {
+		z-index: 4;
+		position: relative;
+		line-height: normal;
+	}
+	
+	.main-header-bar .ast-search-menu-icon .search-form {
+		background-color: #ffffff;
+	}
+	.ast-search-menu-icon.ast-dropdown-active.slide-search .search-form {
+		visibility: visible;
+		opacity: 1;
+	}
+	.ast-search-menu-icon .search-form {
+		border: 1px solid #e7e7e7;
+		line-height: normal;
+		padding: 0 3em 0 0;
+		border-radius: 2px;
+		display: inline-block;
+		-webkit-backface-visibility: hidden;
+		backface-visibility: hidden;
+		position: relative;
+		color: inherit;
+		background-color: #fff;
+	}
+	.ast-search-menu-icon .astra-search-icon {
+		-js-display: flex;
+		display: flex;
+		line-height: normal;
+	}
+	.ast-search-menu-icon .astra-search-icon:focus {
+		outline: none;
+	}
+	.ast-search-menu-icon .search-field {
+		border: none;
+		background-color: transparent;
+		transition: width .2s;
+		border-radius: inherit;
+		color: inherit;
+		font-size: inherit;
+		width: 0;
+		color: #757575;
+	}
+	.ast-search-menu-icon .search-submit {
+		display: none;
+		background: none;
+		border: none;
+		font-size: 1.3em;
+		color: #757575;
+	}
+	.ast-search-menu-icon.ast-dropdown-active {
+		visibility: visible;
+		opacity: 1;
+		position: relative;
+	}
+	  
+	.ast-search-menu-icon.ast-dropdown-active .search-field {
+		width: 235px;
+	}
+	.ast-header-search .ast-search-menu-icon.slide-search .search-form, .ast-header-search .ast-search-menu-icon.ast-inline-search .search-form {
+		-js-display: flex;
+		display: flex;
+		align-items: center;
+	}';
+
+	if ( is_rtl() ) {
+		$search_css .= '
+		.ast-search-menu-icon.ast-inline-search .search-field {
+			width : 100%;
+			padding : 0.60em;
+			padding-left : 5.5em;
+		}
+		.site-header-section-left .ast-search-menu-icon.slide-search .search-form {
+			padding-right: 3em;
+			padding-left: unset;
+			right: -1em;
+			left: unset;
+		}
+		  
+		.site-header-section-left .ast-search-menu-icon.slide-search .search-form .search-field {
+			margin-left: unset;
+			margin-right: 10px;
+		}
+		.ast-search-menu-icon.slide-search .search-form {
+			-webkit-backface-visibility: visible;
+			backface-visibility: visible;
+			visibility: hidden;
+			opacity: 0;
+			transition: all .2s;
+			position: absolute;
+			z-index: 3;
+			left: -1em;
+			top: 50%;
+			transform: translateY(-50%);
+		}';
+	} else {
+		$search_css .= '
+		.ast-search-menu-icon.ast-inline-search .search-field {
+			width : 100%;
+			padding : 0.60em;
+			padding-right : 5.5em;
+		}
+		.site-header-section-left .ast-search-menu-icon.slide-search .search-form {
+			padding-left: 3em;
+			padding-right: unset;
+			left: -1em;
+			right: unset;
+		}
+		  
+		.site-header-section-left .ast-search-menu-icon.slide-search .search-form .search-field {
+			margin-right: unset;
+			margin-left: 10px;
+		}
+		.ast-search-menu-icon.slide-search .search-form {
+			-webkit-backface-visibility: visible;
+			backface-visibility: visible;
+			visibility: hidden;
+			opacity: 0;
+			transition: all .2s;
+			position: absolute;
+			z-index: 3;
+			right: -1em;
+			top: 50%;
+			transform: translateY(-50%);
+		}';
+	}
+
+	return Astra_Enqueue_Scripts::trim_css( $search_css );
 }
