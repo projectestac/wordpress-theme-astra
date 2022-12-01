@@ -165,7 +165,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 						array( $this, 'markup_meta_box' ),      // Callback.
 						$type,                                  // Post_type.
 						'side',                                 // Context.
-						'default',                               // Priority.
+						'default',                              // Priority.
 						array(
 							'__back_compat_meta_box' => true,
 						)
@@ -265,30 +265,45 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 				<div class="disable-section-meta">
 					<?php do_action( 'astra_meta_box_markup_disable_sections_before', $meta ); ?>
 
-					<?php if ( $show_meta_field && Astra_Builder_Helper::is_row_empty( 'above', 'header', 'desktop' ) ) : ?>
+					<?php
+						/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+					if ( $show_meta_field && true === Astra_Builder_Helper::$is_header_footer_builder_active && Astra_Builder_Helper::is_row_empty( 'above', 'header', 'desktop' ) ) :
+						/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						?>
 					<div class="ast-hfb-above-header-display-option-wrap">
 						<input type="checkbox" id="ast-hfb-above-header-display" name="ast-hfb-above-header-display" value="disabled" <?php checked( $above_header, 'disabled' ); ?> />
 						<label for="ast-hfb-above-header-display"><?php esc_html_e( 'Disable Above Header', 'astra' ); ?></label> <br />
 					</div>
 					<?php endif; ?>
 
-					<?php if ( $show_meta_field && Astra_Builder_Helper::is_row_empty( 'primary', 'header', 'desktop' ) ) : ?>
+					<?php
+						/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+					if ( $show_meta_field && Astra_Builder_Helper::is_row_empty( 'primary', 'header', 'desktop' ) ) :
+						/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						?>
 					<div class="ast-main-header-display-option-wrap">
 						<label for="ast-main-header-display">
 							<input type="checkbox" id="ast-main-header-display" name="ast-main-header-display" value="disabled" <?php checked( $primary_header, 'disabled' ); ?> />
-							<?php esc_html_e( 'Disable Primary Header', 'astra' ); ?>
+						<?php esc_html_e( 'Disable Primary Header', 'astra' ); ?>
 						</label>
 					</div>
 					<?php endif; ?>
 
-					<?php if ( $show_meta_field && Astra_Builder_Helper::is_row_empty( 'below', 'header', 'desktop' ) ) : ?>
+					<?php
+						/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+					if ( $show_meta_field && true === Astra_Builder_Helper::$is_header_footer_builder_active && Astra_Builder_Helper::is_row_empty( 'below', 'header', 'desktop' ) ) :
+						/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						?>
 					<div class="ast-hfb-below-header-display-option-wrap">
 						<input type="checkbox" id="ast-hfb-below-header-display" name="ast-hfb-below-header-display" value="disabled" <?php checked( $below_header, 'disabled' ); ?> />
 						<label for="ast-hfb-below-header-display"><?php esc_html_e( 'Disable Below Header', 'astra' ); ?></label> <br />
 					</div>
 					<?php endif; ?>
-
-					<?php if ( $show_meta_field && Astra_Builder_Helper::is_row_empty( 'primary', 'header', 'mobile' ) || Astra_Builder_Helper::is_row_empty( 'above', 'header', 'mobile' ) || Astra_Builder_Helper::is_row_empty( 'below', 'header', 'mobile' ) ) : ?>
+					<?php
+						/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+					if ( $show_meta_field && true === Astra_Builder_Helper::$is_header_footer_builder_active && ( Astra_Builder_Helper::is_row_empty( 'primary', 'header', 'mobile' ) || Astra_Builder_Helper::is_row_empty( 'above', 'header', 'mobile' ) || Astra_Builder_Helper::is_row_empty( 'below', 'header', 'mobile' ) ) ) :
+						/** @psalm-suppress DocblockTypeContradiction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						?>
 
 					<div class="ast-hfb-mobile-header-display-option-wrap">
 						<input type="checkbox" id="ast-hfb-mobile-header-display" name="ast-hfb-mobile-header-display" value="disabled" <?php checked( $mobile_header, 'disabled' ); ?> />
@@ -436,6 +451,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 		 * @return void
 		 */
 		public function load_scripts() {
+			$post_id   = get_the_ID();
 			$post_type = get_post_type();
 
 			if ( defined( 'ASTRA_ADVANCED_HOOKS_POST_TYPE' ) && ASTRA_ADVANCED_HOOKS_POST_TYPE === $post_type ) {
@@ -460,34 +476,48 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 
 			wp_enqueue_script( 'astra-meta-settings' );
 			$astra_ext_extension_class_exists = class_exists( 'Astra_Ext_Extension' ) ? true : false;
+
+			$ast_content_layout_sidebar = false;
+			if ( $post_id ) {
+				$page_for_posts = absint( get_option( 'page_for_posts' ) );
+				if ( $post_id === $page_for_posts ) {
+					$ast_content_layout_sidebar = true;
+				}
+			}
+
 			wp_localize_script(
 				'astra-meta-settings',
 				'astMetaParams',
 				array(
-					'post_type'                => $post_type,
-					'title'                    => $settings_title,
-					'sidebar_options'          => $this->get_sidebar_options(),
-					'sidebar_title'            => __( 'Sidebar', 'astra' ),
-					'content_layout'           => $this->get_content_layout_options(),
-					'content_layout_title'     => __( 'Content Layout', 'astra' ),
-					'disable_sections_title'   => __( 'Disable Sections', 'astra' ),
-					'disable_sections'         => $this->get_disable_section_fields(),
-					'isWhiteLabelled'          => astra_is_white_labelled(),
-					'sticky_header_title'      => __( 'Sticky Header', 'astra' ),
-					'sticky_header_options'    => $this->get_sticky_header_options(),
-					'transparent_header_title' => __( 'Transparent Header', 'astra' ),
-					'page_header_title'        => __( 'Page Header', 'astra' ),
-					'page_header_edit_link'    => esc_url( admin_url( 'edit.php?post_type=astra_adv_header' ) ),
-					'header_options'           => $this->get_header_enabled_options(),
-					'headers_meta_options'     => $this->get_header_disable_meta_fields(),
-					'page_header_options'      => $this->get_page_header_options(),
-					'page_header_availability' => $this->check_page_header_availability(),
-					'is_bb_themer_layout'      => ! astra_check_is_bb_themer_layout(), // Show page header option only when bb is not activated.
-					'is_addon_activated'       => defined( 'ASTRA_EXT_VER' ) ? true : false,
-					'sticky_addon_enabled'     => ( $astra_ext_extension_class_exists && Astra_Ext_Extension::is_active( 'sticky-header' ) ) ? true : false,
-					'register_astra_metabox'   => apply_filters( 'astra_settings_metabox_register', true ),
+					'post_type'                      => $post_type,
+					'title'                          => $settings_title,
+					'sidebar_options'                => $this->get_sidebar_options(),
+					'sidebar_title'                  => __( 'Sidebar', 'astra' ),
+					'content_layout'                 => $this->get_content_layout_options(),
+					'content_layout_title'           => __( 'Content Layout', 'astra' ),
+					'disable_sections_title'         => __( 'Disable Sections', 'astra' ),
+					'disable_sections'               => $this->get_disable_section_fields(),
+					'isWhiteLabelled'                => astra_is_white_labelled(),
+					'sticky_header_title'            => __( 'Sticky Header', 'astra' ),
+					'sticky_header_options'          => $this->get_sticky_header_options(),
+					'transparent_header_title'       => __( 'Transparent Header', 'astra' ),
+					'page_header_title'              => __( 'Page Header', 'astra' ),
+					'page_header_edit_link'          => esc_url( admin_url( 'edit.php?post_type=astra_adv_header' ) ),
+					'header_options'                 => $this->get_header_enabled_options(),
+					'headers_meta_options'           => $this->get_header_disable_meta_fields(),
+					'page_header_options'            => $this->get_page_header_options(),
+					'page_header_availability'       => $this->check_page_header_availability(),
+					'is_bb_themer_layout'            => ! astra_check_is_bb_themer_layout(), // Show page header option only when bb is not activated.
+					'is_addon_activated'             => defined( 'ASTRA_EXT_VER' ) ? true : false,
+					'sticky_addon_enabled'           => ( $astra_ext_extension_class_exists && Astra_Ext_Extension::is_active( 'sticky-header' ) ) ? true : false,
+					'register_astra_metabox'         => apply_filters( 'astra_settings_metabox_register', true ),
+					'is_hide_contnet_layout_sidebar' => $ast_content_layout_sidebar,
+					'upgrade_pro_link'               => ASTRA_PRO_UPGRADE_URL,
+					'show_upgrade_notice'            => astra_showcase_upgrade_notices(),
 				)
 			);
+
+			wp_enqueue_script( 'astra-metabox-cf-compatibility', ASTRA_THEME_URI . 'inc/assets/js/custom-fields-priority.js', array(), ASTRA_THEME_VERSION, false );
 		}
 
 		/**
@@ -948,6 +978,23 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 		}
 	}
 }
+
+/**
+ * Footer disable on archive pages.
+ *
+ * @param bool $display_footer for controling the header and footer enable/disable options.
+ *
+ * @since 3.9.4
+ */
+function astra_footer_bar_display_cb( $display_footer ) {
+	if ( is_home() && ! is_front_page() ) {
+		$page_for_posts = get_option( 'page_for_posts' );
+		$display_footer = get_post_meta( $page_for_posts, 'footer-sml-layout', true );
+	}
+	return $display_footer;
+}
+
+add_filter( 'astra_footer_bar_display', 'astra_footer_bar_display_cb', 99, 1 );
 
 /**
  * Kicking this off by calling 'get_instance()' method

@@ -1,7 +1,7 @@
 .ast-responsive-btns {
   display: inline-block;
   line-height: 1;
-  vertical-align: sub;
+  vertical-align: top;
 }
 
 .ast-responsive-btns > li {
@@ -18,7 +18,6 @@
   cursor: pointer;
   background: none;
   border: none;
-  opacity: .75;
   outline: none;
 }
 
@@ -55,22 +54,6 @@
   display: block;
 }
 
-.customize-control-ast-responsive .input-wrapper .ast-responsive-select {
-  width: 50px;
-  margin: 0;
-  margin-right: 2px;
-  padding: 0 8px 0 24px;
-  font-size: 13px;
-  text-transform: uppercase;
-  float: none;
-  display: none;
-}
-
-.customize-control-ast-responsive .input-wrapper .ast-responsive-input.active + .ast-responsive-select {
-  display: block;
-  width: 25%;
-  float: none;
-}
 
 .customize-control-ast-responsive .input-wrapper .ast-non-reponsive.ast-responsive-input {
   display: inline-block;
@@ -80,16 +63,8 @@
   display: inline-block;
 }
 
-.customize-control-ast-responsive .input-wrapper .ast-non-reponsive.ast-responsive-select {
-  display: inline-block;
-}
-
 #customize-control-astra-settings-font-size-body.customize-control-ast-responsive .input-wrapper {
   display: inline-block;
-}
-
-#customize-control-astra-settings-font-size-body.customize-control-ast-responsive .input-wrapper .ast-responsive-select {
-  display: none;
 }
 
 #customize-control-astra-settings-font-size-body.customize-control-ast-responsive .input-wrapper .ast-responsive-input {

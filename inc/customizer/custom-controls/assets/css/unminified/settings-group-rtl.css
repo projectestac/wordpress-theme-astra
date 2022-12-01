@@ -1,19 +1,18 @@
 .ast-adv-toggle-icon {
   left: 2px;
-  top: 0;
   position: absolute;
   width: 18px;
   height: 18px;
   font-size: 18px;
-  border: 1px solid #ddd;
   border-radius: 2px;
   padding: 4px;
-  color: #0073aa;
-  background: #fff;
+  color: var(--ast-customizer-color-8);
+  background: var(--ast-customizer-color-9);
+  cursor: pointer;
 }
 
 .ast-adv-toggle-icon:hover {
-  color: #099fd6;
+  color: var(--ast-customizer-color-1);
 }
 
 .ast-adv-toggle-icon:before {
@@ -204,7 +203,23 @@
   margin-bottom: 10px;
   font-size: 13px;
   margin-top: 3px;
-  display: block;
+}
+
+.customize-control-ast-settings-group .ast-field-settings-modal .customize-control-ast-responsive-slider .ast-responsive-units,
+.customize-control-ast-settings-group .ast-field-settings-modal .customize-control-ast-responsive-slider .ast-range-unit,
+.customize-control-ast-settings-group .ast-field-settings-modal .customize-control-ast-slider .ast-range-unit,
+.customize-control-ast-settings-group .ast-field-settings-modal .customize-control-ast-slider .ast-range-unit {
+  top: 6px;
+}
+
+.customize-control-ast-settings-group .ast-field-settings-modal .customize-control-ast-responsive-slider .ast-resp-slider-reset-wrap,
+.customize-control-ast-settings-group .ast-field-settings-modal .customize-control-ast-slider .ast-resp-slider-reset-wrap {
+  top: 3px;
+}
+
+.customize-control-ast-settings-group .ast-field-settings-modal .customize-control-ast-slider .ast-responsive-slider-btns,
+.customize-control-ast-settings-group .ast-field-settings-modal .customize-control-ast-responsive-slider .ast-responsive-slider-btns {
+  top: 2px;
 }
 
 .ast-field-settings-modal .customize-control {
@@ -276,6 +291,68 @@
   color: #ffffff;
 }
 
+.astra-popover-tabs.astra-media-tab .components-tab-panel__tabs,
+.astra-popover-tabs.astra-media-tab .components-tab-panel__tab-content {
+  padding: 0;
+}
+
+.astra-popover-tabs.astra-media-tab .components-tab-panel__tabs-item.active-tab {
+  border-color: var(--ast-customizer-color-3);
+  background: var(--ast-customizer-color-1);
+}
+
+.astra-popover-tabs.astra-media-tab .components-tab-panel__tab-content .ast-social-icon-picker-label {
+  text-align: right;
+}
+
+.astra-media-tab .astra-media-image {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.astra-media-tab .ast-media-btn {
+  display: block;
+  width: 100%;
+  border: 1px dashed var(--ast-customizer-color-7);
+  box-sizing: border-box;
+  box-shadow: unset;
+  padding: 9px 0;
+  line-height: 1.6;
+  text-decoration: none;
+}
+
+.astra-media-tab .ast-danger-btn {
+  color: var(--ast-customizer-color-13);
+  margin-top: 10px;
+}
+
+.astra-media-tab .ast-media-btn:hover {
+  border-color: var(--ast-customizer-color-3);
+}
+
+.astra-media-tab .ast-danger-btn:hover {
+  border-color: var(--ast-customizer-color-13);
+}
+
+.components-base-control.ast-text-control-input {
+  margin-bottom: 16px;
+}
+
+.ast-payments-text-control-input .components-base-control__label {
+  text-transform: none;
+  color: #334155;
+  font-size: 13px;
+}
+
+.components-base-control.ast-payments-text-control-input {
+  margin-bottom: 20px;
+}
+
+.components-base-control.ast-text-control-input input {
+  border-color: var(--ast-customizer-color-7);
+  color: var(--ast-customizer-color-5);
+}
+
 .astra-popover-color .astra-popover-tabs .components-tab-panel__tabs button.components-tab-panel__tabs-item.active-tab:not(.is-primary):not(.is-tertiary):not(.is-link):hover {
   color: #fff;
 }
@@ -312,10 +389,12 @@
 .ast-top-divider.customize-control-ast-settings-group .ast-toggle-desc-wrap .ast-adv-toggle-icon {
     top: 23px;
 }
+
 /**
  * Responsive slider control inside settings-group, case: body-font, headings-font.
  */
-.ast-fields-wrap .customize-control-ast-responsive-slider .ast-responsive-slider-btns {
-	top: 0;
-	left: 42px;
+ .ast-fields-wrap .customize-control-ast-responsive-slider .ast-slider-wrap > label,
+ .ast-fields-wrap .customize-control-ast-selector .ast-slider-wrap > label {
+    display: inline-block;
 }
+

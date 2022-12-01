@@ -38,6 +38,50 @@
             }
         );
 
+        $document.on(
+            'click',
+            '.customizer-navigate-on-focus',
+            function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const currentElement = $( this ).closest( '.customizer-navigate-on-focus' );
+                const section_id = currentElement.attr( 'data-section' ) || '';
+                const type       = currentElement.attr( 'data-type' ) ? currentElement.attr( 'data-type' ) : 'section';
+
+                if ( section_id && type ) {
+
+                    if( 'section' === type ) {
+                        if ( defaultTarget.wp.customize.section( section_id ) ) {
+                            defaultTarget.wp.customize.section( section_id ).focus();
+                        }
+                    }
+
+                    if( 'control' === type ) {
+                        if ( defaultTarget.wp.customize.control( section_id ) ) {
+                            defaultTarget.wp.customize.control( section_id ).focus();
+                        }
+                    }
+
+                    if( 'panel' === type ) {
+                        if ( defaultTarget.wp.customize.panel( section_id ) ) {
+                            defaultTarget.wp.customize.panel( section_id ).focus();
+                        }
+                    }
+                  
+                }
+            }
+        );
+
+        /**
+         * Ajax quantity input show.
+         */
+        wp.customize( 'astra-settings[woo-header-cart-click-action]', function( setting ) {
+            setting.bind( function( action ) {
+                $( document.body ).trigger( 'wc_fragment_refresh' );
+            } );
+        } );
+
 		/**
 		 * Register partial refresh events at once asynchronously.
 		 */
@@ -244,3 +288,45 @@ wp.customize( 'astra-settings[edd-archive-width]', function( value ) {
     } );
 } );
 
+// WooCommerce store notice color configs.
+astra_css( 'astra-settings[store-notice-text-color]', 'color', 'body p.demo_store, body .woocommerce-store-notice, body p.demo_store a, body .woocommerce-store-notice a' );
+astra_css( 'astra-settings[store-notice-background-color]', 'background-color', 'body p.demo_store, body .woocommerce-store-notice, body p.demo_store a, body .woocommerce-store-notice a' );
+
+// WooCommerce store notice position preview.
+wp.customize( 'astra-settings[store-notice-position]', function( setting ) {
+    setting.bind( function( position ) {
+		if( 'hang-over-top' === position ) {
+			wp.customize.preview.send( 'refresh' );
+		} else {
+			jQuery('body').removeClass( 'ast-woocommerce-store-notice-hanged' );
+			jQuery('.woocommerce-store-notice').attr( 'data-position', position );
+		}
+    } );
+} );
+
+// Global Typography Refresh - START
+const bodyFontFamily = [
+	'body-font-family',
+	'body-font-variant',
+	'font-size-body',
+	'body-font-weight',
+	'body-text-transform',
+	'body-line-height',
+	'headings-font-family',
+	'headings-font-variant',
+	'headings-font-weight',
+	'headings-text-transform',
+	'headings-line-height'
+];
+
+bodyFontFamily.forEach(element => {
+	// Body Font Family
+	wp.customize( 'astra-settings['+element+']', function( value ) {
+		value.bind( function( value ) {
+			wp.customize.preview.send( 'refresh' );
+		} );
+	} );
+
+});
+
+// Global Typography Refresh - END

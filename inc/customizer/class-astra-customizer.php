@@ -382,7 +382,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 	                    			return \'&#\'+i.charCodeAt(0)+\';\';
 								});
 	                    	desc.remove();
-	                    	li_wrapper.append(" <i class=\'ast-control-tooltip dashicons dashicons-editor-help\'title=\'" + tooltip +"\'></i>");
+	                    	li_wrapper.append(" <i class=\'ast-control-tooltip dashicons dashicons-editor-help\'data-title=\'" + tooltip +"\'></i><span class=\'ast-dashicons-custom-tooltip\'data-title=\'" + tooltip + "\'><span>");
 	                	}
 	            	});
 	        	});';
@@ -479,8 +479,9 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					if ( isset( $configuration['choices'] ) && is_array( $configuration['choices'] ) ) {
 
 						foreach ( $configuration['choices'] as $key => $value ) {
-							$configuration['choices'][ $key ]        = $value['path'];
-							$configuration['choices_titles'][ $key ] = $value['label'];
+							$configuration['choices'][ $key ]         = $value['path'];
+							$configuration['choices_titles'][ $key ]  = $value['label'];
+							$configuration['choices_upgrade'][ $key ] = isset( $value['is_pro'] ) ? $value['is_pro'] : false;
 						}
 					}
 					if ( isset( $configuration['input_attrs'] ) ) {
@@ -576,6 +577,13 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					break;
 				case 'ast-sortable':
 					$configuration['value'] = $val;
+
+					if ( isset( self::$group_configs[ $configuration['name'] ] ) ) {
+						/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						$config = wp_list_sort( self::$group_configs[ $configuration['name'] ], 'priority' );
+						/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+						$configuration['ast_fields'] = $config;
+					}
 
 					break;
 
@@ -688,8 +696,11 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 				'sanitize_callback' => $sanitize_callback,
 				'suffix'            => astra_get_prop( $config, 'suffix' ),
 				'control_type'      => astra_get_prop( $config, 'control' ),
+				'linked'            => astra_get_prop( $config, 'linked' ),
 				'variant'           => astra_get_prop( $config, 'variant' ),
 				'help'              => astra_get_prop( $config, 'help' ),
+				'input_attrs'       => astra_get_prop( $config, 'input_attrs' ),
+				'disable'           => astra_get_prop( $config, 'disable' ),
 			);
 
 			self::$dynamic_options['settings'][ astra_get_prop( $new_config, 'name' ) ] = array(
@@ -1009,6 +1020,26 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 		 */
 		public function enqueue_customizer_scripts() {
 
+			$sorted_menus = array(
+				'0' => __( 'Select Menu', 'astra' ),
+			);
+
+			$all_menus = get_terms( array( 'taxonomy' => 'nav_menu', 'hide_empty' => true ) );
+
+			if ( is_array( $all_menus ) && count( $all_menus ) ) {
+				foreach ( $all_menus as $row ) {
+					/** @psalm-suppress PossiblyInvalidPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+					$sorted_menus[ $row->term_id ] = $row->name;
+					/** @psalm-suppress PossiblyInvalidPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+				}
+			}
+
+			$resultant_menus = array();
+
+			foreach ( $sorted_menus as $id => $menu ) {
+				$resultant_menus[ $id ] = $menu;
+			}
+
 			// Localize variables for Dev mode > Customizer JS.
 			wp_localize_script(
 				SCRIPT_DEBUG ? 'astra-custom-control-react-script' : 'astra-custom-control-script',
@@ -1029,6 +1060,8 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					'failedFlushed'           => __( 'Failed, Please try again later.', 'astra' ),
 					'googleFonts'             => Astra_Font_Families::get_google_fonts(),
 					'variantLabels'           => Astra_Font_Families::font_variant_labels(),
+					'menuLocations'           => $resultant_menus,
+					'upgradeUrl'              => ASTRA_PRO_UPGRADE_URL,
 				)
 			);
 
@@ -1301,6 +1334,11 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					</ul>
 			</div>';
 
+			$sortable_subcontrol_template = '<div class="ast-sortable-subfields-wrap">
+					<ul class="ast-fields-wrap">
+					</ul>
+			</div>';
+
 			wp_localize_script(
 				'astra-customizer-controls-toggle-js',
 				'astra',
@@ -1308,7 +1346,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 					'astra_theme_customizer_js_localize',
 					array(
 						'customizer' => array(
-							'settings'         => array(
+							'settings'            => array(
 								'sidebars'     => array(
 									'single'  => array(
 										'single-post-sidebar-layout',
@@ -1329,10 +1367,12 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 								),
 								'google_fonts' => $string,
 							),
-							'group_modal_tmpl' => $template,
-							'is_pro'           => defined( 'ASTRA_EXT_VER' ),
-							'upgrade_link'     => htmlspecialchars_decode( astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'upgrade-link', 'upgrade-to-pro' ) ),
-							'is_block_widget'  => astra_has_widgets_block_editor(),
+							'group_modal_tmpl'    => $template,
+							'sortable_modal_tmpl' => $sortable_subcontrol_template,
+							'is_pro'              => defined( 'ASTRA_EXT_VER' ),
+							'show_upgrade_notice' => ( astra_showcase_upgrade_notices() ) ? true : false,
+							'upgrade_link'        => htmlspecialchars_decode( astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'upgrade-link', 'upgrade-to-pro' ) ),
+							'is_block_widget'     => astra_has_widgets_block_editor(),
 						),
 						'theme'      => array(
 							'option' => ASTRA_THEME_SETTINGS,

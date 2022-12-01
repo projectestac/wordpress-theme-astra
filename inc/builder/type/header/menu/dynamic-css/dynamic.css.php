@@ -91,7 +91,6 @@ function astra_hb_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 		$menu_font_size_tablet_unit  = ( isset( $menu_font_size['tablet-unit'] ) ) ? $menu_font_size['tablet-unit'] : '';
 		$menu_font_size_mobile_unit  = ( isset( $menu_font_size['mobile-unit'] ) ) ? $menu_font_size['mobile-unit'] : '';
 
-
 		// Spacing.
 		$menu_spacing = astra_get_option( 'header-' . $_prefix . '-menu-spacing' );
 
@@ -235,6 +234,9 @@ function astra_hb_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 				'margin-left'   => astra_responsive_spacing( $margin, 'left', 'tablet' ),
 				'margin-right'  => astra_responsive_spacing( $margin, 'right', 'tablet' ),
 			),
+			$selector . ' .main-header-menu > .menu-item > .sub-menu, ' . $selector . ' .main-header-menu > .menu-item > .astra-full-megamenu-wrapper' => array(
+				'margin-top' => '0',
+			),
 		);
 
 		$css_output_tablet[ $selector . ' .main-header-menu, ' . $selector . ' .main-header-menu .sub-menu' ] = astra_get_responsive_background_obj( $menu_resp_bg_color, 'tablet' );
@@ -280,6 +282,9 @@ function astra_hb_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 				'margin-bottom' => astra_responsive_spacing( $margin, 'bottom', 'mobile' ),
 				'margin-left'   => astra_responsive_spacing( $margin, 'left', 'mobile' ),
 				'margin-right'  => astra_responsive_spacing( $margin, 'right', 'mobile' ),
+			),
+			$selector . ' .main-header-menu > .menu-item > .sub-menu, ' . $selector . ' .main-header-menu > .menu-item > .astra-full-megamenu-wrapper' => array(
+				'margin-top' => '0',
 			),
 		);
 

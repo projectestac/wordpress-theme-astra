@@ -19,14 +19,12 @@
     background: #eeeeee;
     vertical-align: top;
     border: none;
-    border-right: 1px solid #dddddd;
     padding: 8px 12px;
     border-radius: 0;
 }
 
 #customize-control-astra-settings-builder-header, #customize-control-astra-settings-builder-footer {
     background: #eee;
-    transition: all 0.2s;
     backface-visibility: hidden;
     z-index: 10;
     height: 45px;
@@ -44,8 +42,9 @@
 }
 
 .button.ahfb-builder-hide-button.ahfb-builder-tab-toggle {
-    width: 100px;
-    text-align: center;
+	width: auto;
+	padding-left: 20px;
+	text-align: center;
 }
 
 .customize-control-ast-builder-header-control .ahfb-builder-tab-toggle:hover, .customize-control-ast-builder-header-control .ahfb-builder-section-shortcut:hover {
@@ -113,8 +112,8 @@
     margin-left: -24px;
     padding: 0;
     margin-bottom: 0;
-    border: 1px solid #dddddd;
-    background: #ffffff;
+    border: 1px solid var(--ast-customizer-color-7);
+    background: var(--ast-customizer-color-9);
     margin-bottom: 0;
 }
 
@@ -127,9 +126,9 @@
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 500;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     font-style: normal;
     text-transform: uppercase;
     height: 40px;
@@ -139,8 +138,9 @@
     cursor: pointer;
     border: 0;
     background: transparent;
-    border-top: 2px solid transparent;
+    border-bottom: 3px solid transparent;
     border-radius: 0;
+	color: var(--ast-customizer-color-6);
 }
 
 .ahfb-compontent-tabs .ahfb-compontent-tabs-button:not(:first-child) {
@@ -152,14 +152,13 @@
 }
 
 .ahfb-compontent-tabs .ahfb-compontent-tabs-button:not(.nav-tab-active):hover {
-	background: #ffffff;
-    color: #0072aa;
+	background: var(--ast-customizer-color-9);
+    color: var(--ast-customizer-color-8);
 }
 
 .ahfb-compontent-tabs .ahfb-compontent-tabs-button.nav-tab-active {
-	border-top-color: #0071a1;
-    color: #0073aa;
-    background-image: linear-gradient( -180deg, #f3f5f6, #ffffff);
+	border-bottom-color: var(--ast-customizer-color-1);
+    color: var(--ast-customizer-color-8);
 }
 
 .ahfb-compontent-tabs .ahfb-compontent-tabs-button.nav-tab-active:focus {
@@ -275,13 +274,13 @@
     height: auto;
     min-width: 90px;
     background: #f1f1f1;
-    color: #444444;
+    color: var(--ast-customizer-color-5);
     position: relative;
     white-space: nowrap;
     cursor: grab;
     margin: 0 4px;
-    padding: 0 12px;
-    border-radius: 3px;
+    padding: 0 14px;
+    border-radius: 4px;
     border: none;
     transition: all 0.2s;
 }
@@ -383,7 +382,7 @@
 }
 
 .ahfb-builder-item-start {
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     min-height: 34px;
     display: flex;
 }
@@ -443,7 +442,6 @@
 }
 
 .ahfb-build-tabs .nav-tab.nav-tab-active {
-    background: #eeeeee;
     color: #191e23;
     box-shadow: none;
     border-bottom: 4px solid #191e23;
@@ -637,10 +635,12 @@
 }
 
 .ahfb-builder-item-start button.ahfb-builder-item {
-    border: 1px dashed #bbb;
-    background: #f2f2f2;
+    border: 1px dashed var(--ast-customizer-color-7);
+    background: var(--ast-customizer-color-11);
     cursor: pointer;
     box-shadow: none !important;
+	line-height: 42px;
+	font-size: 14px;
 }
 
 .ast-builder-elements-section .ast-builder-elements-notice  {
@@ -751,7 +751,6 @@
 
 
 .components-button:not(:disabled):not([aria-disabled="true"]):not(.is-secondary):not(.is-primary):not(.is-tertiary):not(.is-link):not(.components-color-picker__saturation-pointer):hover {
-    color: #777777;
     box-shadow: none;
 }
 
@@ -837,17 +836,9 @@
     margin: 4px;
 }
 
-.ahfb-builder-item-start button.ahfb-builder-item {
-    border: 1px dashed #b4b9be;
-    background: transparent;
-}
-
 .ahfb-builder-item-start button.ahfb-builder-item:hover {
-    background: #fbfbfc;
-}
-
-.ahfb-builder-item-start .ahfb-builder-item:hover > .ahfb-builder-item-icon {
-    color: #007cba;
+    background: var(--ast-customizer-color-9);
+	border-style: solid;
 }
 
 .ahfb-builder-item > .ahfb-builder-item-icon.ahfb-move-icon {
@@ -956,29 +947,6 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
     border-top: 1px solid #dddddd;
 }
 
-.components-popover.ahfb-popover-add-builder {
-    right: 50% !important;
-    top: 0 !important;
-    position: absolute;
-    bottom: auto;
-}
-
-.ahfb-builder-group .ahfb-builder-area:nth-child(3) .ahfb-builder-add-item.center-on-left .components-popover.ahfb-popover-add-builder, .ahfb-builder-group .ahfb-builder-area:nth-child(4) .ahfb-builder-add-item .components-popover.ahfb-popover-add-builder, .ahfb-builder-group .ahfb-builder-area:nth-child(5) .ahfb-builder-add-item .components-popover.ahfb-popover-add-builder, .ahfb-builder-group.ast-grid-row-layout-3-cwide .ahfb-builder-area-3 .ahfb-builder-add-item .components-popover.ahfb-popover-add-builder {
-    right: -20% !important;
-}
-
-.ahfb-builder-group.ast-grid-row-layout-6-equal .ahfb-builder-area-6 .ahfb-builder-add-item .components-popover.ahfb-popover-add-builder {
-    right: -35% !important;
-}
-
-.customize-control-ast-builder .components-popover.ahfb-popover-add-builder[data-x-axis="center"] {
-    right: 160px !important;
-}
-
-.customize-control-ast-builder .components-popover.ahfb-popover-add-builder[data-x-axis="right"] {
-    right: 0px !important;
-}
-
 .components-popover__content .ahfb-popover-builder-list .ahfb-radio-container-control {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -1052,9 +1020,12 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 
 .ahfb-responsive-control-bar {
     display: flex;
-    justify-content: space-between;
     position: relative;
     margin-bottom: 10px;
+}
+
+.ahfb-responsive-control-bar .floating-controls {
+	padding-right: 5px;
 }
 
 .ahfb-responsive-control-bar .floating-controls .components-button.is-tertiary:not(.active-device) {
@@ -1078,8 +1049,9 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 }
 
 .ahfb-responsive-control-bar .floating-controls .components-button svg {
-    height: 16px;
+    height: 13px;
     width: 16px;
+    fill: none;
 }
 
 .ahfb-responsive-control-bar .floating-controls .components-button:focus:not(:disabled) {
@@ -1254,10 +1226,6 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
     background: white;
 }
 
-.components-popover.ahfb-popover-add-builder .components-popover__content {
-    bottom: 0;
-}
-
 .ahfb-control-field .ahfb-background-tabs .customize-control-title {
     padding-top: 10px;
     font-size: 12px;
@@ -1376,10 +1344,10 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
     max-height: 100%;
 }
 
-.ahfb-row-layout-control .ahfb-responsive-controls-content .components-button svg, .ahfb-icon-set-control .ahfb-radio-container-control .components-button svg {
+/* .ahfb-row-layout-control .ahfb-responsive-controls-content .components-button svg, .ahfb-icon-set-control .ahfb-radio-container-control .components-button svg {
     width: 75px;
     height: 50px;
-}
+} */
 
 #customize-control-astra-settings-header-trigger-icon .components-button.is-tertiary.active-radio svg, #customize-control-astra-settings-header-trigger-icon .components-button.is-tertiary svg,
 #customize-control-astra-settings-header-trigger-icon svg {
@@ -1435,7 +1403,8 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 .ahfb-sorter-item-panel-header .ahfb-sorter-title {
     flex-grow: 2;
     padding: 0 5px;
-    color: #556068;
+    color: #334155;
+		font-size: 14px;
 }
 
 .customize-control-ast-language-selector span.ahfb-sorter-title {
@@ -1444,7 +1413,7 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 
 .ahfb-sorter-item-panel-header .ahfb-sorter-visiblity {
     border-radius: 0;
-    height: 36px;
+    height: 41px;
     border-left: 1px solid #A0AEC0;
 }
 
@@ -1456,7 +1425,7 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 }
 
 .ahfb-sorter-item-panel-header .ahfb-sorter-item-expand, .ahfb-sorter-item-panel-header .ahfb-sorter-item-remove {
-    color: #556068;
+    color: #4B5563;
     box-shadow: none;
 }
 
@@ -1471,27 +1440,18 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
     height: 18px;
 }
 
-.ahfb-sorter-item-panel-header .ahfb-sorter-item-expand:before, .ahfb-sorter-item-panel-header .ahfb-sorter-item-remove:before {
-    content: '';
-    position: absolute;
-    right: 0;
-    height: 100%;
-    background: #dddddd;
-    width: 1px;
-}
-
 .ahfb-sorter-drop .ahfb-sorter-item {
     line-height: 28px;
     height: auto;
     background: white;
     position: relative;
-    border: 1px solid #dddddd;
+    border: 1px solid #D1D5DB;
     border-bottom: none;
     white-space: nowrap;
     position: relative;
     margin: 0 0 10px;
     padding: 0px;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 .ahfb-sorter-item-panel-content {
@@ -1547,6 +1507,10 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
     padding-left: 10px;
 }
 
+.ahfb-social-add-area .components-select-control {
+    border-radius: 4px;
+}
+
 .ahfb-social-add-area .ahfb-sorter-add-item {
     height: 30px;
     line-height: normal;
@@ -1588,7 +1552,7 @@ li#customize-control-astra-settings-header-desktop-items, li#customize-control-a
 button.components-button.ahfb-sorter-item-expand {
     transition: 0.5s;
     position: relative;
-    border-right: 1px solid #ddd;
+    border-right: none;
 }
 
 @media (max-width: 1660px) {
@@ -1687,7 +1651,7 @@ button.components-button.ahfb-sorter-item-expand {
     background: unset;
 }
 
-.components-button-group.ahfb-radio-container-control .components-button.is-tertiary.active-radio svg, .active-radio .ahfb-icon-set svg {
+.active-radio .ahfb-icon-set svg {
     background: #ffffff;
     border-radius: 3px;
     box-shadow: 0 0 3px 0px rgba(0, 133, 186, 0.67);
@@ -1700,13 +1664,17 @@ button.components-button.ahfb-sorter-item-expand {
     box-shadow: unset;
 }
 
-.ahfb-radio-icon-control .components-button-group.ahfb-radio-container-control .components-button.is-tertiary svg rect, .ahfb-radio-icon-control .components-button-group.ahfb-radio-container-control .components-button.is-tertiary svg path, .ahfb-icon-set svg,
+.ahfb-icon-set svg,
 #customize-control-astra-settings-header-trigger-icon span.ahfb-svg-iconset.svg-baseline svg path, span.ahfb-svg-iconset.svg-baseline svg circle {
-    fill: rgb(160 174 192);
+    fill: var(--ast-customizer-color-7);
 }
 
-.ahfb-radio-icon-control .components-button-group.ahfb-radio-container-control .components-button.is-tertiary.active-radio svg rect, .ahfb-radio-icon-control  .components-button-group.ahfb-radio-container-control .components-button.is-tertiary.active-radio svg path, .active-radio .ahfb-icon-set svg, .active-radio .ahfb-icon-set svg, #customize-control-astra-settings-header-trigger-icon input:checked + .ast-radio-img-svg svg path, #customize-control-astra-settings-header-trigger-icon input:checked + .ast-radio-img-svg svg circle {
-    fill: #007cba;
+.active-radio .ahfb-icon-set svg, .active-radio .ahfb-icon-set svg, #customize-control-astra-settings-header-trigger-icon input:checked + .ast-radio-img-svg svg path, #customize-control-astra-settings-header-trigger-icon input:checked + .ast-radio-img-svg svg circle {
+    fill: var(--ast-customizer-color-10);
+}
+
+#customize-control-astra-settings-header-trigger-icon input:checked + .ast-radio-img-svg svg > path {
+	fill: var(--ast-customizer-color-1);
 }
 
 .ahfb-icon-set-control.ahfb-three-col-short .components-button-group.ahfb-radio-container-control {
@@ -1750,7 +1718,7 @@ button.components-button.ahfb-sorter-item-expand {
 }
 
 #customize-theme-controls .accordion-section-content {
-    color: #2D3748;
+    color: var(--ast-customizer-color-4);
 }
 
 .ahfb-popover-social-list .components-button-group.ahfb-radio-container-control {
@@ -1779,9 +1747,10 @@ button.components-button.ahfb-sorter-item-expand {
 
 .ahfb-sorter-drop-social_item_group .ahfb-sorter-item-panel-header .ahfb-sorter-visiblity svg {
     max-width: 12px;
-	fill: #556068;
+	fill: #4B5563;
 	width: 28px;
 	height: 28px;
+	vertical-align: middle;
 }
 
 .ahfb-sorter-drop-social_item_group .ahfb-sorter-item-panel-header .ahfb-sorter-visiblity.item-is-hidden {
@@ -1928,7 +1897,7 @@ button.components-button.ahfb-sorter-item-expand {
 }
 
 .ahfb-slide-up span {
-	font-size: 12px;
+	font-size: 14px;
 	padding-right: 2px;
 }
 
@@ -2225,7 +2194,7 @@ button.components-button.ahfb-sorter-item-expand {
 	margin-left: auto
 }
 
-.rfipicons__cp {
+.customize-control .rfipicons .rfipicons__cp {
 	width: 32px;
 	height: 24px;
 	line-height: 24px;
@@ -5029,4 +4998,29 @@ i.fipicon-angle-left:before {
 
 .ahfb-builder-item > .ahfb-builder-item-icon.ahfb-setting-icon {
     margin-left: -12px;
+}
+
+/**
+ * Added CSS for hiding section from WP-Customizer panel.
+ */
+li#accordion-section-ast-single-post, li#accordion-section-ast-single-product,
+li#accordion-section-ast-archive-post, li#accordion-section-ast-archive-product {
+    display: none !important;
+}
+
+
+#customize-control-astra-settings-shop-skin-section-link .ahfb-builder-item-start,
+#customize-control-astra-settings-footer-create-menu-link .ahfb-builder-item-start,
+#customize-control-astra-settings-header-mobile-menu-create-menu-link .ahfb-builder-item-start {
+	margin-bottom: 0;
+}
+
+.ahfb-sorter-drop-social_item_group .ahfb-sorter-item .ahfb-sorter-item-panel-header .dashicons {
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+}
+
+.ahfb-sorter-item-remove {
+	margin-right: -12px;
 }

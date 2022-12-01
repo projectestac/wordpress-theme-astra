@@ -497,6 +497,7 @@ function astra_breadcrumb_section_dynamic_css( $dynamic_css, $dynamic_css_filter
 		$breadcrumbs_default_css['.ast-header-breadcrumb'] = array(
 			'padding-top'    => '10px',
 			'padding-bottom' => '10px',
+			'width'          => '100%',
 		);
 	} elseif ( 'astra_masthead_content' === $breadcrumb_position ) {
 		// Inside Header.
@@ -550,6 +551,7 @@ function astra_breadcrumb_section_dynamic_css( $dynamic_css, $dynamic_css_filter
 	$breadcrumbs_desktop['.ast-breadcrumbs-wrapper'] = array(
 		'text-align' => esc_attr( $breadcrumb_alignment ),
 	);
+	
 
 	$css .= astra_parse_css( $breadcrumbs_desktop );
 	$css .= astra_parse_css( $breadcrumbs_tablet, '', astra_get_tablet_breakpoint() );

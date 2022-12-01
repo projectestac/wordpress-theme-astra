@@ -39,6 +39,7 @@ final class Astra_Builder_Admin {
 	 */
 	public function __construct() {
 		add_action( 'wp_ajax_ast-migrate-to-builder', array( $this, 'migrate_to_builder' ) );
+		add_action( 'wp_ajax_ast-disable-pro-notices', array( $this, 'disable_astra_pro_notices' ) );
 		add_action( 'astra_welcome_page_content', array( $this, 'migrate_to_builder_box' ), 5 );
 	}
 
@@ -92,7 +93,25 @@ final class Astra_Builder_Admin {
 							);
 						?>
 					</p>
-					<p><?php esc_html_e( 'Note: The header/footer builder will replace the existing header/footer settings in the customizer. This might make your header/footer look a bit different. You can configure header/footer builder settings from customizer to give it a nice look. You can always come back here and switch to your old header/footer.', 'astra' ); ?></p>
+					<p>
+						<?php
+							printf(
+								/* translators: %1$s: Theme name. */
+								esc_html__( 'After years of evolution and updates, the old header footer builder is at the point where it can no longer handle all of the new features. ', 'astra' ),
+								esc_html( $astra_theme_title )
+							);
+						?>
+					</p>
+					<p>
+						<?php
+							printf(
+								/* translators: %1$s: Theme name. */
+								esc_html__( 'We recommend that you upgrade to the new header footer builder which has an assortment of new features and provides a more seamless experience. ', 'astra' ),
+								esc_html( $astra_theme_title )
+							);
+						?>
+					</p>
+					<p><?php esc_html_e( 'Note: The header/footer builder will replace the existing header/footer settings in the customizer. This might make your header/footer look a bit different. You can configure header/footer builder settings from customizer to give it a nice look. You can always come back here and switch to your old header/footer. ', 'astra' ); ?></p>
 					<div class="ast-actions-wrap" style="justify-content: space-between;display: flex;align-items: center;" >
 						<a href="<?php echo esc_url( admin_url( '/customize.php' ) ); ?>" class="ast-go-to-customizer"><?php esc_html_e( 'Go to Customizer', 'astra' ); ?></a>
 						<div class="ast-actions" style="display: inline-flex;">
@@ -136,17 +155,41 @@ final class Astra_Builder_Admin {
 			wp_send_json_error( __( 'You don\'t have the access', 'astra' ) );
 		}
 
+		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migrate = isset( $_POST['value'] ) ? sanitize_key( $_POST['value'] ) : '';
+		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migrate = ( $migrate ) ? true : false;
 		/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migration_flag = astra_get_option( 'v3-option-migration', false );
 		astra_update_option( 'is-header-footer-builder', $migrate );
 		if ( $migrate && false === $migration_flag ) {
+			require_once ASTRA_THEME_DIR . 'inc/theme-update/astra-builder-migration-updater.php';  // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 			astra_header_builder_migration();
 		}
 		wp_send_json_success();
 	}
 
+	/**
+	 * Disable pro upgrade notice from all over in Astra.
+	 *
+	 * @since 3.9.4
+	 */
+	public function disable_astra_pro_notices() {
+
+		check_ajax_referer( 'astra-upgrade-notices-nonce', 'security' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'You don\'t have the access', 'astra' ) );
+		}
+
+		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$migrate = isset( $_POST['value'] ) ? sanitize_key( $_POST['value'] ) : '';
+		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$migrate = ( $migrate ) ? true : false;
+		astra_update_option( 'ast-disable-upgrade-notices', $migrate );
+
+		wp_send_json_success();
+	}
 }
 
 /**

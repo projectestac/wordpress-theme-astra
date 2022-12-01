@@ -26,7 +26,7 @@ add_filter( 'astra_dynamic_theme_css', 'astra_above_header_row_setting', 11 );
  */
 function astra_above_header_row_setting( $dynamic_css, $dynamic_css_filtered = '' ) {
 
-	if ( ! is_customize_preview() && ( ! Astra_Builder_helper::is_row_empty( 'above', 'header', 'desktop' ) && ! Astra_Builder_helper::is_row_empty( 'above', 'header', 'mobile' ) ) ) {
+	if ( ! is_customize_preview() && ( ! Astra_Builder_Helper::is_row_empty( 'above', 'header', 'desktop' ) && ! Astra_Builder_Helper::is_row_empty( 'above', 'header', 'mobile' ) ) ) {
 		return $dynamic_css;
 	}
 

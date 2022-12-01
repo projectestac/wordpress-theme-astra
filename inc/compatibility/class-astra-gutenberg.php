@@ -22,6 +22,8 @@ class Astra_Gutenberg {
 		} else {
 			add_filter( 'render_block', array( $this, 'restore_group_inner_container' ), 10, 2 );
 		}
+
+		add_filter( 'render_block_core/group', array( $this, 'add_inherit_width_group_class' ), 10, 2 );
 	}
 
 	/**
@@ -38,11 +40,15 @@ class Astra_Gutenberg {
 			/** @psalm-suppress RedundantConditionGivenDocblockType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 			/** @psalm-suppress UndefinedConstant */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-			$current_post = get_post( (int) $post_id, OBJECT );
+			$current_post = get_post( absint( $post_id ), OBJECT );
 			/** @psalm-suppress UndefinedConstant */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
+			/** @psalm-suppress TooManyArguments */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$enable_block_editor_attr = apply_filters( 'astra_disable_block_content_attr', true, $post_id );
+			/** @psalm-suppress TooManyArguments */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+
 			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-			if ( has_blocks( $current_post ) ) {
+			if ( has_blocks( $current_post ) && $enable_block_editor_attr ) {
 				/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 				add_filter( 'astra_attr_article-entry-content-single-layout', array( $this, 'add_ast_block_container' ) );
 				add_filter( 'astra_attr_article-entry-content', array( $this, 'add_ast_block_container' ) );
@@ -85,6 +91,11 @@ class Astra_Gutenberg {
 		) {
 			return $block_content;
 		}
+		/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		if ( ( isset( $block['blockName'] ) && 'core/group' === $block['blockName'] ) && ! empty( $block['attrs'] ) && isset( $block['attrs']['layout'] ) && isset( $block['attrs']['layout']['type'] ) && 'flex' === $block['attrs']['layout']['type'] ) {
+			return $block_content;
+		}
+
 
 		$replace_regex   = '/(^\s*<div\b[^>]*wp-block-group[^>]*>)(.*)(<\/div>\s*$)/ms';
 		$updated_content = preg_replace_callback(
@@ -93,6 +104,35 @@ class Astra_Gutenberg {
 			$block_content
 		);
 		return $updated_content;
+	}
+
+	/**
+	 * Add Group block custom class when "Inherit default layout" toggle enabled.
+	 *
+	 * @since 3.8.3
+	 * @access public
+	 *
+	 * @param string $block_content Rendered block content.
+	 * @param array  $block         Block object.
+	 *
+	 * @return string Filtered block content.
+	 */
+	public function add_inherit_width_group_class( $block_content, $block ) {
+		if (
+			isset( $block['blockName'] ) && isset( $block['attrs']['layout']['inherit'] ) && $block['attrs']['layout']['inherit']
+		) {
+			$block_classgroups    = isset( $block['attrs']['className'] ) ? $block['attrs']['className'] : '';
+			$processed_classnmaes = $block_classgroups . ' inherit-container-width';
+
+			$block_content = preg_replace(
+				'/' . preg_quote( 'class="', '/' ) . '/',
+				'class="inherit-container-width ',
+				$block_content,
+				1
+			);
+		}
+
+		return $block_content;
 	}
 
 	/**

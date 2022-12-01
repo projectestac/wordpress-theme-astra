@@ -584,6 +584,18 @@ function astra_addon_has_3_5_0_version() {
 }
 
 /**
+ * Check the Astra addon version.
+ * For  major update and frequently we used version_compare, added a function for this for easy maintenance.
+ *
+ * @param string $version Astra addon version.
+ * @param string $compare Compare symbols.
+ * @since  3.9.2
+ */
+function astra_addon_check_version( $version, $compare ) {
+	return defined( 'ASTRA_EXT_VER' ) && version_compare( ASTRA_EXT_VER, $version, $compare );
+}
+
+/**
  * Get a stylesheet URL for a webfont.
  *
  * @since 3.6.0
@@ -623,7 +635,7 @@ function astra_load_preload_local_fonts( $url, $format = 'woff2' ) {
 		$font_format = apply_filters( 'astra_local_google_fonts_format', $format );
 		foreach ( $astra_local_font_files as $key => $local_font ) {
 			if ( $local_font ) {
-				echo '<link rel="preload" href="' . esc_url( $local_font ) . '" as="font" type="font/' . esc_attr( $font_format ) . '" crossorigin>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<link rel="preload" href="' . esc_url( $local_font ) . '" as="font" type="font/' . esc_attr( $font_format ) . '" crossorigin>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Preparing HTML link tag.
 			}
 		}
 		return;
@@ -820,13 +832,12 @@ function astra_apply_content_background_fullwidth_layouts() {
 
 /**
  * Search Component static CSS.
- * 
+ *
  * @return string
  * @since 3.5.0
  */
 function astra_search_static_css() {
 	$search_css = '
-	
 	.main-header-bar .main-header-bar-navigation .ast-search-icon {
 		display: block;
 		z-index: 4;
@@ -840,7 +851,6 @@ function astra_search_static_css() {
 		position: relative;
 		line-height: normal;
 	}
-	
 	.main-header-bar .ast-search-menu-icon .search-form {
 		background-color: #ffffff;
 	}
@@ -890,7 +900,6 @@ function astra_search_static_css() {
 		opacity: 1;
 		position: relative;
 	}
-	  
 	.ast-search-menu-icon.ast-dropdown-active .search-field {
 		width: 235px;
 	}
@@ -913,7 +922,6 @@ function astra_search_static_css() {
 			right: -1em;
 			left: unset;
 		}
-		  
 		.site-header-section-left .ast-search-menu-icon.slide-search .search-form .search-field {
 			margin-left: unset;
 			margin-right: 10px;
@@ -943,7 +951,6 @@ function astra_search_static_css() {
 			left: -1em;
 			right: unset;
 		}
-		  
 		.site-header-section-left .ast-search-menu-icon.slide-search .search-form .search-field {
 			margin-right: unset;
 			margin-left: 10px;
@@ -963,4 +970,14 @@ function astra_search_static_css() {
 	}
 
 	return Astra_Enqueue_Scripts::trim_css( $search_css );
+}
+
+/**
+ * Showcase "Upgrade to Pro" notices for Astra & here is the filter work as central control to enable/disable those notices from customizer, meta settings, admin area, pro post types pages.
+ *
+ * @since 3.9.4
+ * @return bool
+ */
+function astra_showcase_upgrade_notices() {
+	return ( ! defined( 'ASTRA_EXT_VER' ) && astra_get_option( 'ast-disable-upgrade-notices', true ) ) ? true : false;
 }

@@ -41,30 +41,30 @@
 }
 .ast-radio-image-controller input:checked + label svg {
     color: var(--wp-admin-theme-color);
-	background: #ffffff;
-	border-radius: 3px;
+	background: var(--wp-admin-theme-color);
+	border-color: transparent;
+	box-shadow: 0 12px 20px -8px rgb(30 41 59 / 16%);
+	border-bottom-color: #f0f0f1;
+	border-radius: 4px;
 	opacity: 1;
 }
 .ast-radio-image-controller > .options-wrapper {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 10px;
-    grid-row-gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-gap: 23px;
+    grid-row-gap: 23px;
 }
 .ast-radio-image-controller .ast-radio-img-svg svg {
     color: #A0AEC0;
     width: 100%;
     height: auto;
-	background: none;
-	border-radius: 3px;
+	background: rgba(221,224,226,.5);
+	border: 1px solid var(--ast-customizer-color-7);
+	border-radius: 4px;
     transition: all 0.2s;
-	padding: 2px;
 	transition: 0.06s all;
 }
-.ast-radio-image-controller .ast-radio-img-svg:hover svg,
-.ast-radio-image-controller input:checked+label svg {
-    outline: 1px solid var(--wp-admin-theme-color);
-}
+
 .ast-radio-image-controller label {
     position: relative;
     display: inline-block;
@@ -80,6 +80,7 @@
 }
 div#astra_settings_meta_box {
     padding: 0;
+	overflow: hidden;
 }
 .components-panel__body .components-base-control__field {
     padding: 5px 0 0;
@@ -129,7 +130,10 @@ div#astra_settings_meta_box {
 .ast-meta-selector-controller .ast-selector-inner-wrap .components-button:focus:not(:disabled) {
     box-shadow: none;
 }
-#astra_settings_meta_box .components-toggle-control .components-base-control__field, .ast-header-settings-modal .components-toggle-control .components-base-control__field {
+.ast-meta-settings-content .components-toggle-control .components-base-control__field,
+.ast-sidebar-container .components-toggle-control .components-base-control__field,
+.ast-meta-settings-content .components-toggle-control .components-base-control__field .components-flex,
+.ast-sidebar-container .components-toggle-control .components-base-control__field .components-flex {
 	justify-content: space-between;
 	flex-direction: row-reverse;
 	margin-bottom: 0;
@@ -293,4 +297,22 @@ td.ast-advanced-hook-row-heading {
 .ast-radio-img-svg:hover .ast-meta-image-tooltip {
 	opacity: 1;
 	visibility: visible;
+}
+
+.ast-pro-upgrade-cta-wrapper {
+    padding: 20px;
+    text-align: center;
+}
+p.ast-upgrade-description {
+    margin-top: 15px;
+	margin-bottom: 15px;
+}
+a.ast-pro-upgrade-link {
+    color: #0284C7;
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    padding: 8px;
+    border: 1px solid #0284C7;
+    border-radius: 2px;
 }

@@ -204,7 +204,7 @@ if ( ! function_exists( 'astra_edd_terms_list' ) ) {
 	 * @return void
 	 */
 	function astra_edd_terms_list( $taxonomy_name ) {
-		$terms = get_terms( $taxonomy_name );
+		$terms = get_terms( array( 'taxonomy' => $taxonomy_name ) );
 		?>
 	<div class="ast-edd-download-categories">
 		<?php foreach ( $terms as $term ) : ?>

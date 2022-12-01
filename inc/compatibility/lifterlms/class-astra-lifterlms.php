@@ -242,7 +242,9 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 					'post_parent'      => get_the_ID(),
 					'suppress_filters' => true,
 				);
+				/** @psalm-suppress ArgumentTypeCoercion */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 				$posts_array = get_posts( $args );
+				/** @psalm-suppress ArgumentTypeCoercion */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 				$styles = array(
 					'background-color' => '#EFEFEF',

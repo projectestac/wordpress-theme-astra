@@ -32,6 +32,50 @@
 			$( document ).on('wp-plugin-install-error'   , AstraThemeAdmin._installError);
 			$( document ).on('wp-plugin-installing'      , AstraThemeAdmin._pluginInstalling);
 			$( document ).on('click', '.ast-builder-migrate', AstraThemeAdmin._migrate );
+			$( document ).on('click', '.ast-disable-notices', AstraThemeAdmin._disableNotices );
+		},
+
+		_disableNotices: function( e ) {
+
+			e.stopPropagation();
+			e.preventDefault();
+
+			var $this = $( this );
+
+			if ( $this.hasClass( 'updating-message' ) ) {
+				return;
+			}
+
+			$this.addClass( 'updating-message' );
+
+			var data = {
+				action: 'ast-disable-pro-notices',
+				value: $(this).attr( 'data-value' ),
+				security: astra.notices_ajax_nonce,
+			};
+
+			if ( data.value == '1' ) {
+				$this.text( astra.noticeEnablingText );
+			} else {
+				$this.text( astra.noticeDisablingText );
+			}
+
+			$.ajax({
+				url: astra.ajaxUrl,
+				type: 'POST',
+				data: data,
+				success: function( response ) {
+					$this.removeClass( 'updating-message' );
+					if ( response.success ) {
+						if ( data.value == '1' ) {
+							$this.text( astra.noticeDisableText );
+						} else {
+							$this.text( astra.noticeEnableText );
+						}
+						location.reload(true);
+					}
+				}
+			})
 		},
 
 		_migrate: function( e ) {
@@ -47,7 +91,7 @@
 
 			$this.addClass( 'updating-message' );
 
-			 var data = {
+			var data = {
 				action: 'ast-migrate-to-builder',
 				value: $(this).attr( 'data-value' ),
 				nonce: astra.ajax_nonce,

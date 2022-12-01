@@ -1,3 +1,122 @@
+v3.9.4
+- New: WooCommerce Cart - "Cart Page" click action introduced to redirect the user to the cart page.
+- Improvement: Added Spectra plugin compatibility for a better experience.
+- Improvement: WooCommerce Cart - Moved border width option for cart icon from the addon to theme.
+- Improvement: WooCommerce - Clear button is aligned on top for WooCommerce active filter widget when the "Chips" option is enabled.
+- Improvement: WooCommerce - Single Product - Edit shortcut link assigned to sticky add to cart for easy navigation in respective customizer section.
+- Improvement: WooCommerce - Added product images for tablet users on the cart page.
+- Improvement: To have an elegant fresh setup UI, updated the customizer sidebar layout by default to No-Sidebar.
+- Improvement: WooCommerce Cart - Responsive slider option to adjust Slide-in Cart width for Desktop, Tablet, & Mobile devices.
+- Fix: WooCommerce - Content background colour not working in the customizer preview.
+- Fix: WooCommerce - Shop - Sale badge text is misaligned on the front end.
+- Fix: WooCommerce - Custom image and icon support for payment section.
+- Fix: WooCommerce - Payment list styling is broken inside quick view.
+- Fix: Block Editor - Astra Meta settings do not save when the Custom Fields option is enabled from the preferences.
+- Fix: Two search buttons are visible on the empty archive search result page.
+- Fix: Disabled Astra meta setting for the Blog page, which does not work from meta box, as it acts like an archive page on the frontend.
+- Fix: Megamenu spacing conflicts with the primary menu top offset option on mobile devices.
+- Fix: WooCommerce - Cart icon size is not working on the starter template site.
+- Fix: Top border showing up for related post section on a single post when Boxed & Content Boxed layout is active.
+- Fix: Editor - External toggle controls reverse their direction due to the theme's CSS.
+- Fix: Block editor - Getting console error for reading properties of undefined for getEditedPostAttribute.
+
+v3.9.3
+- Improvement: Compatibility with WordPress 6.1.
+
+v3.9.2
+- Improvement: WooCommerce - Admin bar's customize link updated on WooCommerce pages for quick landing to it's respected customizer section.
+- Improvement: WooCommerce - Added WPML translation support for cart dynamic input, proceed to checkout input & free-shipping text input through wpml-config.xml file. (Props - OnTheGoSystems)
+- Improvement: WooCommerce - Shop - Shop skin layout design 3 option moved from addon to theme.
+- Improvement: WooCommerce - Shop - Product card alignment option moved from addon to theme.
+- Improvement: WooCommerce Cart - Hide cart total when cart is empty option.
+- Improvement: WooCommerce - Single Product - Moved sticky add to cart from addon to theme.
+- Improvement: WooCommerce - Moved Add to cart quantity button to cart from addon to theme.
+- Improvement: WooCommerce - Single Product - Moved structure options from pro to free theme.
+- Improvement: WooCommerce - Moved Add to cart quantity button to cart from addon to theme.
+- Improvement: Earth (default) icon for selected color improved for better visibility on brighter & dim colors.
+- Improvement: Redesigned the Astra Meta Settings layout control similar to customizer layout selection options.
+- Fix: WooCommerce - Single Product - Alignment issue with content added by plugin near add to cart section.
+- Fix: WooCommerce - Dropdown icon cart link does not redirect to cart page.
+- Fix: WooCommerce - Cart element is adding primary header height on below and above header section.
+- Fix: WooCommerce - Cross sell grid products showing with 50% width when modern cart layout is enabled on cart page.
+- Fix: WooCommerce - Single Product - Flex CSS conflicting with third party plugins which adds custom functionality aside add-to-cart button.
+- Fix: WooCommerce - Checkout - Misalignment for order products quantity in order summary box.
+- Fix: WooCommerce - Show password eye icon is not visible on My Account page.
+- Fix: Block Editor - 2em Block gap spacing appearing in container blocks.
+- Fix: Customizer range slider control not accepting decimal values for 'em' unit.
+- Fix: Padding being added to the Full Width/Stretched Layout when using Brizy Page Builder.
+- Fix: Search element not clickable on above header, moving old to new header builder.
+- Fix: Showing deprecated function warning on frontend after installing Elementor with theme.
+- Fix: The Menu gets disappeared on the Android mobile device when you select Header Type is set as Dropdown.
+- Fix: Footer - Footer global background color and padding is not working in the frontend.
+- Fix: Spectra plugin settings page link redirect to old 'uag' admin page.
+
+v3.9.1
+- Fix: WooCommerce - Child theme's WooCommerce custom templates gets overridden by parent theme.
+- Fix: Block editor - Row block's layout stack in editor.
+- Fix: PHP error with uncaught function 'ctype_xdigit' not found in common-functions.php on some specific servers.
+
+v3.9.0
+- New: Redesigned the entire customizer UI for better user experience.
+- New: WooCommerce - Product Catalog - Introduced content layout & sidebar option.
+- New: WooCommerce - General - Introduced store notice text color & background color options.
+- New: WooCommerce - General - Introduced store notice position option.
+- New: WooCommerce - Single Product- Introduced Option to add free shipping text next to WooCommerce single product price.
+- New: WooCommerce - Single Product - Introduced Product Variation Orientation option.
+- New: WooCommerce Cart - Option for enabling desktop offcanvas cart flyout.
+- New: WooCommerce Cart - Option to update offcanvas flyout direction.
+- New: WooCommerce Cart - Option to change offcanvas flyout width.
+- New: WooCommerce Cart - Introduced cart icon hover color option.
+- New: WooCommerce Cart - Introduced cart Margin and Padding spacing option.
+- New: WooCommerce Cart - Introduced cart total Label position option.
+- New: WooCommerce Cart - Introduced Icon size option in the WooCommerce Cart.
+- New: WooCommerce Cart - Introduced show/hide cart total badge option.
+- Improvement: Categorized & segregated global options into respective sections of customizer.
+- Improvement: WooCommerce Cart - Modify the Cart label section via Shortcodes. ( https://wpastra.com/docs/improvement-woocommerce-modify-the-cart-label-design/ )
+- Improvement: Introduced filter 'astra_stretched_layout_with_spacing' to exclude Stretched layout around spacing CSS. ( https://wpastra.com/docs/improved-block-editor-experience/ )
+- Improvement: Introduced filter 'astra_get_store_sidebar_layout' to extend sidebar option for the WooCommerce layout.
+- Fix: WooCommerce - Margin issue for single shop page with the Full width & Contained Layout.
+
+v3.8.5
+- Fix: Getting top spacing for entry-header in case of page builder template.
+
+v3.8.4
+- Fix: Page layout & Sidebar option directly updating after the last update.
+
+v3.8.3
+- New: Block editor - Padding presets for container blocks. ( https://wpastra.com/docs/improved-block-editor-experience/ )
+- Improvement: Default sidebar layout is improved.
+- Improvement: Moved Single Post and Page spacing option to theme from addon.
+- Fix: Block editor - Bottom margin is not set as per customizer setting for Paragraph block.
+- Fix: Table block not aligned centrally for Legacy block editor setup.
+- Fix: Sticky header - Offcanvas menu do not close when header menu link is set to #target.
+- Fix: Blog Achieve layout 2 and layout 3 broken between 769px to 921px.
+- Fix: Image block not aligned centrally for Legacy block editor setup.
+- Fix: Block editor and frontend layout mismatch for Row block.
+- Fix: Primary submenus not expandable on mobile when toggle button element is not added.
+- Fix: PHP Notice - Array to string conversion on widget.php page.
+- Fix: ul & ol list items overlap on previous alignleft WordPress block.
+- Fix: Logo markup loading on the frontend without added logo in Site Identity.
+- Fix: Mobile/tablet menu not able to close when #target_id link is used.
+
+v3.8.2
+- Fix: Improvements as per WordPress coding standards.
+- Fix: Compatibility with WordPress 6.0 - Image block not aligned center when Legacy option set from the Block Editor.
+- Fix: Header - Account - Login popup not opening on mobile/tablet.
+- Fix: The theme's responsive styles not loading with the responsive preview option in the block editor.
+- Fix: Off-Canvas - button type is missing for the close button inside the Flyout header type.
+- Fix: W3 validation - Parse error for background-color CSS property.
+- Fix: W3 validation - aria-label attribute is missing for related posts link.
+- Fix: W3 validation - Role attribute is missing for Account element link.
+- Fix: Line height decimal not appearing in the Global typography section.
+- Fix: Block editor - Layout settings are not visible for Group block.
+
+v3.8.1
+- Fix: Users updating from v3.7.8 in some edge cases facing resource allocation error.
+- Fix: Global Typography Body and Headings font family preview changes not appearing in the customizer.
+- Fix: Beaver Builder page content width not working properly with block editor CSS compatibility.
+- Fix: W3 validation - Role attribute is missing for Account element link.
+
 v3.8.0
 - New: Enhanced block editor experience. ( https://wpastra.com/docs/improved-block-editor-experience/ )
 - Improvement: Font variant customizer control's HTML markup was loading from PHP, which is now moved to React JS for the better and optimized customizer performance.
@@ -52,6 +171,7 @@ v3.7.6
 - Improvement: Builder - Button - Added typography options from Astra Pro to free theme.
 - Fix: Mobile menu does not close when you click a one page navigation link inside them.
 - Fix: Responsive color options from 'color-group-control' are hiding when trying to set them in responsive devices.
+- Fix: Global button design options are not working in customizer preview for WooCommerce buttons.
 - Fix: Removed unwanted title and desc tag present for search icon.
 - Fix: WooCommerce Pagination markup misaligned on mobile devices.
 - Fix: Gutenberg separator dots not appearing properly on frontend.
@@ -72,6 +192,7 @@ v3.7.4
 - Improvement: Gutenberg frontend blocks UI improvement. ( https://wpastra.com/docs/gutenberg-ui-improvements-with-astra/ )
 - Improvement: Global – Typography – Heading presets value should also retain in H1 to H6.
 - Improvement: Moved Astra meta settings into a separate Gutenberg sidebar panel. ( https://wpastra.com/astra-3-7-4/ )
+- Improvement: Added Background color and hover color for WooCommerce Cart.
 - Fix: W3 validation - Getting duplicate H1 tag for site-title.
 - Fix: W3 validation - Duplicate HTML id '#site-navigation' if there are multiple menus on a single page.
 - Fix: W3 validation - CSS parse error for '.menu-link' & '.wp-block-button__link'.

@@ -141,7 +141,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 * @return void
 		 */
 		public function global_astra_header() {
-			$display = get_post_meta( (int) astra_get_post_id(), 'ast-global-header-display', true );
+			$display = get_post_meta( absint( astra_get_post_id() ), 'ast-global-header-display', true );
 			$display = apply_filters( 'astra_header_display', $display );
 			if ( 'disabled' === $display ) {
 				remove_action( 'astra_header', 'astra_header_markup' );
@@ -383,7 +383,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		public function mobile_below_header() {
 
-			$display = get_post_meta( (int) astra_get_post_id(), 'ast-hfb-mobile-header-display', true );
+			$display = get_post_meta( absint( astra_get_post_id() ), 'ast-hfb-mobile-header-display', true );
 			$display = apply_filters( 'astra_below_mobile_header_display', $display );
 
 			if ( 'disabled' !== $display ) {

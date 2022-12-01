@@ -57,24 +57,33 @@ class Astra_Headings_Typo_Configs extends Astra_Customizer_Config_Base {
 			/**
 			 * Option: Heading 1 (H1) Font Size
 			 */
+
 			array(
-				'name'        => 'font-size-h1',
-				'parent'      => ASTRA_THEME_SETTINGS . '[ast-heading-h1-typo]',
-				'type'        => 'sub-control',
-				'control'     => 'ast-responsive',
-				'section'     => $section,
-				'default'     => astra_get_option( 'font-size-h1' ),
-				'transport'   => 'postMessage',
-				'priority'    => 28,
-				'title'       => __( 'Size', 'astra' ),
-				'input_attrs' => array(
-					'min' => 0,
-				),
-				'units'       => array(
-					'px' => 'px',
-					'em' => 'em',
+				'name'              => 'font-size-h1',
+				'parent'            => ASTRA_THEME_SETTINGS . '[ast-heading-h1-typo]',
+				'type'              => 'sub-control',
+				'control'           => 'ast-responsive-slider',
+				'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+				'section'           => $section,
+				'default'           => astra_get_option( 'font-size-h1' ),
+				'transport'         => 'postMessage',
+				'priority'          => 28,
+				'title'             => __( 'Size', 'astra' ),
+				'suffix'            => array( 'px', 'em' ),
+				'input_attrs'       => array(
+					'px' => array(
+						'min'  => 0,
+						'step' => 1,
+						'max'  => 100,
+					),
+					'em' => array(
+						'min'  => 0,
+						'step' => 0.01,
+						'max'  => 20,
+					),
 				),
 			),
+
 
 			/**
 			 * Option: Heading <H1> Font Weight
@@ -158,23 +167,30 @@ class Astra_Headings_Typo_Configs extends Astra_Customizer_Config_Base {
 			/**
 			 * Option: Heading 2 (H2) Font Size
 			 */
+
 			array(
-				'name'        => 'font-size-h2',
-				'parent'      => ASTRA_THEME_SETTINGS . '[ast-heading-h2-typo]',
-				'type'        => 'sub-control',
-				'control'     => 'ast-responsive',
-				'section'     => $section,
-				'lazy'        => true,
-				'default'     => astra_get_option( 'font-size-h2' ),
-				'transport'   => 'postMessage',
-				'priority'    => 28,
-				'title'       => __( 'Size', 'astra' ),
-				'input_attrs' => array(
-					'min' => 0,
-				),
-				'units'       => array(
-					'px' => 'px',
-					'em' => 'em',
+				'name'              => 'font-size-h2',
+				'parent'            => ASTRA_THEME_SETTINGS . '[ast-heading-h2-typo]',
+				'type'              => 'sub-control',
+				'control'           => 'ast-responsive-slider',
+				'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+				'section'           => $section,
+				'default'           => astra_get_option( 'font-size-h2' ),
+				'transport'         => 'postMessage',
+				'priority'          => 28,
+				'title'             => __( 'Size', 'astra' ),
+				'suffix'            => array( 'px', 'em' ),
+				'input_attrs'       => array(
+					'px' => array(
+						'min'  => 0,
+						'step' => 1,
+						'max'  => 100,
+					),
+					'em' => array(
+						'min'  => 0,
+						'step' => 0.01,
+						'max'  => 20,
+					),
 				),
 			),
 
@@ -263,23 +279,30 @@ class Astra_Headings_Typo_Configs extends Astra_Customizer_Config_Base {
 			/**
 			 * Option: Heading 3 (H3) Font Size
 			 */
+
 			array(
-				'name'        => 'font-size-h3',
-				'parent'      => ASTRA_THEME_SETTINGS . '[ast-heading-h3-typo]',
-				'type'        => 'sub-control',
-				'control'     => 'ast-responsive',
-				'section'     => $section,
-				'priority'    => 28,
-				'lazy'        => true,
-				'default'     => astra_get_option( 'font-size-h3' ),
-				'transport'   => 'postMessage',
-				'title'       => __( 'Size', 'astra' ),
-				'input_attrs' => array(
-					'min' => 0,
-				),
-				'units'       => array(
-					'px' => 'px',
-					'em' => 'em',
+				'name'              => 'font-size-h3',
+				'parent'            => ASTRA_THEME_SETTINGS . '[ast-heading-h3-typo]',
+				'type'              => 'sub-control',
+				'control'           => 'ast-responsive-slider',
+				'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+				'section'           => $section,
+				'default'           => astra_get_option( 'font-size-h3' ),
+				'transport'         => 'postMessage',
+				'priority'          => 28,
+				'title'             => __( 'Size', 'astra' ),
+				'suffix'            => array( 'px', 'em' ),
+				'input_attrs'       => array(
+					'px' => array(
+						'min'  => 0,
+						'step' => 1,
+						'max'  => 100,
+					),
+					'em' => array(
+						'min'  => 0,
+						'step' => 0.01,
+						'max'  => 20,
+					),
 				),
 			),
 
@@ -367,23 +390,30 @@ class Astra_Headings_Typo_Configs extends Astra_Customizer_Config_Base {
 			/**
 			 * Option: Heading 4 (H4) Font Size
 			 */
+
 			array(
-				'name'        => 'font-size-h4',
-				'parent'      => ASTRA_THEME_SETTINGS . '[ast-heading-h4-typo]',
-				'type'        => 'sub-control',
-				'control'     => 'ast-responsive',
-				'section'     => $section,
-				'default'     => astra_get_option( 'font-size-h4' ),
-				'transport'   => 'postMessage',
-				'lazy'        => true,
-				'priority'    => 28,
-				'title'       => __( 'Size', 'astra' ),
-				'input_attrs' => array(
-					'min' => 0,
-				),
-				'units'       => array(
-					'px' => 'px',
-					'em' => 'em',
+				'name'              => 'font-size-h4',
+				'parent'            => ASTRA_THEME_SETTINGS . '[ast-heading-h4-typo]',
+				'type'              => 'sub-control',
+				'control'           => 'ast-responsive-slider',
+				'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+				'section'           => $section,
+				'default'           => astra_get_option( 'font-size-h4' ),
+				'transport'         => 'postMessage',
+				'priority'          => 28,
+				'title'             => __( 'Size', 'astra' ),
+				'suffix'            => array( 'px', 'em' ),
+				'input_attrs'       => array(
+					'px' => array(
+						'min'  => 0,
+						'step' => 1,
+						'max'  => 100,
+					),
+					'em' => array(
+						'min'  => 0,
+						'step' => 0.01,
+						'max'  => 20,
+					),
 				),
 			),
 
@@ -472,25 +502,30 @@ class Astra_Headings_Typo_Configs extends Astra_Customizer_Config_Base {
 			 * Option: Heading 5 (H5) Font Size
 			 */
 			array(
-				'name'        => 'font-size-h5',
-				'parent'      => ASTRA_THEME_SETTINGS . '[ast-heading-h5-typo]',
-				'type'        => 'sub-control',
-				'control'     => 'ast-responsive',
-				'section'     => $section,
-				'lazy'        => true,
-				'default'     => astra_get_option( 'font-size-h5' ),
-				'transport'   => 'postMessage',
-				'priority'    => 28,
-				'title'       => __( 'Size', 'astra' ),
-				'input_attrs' => array(
-					'min' => 0,
-				),
-				'units'       => array(
-					'px' => 'px',
-					'em' => 'em',
+				'name'              => 'font-size-h5',
+				'parent'            => ASTRA_THEME_SETTINGS . '[ast-heading-h5-typo]',
+				'type'              => 'sub-control',
+				'control'           => 'ast-responsive-slider',
+				'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+				'section'           => $section,
+				'default'           => astra_get_option( 'font-size-h5' ),
+				'transport'         => 'postMessage',
+				'priority'          => 28,
+				'title'             => __( 'Size', 'astra' ),
+				'suffix'            => array( 'px', 'em' ),
+				'input_attrs'       => array(
+					'px' => array(
+						'min'  => 0,
+						'step' => 1,
+						'max'  => 100,
+					),
+					'em' => array(
+						'min'  => 0,
+						'step' => 0.01,
+						'max'  => 20,
+					),
 				),
 			),
-
 			/**
 			 * Option: Heading <H5> Font Weight
 			 */
@@ -577,22 +612,28 @@ class Astra_Headings_Typo_Configs extends Astra_Customizer_Config_Base {
 			 * Option: Heading 6 (H6) Font Size
 			 */
 			array(
-				'name'        => 'font-size-h6',
-				'parent'      => ASTRA_THEME_SETTINGS . '[ast-heading-h6-typo]',
-				'type'        => 'sub-control',
-				'control'     => 'ast-responsive',
-				'section'     => $section,
-				'lazy'        => true,
-				'default'     => astra_get_option( 'font-size-h6' ),
-				'transport'   => 'postMessage',
-				'priority'    => 28,
-				'title'       => __( 'Size', 'astra' ),
-				'input_attrs' => array(
-					'min' => 0,
-				),
-				'units'       => array(
-					'px' => 'px',
-					'em' => 'em',
+				'name'              => 'font-size-h6',
+				'parent'            => ASTRA_THEME_SETTINGS . '[ast-heading-h6-typo]',
+				'type'              => 'sub-control',
+				'control'           => 'ast-responsive-slider',
+				'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+				'section'           => $section,
+				'default'           => astra_get_option( 'font-size-h6' ),
+				'transport'         => 'postMessage',
+				'priority'          => 28,
+				'title'             => __( 'Size', 'astra' ),
+				'suffix'            => array( 'px', 'em' ),
+				'input_attrs'       => array(
+					'px' => array(
+						'min'  => 0,
+						'step' => 1,
+						'max'  => 100,
+					),
+					'em' => array(
+						'min'  => 0,
+						'step' => 0.01,
+						'max'  => 20,
+					),
 				),
 			),
 

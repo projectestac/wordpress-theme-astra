@@ -94,7 +94,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 			}
 
 			if ( ( ( 'post-new.php' == $pagenow || 'post.php' == $pagenow ) && ( defined( 'ASTRA_ADVANCED_HOOKS_POST_TYPE' ) && ASTRA_ADVANCED_HOOKS_POST_TYPE == $screen->post_type ) ) || 'widgets.php' == $pagenow ) {
-				return;
+				return $classes;
 			}
 
 			$post_id = get_the_ID();
@@ -107,6 +107,19 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				$content_layout = $meta_content_layout;
 			} else {
 				$content_layout = astra_get_option( 'site-content-layout' );
+			}
+
+			$post_type                     = get_post_type();
+			$editor_default_content_layout = '';
+			if ( 'post' === $post_type || 'page' === $post_type ) {
+				$editor_default_content_layout = astra_get_option( 'single-' . $post_type . '-content-layout' );
+				$classes                      .= ' ast-default-layout-' . $editor_default_content_layout;
+			}
+			if ( 'default' === $editor_default_content_layout || empty( $editor_default_content_layout ) ) {
+				// Get the GLOBAL content layout value.
+				// NOTE: Here not used `true` in the below function call.
+				$editor_default_content_layout = astra_get_option( 'site-content-layout', 'full-width' );
+				$classes                      .= ' ast-default-layout-' . $editor_default_content_layout;
 			}
 
 			if ( 'content-boxed-container' == $content_layout ) {
@@ -122,6 +135,13 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 			$site_layout = astra_get_option( 'site-layout' );
 			if ( 'ast-box-layout' === $site_layout ) {
 				$classes .= ' ast-max-width-layout';
+			}
+
+			// block CSS class.
+			if ( astra_block_based_legacy_setup() ) {
+				$classes .= ' ast-block-legacy';
+			} else {
+				$classes .= ' ast-block-custom';
 			}
 
 			$classes .= ' ast-' . astra_page_layout();
@@ -167,6 +187,17 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				if ( Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) ||
 					Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) ) {
 					$default_assets['js']['astra-mobile-cart'] = 'mobile-cart';
+				}
+
+				if ( class_exists( 'WooCommerce' ) && is_product() && astra_get_option( 'single-product-sticky-add-to-cart' ) ) {
+					$default_assets['js']['astra-sticky-add-to-cart'] = 'sticky-add-to-cart';
+				}
+
+				/** @psalm-suppress UndefinedFunction */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+				$astra_add_to_cart_quantity_btn_enabled = apply_filters( 'astra_add_to_cart_quantity_btn_enabled', astra_get_option( 'single-product-plus-minus-button' ) );
+
+				if ( class_exists( 'WooCommerce' ) && $astra_add_to_cart_quantity_btn_enabled ) {
+					$default_assets['js']['astra-add-to-cart-quantity-btn'] = 'add-to-cart-quantity-btn';
 				}
 			}
 			return apply_filters( 'astra_theme_assets', $default_assets );
@@ -316,12 +347,30 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				}
 			}
 
+			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$quantity_type = ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'woocommerce' ) ) ? astra_get_option( 'cart-plus-minus-button-type' ) : 'normal';
+			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+
 			$astra_localize = array(
 				'break_point' => astra_header_break_point(),    // Header Break Point.
 				'isRtl'       => is_rtl(),
 			);
 
 			wp_localize_script( 'astra-theme-js', 'astra', apply_filters( 'astra_theme_js_localize', $astra_localize ) );
+
+			$astra_qty_btn_localize = array(
+				'plus_qty'   => __( 'Plus Quantity', 'astra' ),
+				'minus_qty'  => __( 'Minus Quantity', 'astra' ),
+				'style_type' => $quantity_type,    // Quantity button type.
+			);
+
+			wp_localize_script( 'astra-add-to-cart-quantity-btn', 'astra_qty_btn', apply_filters( 'astra_qty_btn_js_localize', $astra_qty_btn_localize ) );
+
+			$astra_cart_localize_data = array(
+				'desktop_layout' => astra_get_option( 'woo-header-cart-click-action' ),    // WooCommerce sidebar flyout desktop.
+			);
+
+			wp_localize_script( 'astra-mobile-cart', 'astra_cart', apply_filters( 'astra_cart_js_localize', $astra_cart_localize_data ) );
 		}
 
 		/**

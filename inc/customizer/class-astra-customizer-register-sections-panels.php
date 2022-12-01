@@ -215,6 +215,13 @@ if ( ! class_exists( 'Astra_Customizer_Register_Sections_Panels' ) ) {
 				),
 
 				array(
+					'name'     => 'section-page-group',
+					'type'     => 'section',
+					'priority' => 40,
+					'title'    => __( 'Page', 'astra' ),
+				),
+
+				array(
 					'name'               => 'section-sidebars',
 					'type'               => 'section',
 					'priority'           => 50,

@@ -34,7 +34,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 		 * Page title
 		 *
 		 * @since 1.0
-		 * @var array $page_title
+		 * @var string $page_title
 		 */
 		public static $page_title = 'Astra';
 
@@ -131,6 +131,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 
 			add_action( 'astra_welcome_page_right_sidebar_content', __CLASS__ . '::astra_welcome_page_starter_sites_section', 10 );
 			add_action( 'astra_welcome_page_right_sidebar_content', __CLASS__ . '::external_important_links_section', 11 );
+			add_action( 'astra_welcome_page_right_sidebar_content', __CLASS__ . '::astra_upgrade_pro_postbox', 12 );
 
 			add_action( 'astra_welcome_page_content', __CLASS__ . '::astra_welcome_page_content' );
 			add_action( 'astra_welcome_page_content', __class__ . '::astra_available_plugins', 30 );
@@ -145,6 +146,194 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 			add_action( 'astra_notice_before_markup', __CLASS__ . '::notice_assets' );
 
 			add_action( 'admin_init', __CLASS__ . '::minimum_addon_version_notice' );
+
+			if ( astra_showcase_upgrade_notices() ) {
+				add_action( 'admin_menu', __CLASS__ . '::register_pro_menu', 100 );
+				add_action( 'admin_init', __CLASS__ . '::upgrade_to_pro_wc_notice' );
+				add_action( 'wp_nav_menu_item_custom_fields', __CLASS__ . '::add_custom_fields', 10, 4 );
+			}
+		}
+
+		/**
+		 * Add custom megamenu fields data to the menu.
+		 *
+		 * @access public
+		 * @param int    $id menu item id.
+		 * @param object $item A single menu item.
+		 * @param int    $depth menu item depth.
+		 * @param array  $args menu item arguments.
+		 * @return void
+		 *
+		 * @since 3.9.4
+		 */
+		public static function add_custom_fields( $id, $item, $depth, $args ) {
+			?>
+				<p class="description description-wide">
+					<button class="button button-secondary button-large astra-megamenu-opts-btn" style="margin: 8px 8px 8px 0;" disabled>
+						<?php echo esc_html__( 'Astra Menu Settings', 'astra' ); ?>
+						<svg width="17" height="16" style="vertical-align: sub; opacity: 0.5;" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M12.5002 7.2001H11.7002V4.8001C11.7002 3.0401 10.2602 1.6001 8.5002 1.6001C6.7402 1.6001 5.3002 3.0401 5.3002 4.8001V7.2001H4.5002C4.1002 7.2001 3.7002 7.6001 3.7002 8.0001V13.6001C3.7002 14.0001 4.1002 14.4001 4.5002 14.4001H12.5002C12.9002 14.4001 13.3002 14.0001 13.3002 13.6001V8.0001C13.3002 7.6001 12.9002 7.2001 12.5002 7.2001ZM9.3002 12.8001H7.7002L8.0202 11.0401C7.6202 10.8801 7.3002 10.4001 7.3002 10.0001C7.3002 9.3601 7.8602 8.8001 8.5002 8.8001C9.1402 8.8001 9.7002 9.3601 9.7002 10.0001C9.7002 10.4801 9.4602 10.8801 8.9802 11.0401L9.3002 12.8001ZM10.1002 7.2001H6.9002V4.8001C6.9002 3.9201 7.6202 3.2001 8.5002 3.2001C9.3802 3.2001 10.1002 3.9201 10.1002 4.8001V7.2001Z" fill="#0284C7"></path> </svg>
+					</button>
+					<a href="<?php echo esc_url( ASTRA_PRO_UPGRADE_URL ); ?>" target="_blank" title="<?php echo __( 'Unlock with Astra Pro', 'astra' ); ?>">
+						<?php echo esc_html__( 'Unlock', 'astra' ); ?>
+					</a>
+				</p>
+			<?php
+		}
+
+		/**
+		 * Register Custom Layout & Page Header Pro sub-menus.
+		 *
+		 * Add new admin pages as sub-menu under the main Astra Options menu.
+		 *
+		 * Fired by `admin_menu` action.
+		 *
+		 * @since 3.9.4
+		 * @access public
+		 */
+		public static function register_pro_menu() {
+			add_theme_page(
+				__( 'Custom Layouts', 'astra' ),
+				__( 'Custom Layouts', 'astra' ),
+				'edit_theme_options',
+				'astra-advanced-hook',
+				__CLASS__ . '::preview_custom_layout'
+			);
+			add_theme_page(
+				__( 'Page Headers', 'astra' ),
+				__( 'Page Headers', 'astra' ),
+				'edit_theme_options',
+				'astra_adv_header',
+				__CLASS__ . '::preview_page_header'
+			);
+		}
+
+		/**
+		 * Showcase Custom Layout highlight.
+		 *
+		 * @since 3.9.4
+		 * @access public
+		 */
+		public static function preview_custom_layout() {
+			$ast_icon           = apply_filters( 'astra_page_top_icon', true );
+			$ast_visit_site_url = apply_filters( 'astra_site_url', 'https://wpastra.com/?utm_source=welcome_page&utm_medium=logo_link&utm_campaign=astra_theme' );
+			$ast_wrapper_class  = apply_filters( 'astra_welcome_wrapper_class', array() );
+
+			?>
+				<div class="ast-menu-page-wrapper wrap ast-clear <?php echo esc_attr( implode( ' ', $ast_wrapper_class ) ); ?>">
+					<div class="ast-theme-page-header">
+						<div class="ast-container ast-flex">
+							<div class="ast-theme-title">
+								<a href="<?php echo esc_url( $ast_visit_site_url ); ?>" target="_blank" rel="noopener" >
+								<?php if ( $ast_icon ) { ?>
+									<img src="<?php echo esc_url( ASTRA_THEME_URI . 'inc/assets/images/astra.svg' ); ?>" class="ast-theme-icon" alt="<?php echo esc_attr( self::$page_title ); ?> " >
+									<span class="astra-theme-version"><?php echo esc_html( ASTRA_THEME_VERSION ); ?></span>
+								<?php } ?>
+								<?php do_action( 'astra_welcome_page_header_title' ); ?>
+								</a>
+							</div>
+							<?php do_action( 'astra_header_right_section' ); ?>
+						</div>
+					</div>
+					<div class="ast-pro-posttype-preview-container">
+						<img src="<?php echo esc_url( ASTRA_THEME_URI . 'inc/assets/images/custom-layout.svg' ); ?>"/>
+					</div>
+				</div>
+				<div class="ast-pro-posttype-popup">
+					<div class="ast-pro-posttype-popup-innerwrap">
+						<img src="<?php echo esc_url( ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg' ); ?>"/>
+						<p><span class="ast-posttype-title"> <?php echo __( 'Custom Layouts', 'astra' ); ?> </span></p>
+						<p class="ast-posttype-description"> <?php echo __( 'Upgrade to Astra Pro for instant access to your website\'s full potential. Create unique layouts, headers and footers, custom pages and content areas with ease!', 'astra' ); ?> </p>
+						<a href="<?php echo esc_url( ASTRA_PRO_UPGRADE_URL ); ?>" target="_blank" class="button button-primary button-hero ast-upgrade-cpt-link">
+							<?php _e( 'Upgrade Now', 'astra' ); ?>
+						</a>
+					</div>
+				</div>
+			<?php
+		}
+
+		/**
+		 * Showcase Page Header highlight.
+		 *
+		 * @since 3.9.4
+		 * @access public
+		 */
+		public static function preview_page_header() {
+			$ast_icon           = apply_filters( 'astra_page_top_icon', true );
+			$ast_visit_site_url = apply_filters( 'astra_site_url', 'https://wpastra.com/?utm_source=welcome_page&utm_medium=logo_link&utm_campaign=astra_theme' );
+			$ast_wrapper_class  = apply_filters( 'astra_welcome_wrapper_class', array() );
+
+			?>
+				<div class="ast-menu-page-wrapper wrap ast-clear <?php echo esc_attr( implode( ' ', $ast_wrapper_class ) ); ?>">
+					<div class="ast-theme-page-header">
+						<div class="ast-container ast-flex">
+							<div class="ast-theme-title">
+								<a href="<?php echo esc_url( $ast_visit_site_url ); ?>" target="_blank" rel="noopener" >
+								<?php if ( $ast_icon ) { ?>
+									<img src="<?php echo esc_url( ASTRA_THEME_URI . 'inc/assets/images/astra.svg' ); ?>" class="ast-theme-icon" alt="<?php echo esc_attr( self::$page_title ); ?> " >
+									<span class="astra-theme-version"><?php echo esc_html( ASTRA_THEME_VERSION ); ?></span>
+								<?php } ?>
+								<?php do_action( 'astra_welcome_page_header_title' ); ?>
+								</a>
+							</div>
+							<?php do_action( 'astra_header_right_section' ); ?>
+						</div>
+					</div>
+					<div class="ast-pro-posttype-preview-container">
+						<img src="<?php echo esc_url( ASTRA_THEME_URI . 'inc/assets/images/page-header.svg' ); ?>"/>
+					</div>
+				</div>
+				<div class="ast-pro-posttype-popup">
+					<div class="ast-pro-posttype-popup-innerwrap">
+						<img src="<?php echo esc_url( ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg' ); ?>"/>
+						<p><span class="ast-posttype-title"> <?php echo __( 'Page Headers', 'astra' ); ?> </span></p>
+						<p class="ast-posttype-description"> <?php echo __( 'Make that instant connection with engaging page headers. Unlock the full potential of pages with full control over the look and feel of your page headers!', 'astra' ); ?> </p>
+						<a href="<?php echo esc_url( ASTRA_PRO_UPGRADE_URL ); ?>" target="_blank" class="button button-primary button-hero ast-upgrade-cpt-link">
+							<?php _e( 'Upgrade Now', 'astra' ); ?>
+						</a>
+					</div>
+				</div>
+			<?php
+		}
+
+		/**
+		 * Astra upgrade to pro postbox.
+		 *
+		 * @since 3.9.4
+		 */
+		public static function astra_upgrade_pro_postbox() {
+
+			if ( defined( 'ASTRA_EXT_VER' ) ) {
+				return;
+			}
+
+			$status = astra_get_option( 'ast-disable-upgrade-notices', true );
+
+			?>
+			<div class="postbox">
+				<h2 class="hndle ast-normal-cursor">
+					<span><?php echo esc_html( apply_filters( 'astra_upgrade_pro_postbox', __( 'Build Better Websites with Astra Pro', 'astra' ) ) ); ?></span>
+				</h2>
+				<div class="inside">
+					</p>
+						<?php echo esc_html__( 'Access powerful features for painless WordPress design without the high costs.', 'astra' ); ?>
+					<p>
+					</p>
+						<?php echo esc_html__( 'Powerful tools, premium support, limitless opportunity with Astra Pro!', 'astra' ); ?>
+					<p>
+					</p>
+						<?php echo esc_html__( 'Toggle upgrade notices on or off ', 'astra' ); ?>
+						<a href="#" class="ast-disable-notices" data-value="<?php echo $status ? 0 : 1; ?>" target="_blank" rel="noopener">
+							<?php echo __( 'here.', 'astra' ); ?>
+						</a>
+					<p>
+					<label for="astra_upgrade_pro_postbox">
+						<a class="button button-primary" href="<?php echo esc_url( ASTRA_PRO_UPGRADE_URL ); ?>" target="_blank" rel="noopener">
+							<?php echo esc_html__( 'Upgrade to Astra Pro!', 'astra' ); ?>
+						</a>
+					</label>
+				</div>
+			</div>
+			<?php
 		}
 
 		/**
@@ -182,8 +371,12 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 				return;
 			}
 
+			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$current_slug = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+
 			// Force Astra welcome notice on theme activation.
-			if ( current_user_can( 'install_plugins' ) && ! defined( 'ASTRA_SITES_NAME' ) && '1' == get_option( 'fresh_site' ) ) {
+			if ( current_user_can( 'install_plugins' ) && ! defined( 'ASTRA_SITES_NAME' ) && '1' == get_option( 'fresh_site' ) && ! in_array( $current_slug, array( 'astra-advanced-hook', 'astra_adv_header' ), true ) ) {
 
 				$image_path           = ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg';
 				$ast_sites_notice_btn = self::astra_sites_notice_button();
@@ -229,6 +422,53 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 					'priority'                   => 5,
 					'display-with-other-notices' => false,
 					'show_if'                    => class_exists( 'Astra_Ext_White_Label_Markup' ) ? Astra_Ext_White_Label_Markup::show_branding() : true,
+				);
+
+				Astra_Notices::add_notice(
+					$astra_sites_notice_args
+				);
+			}
+		}
+
+		/**
+		 * Upgrade to Pro notice for Astra on WooCommerce pages.
+		 *
+		 * @since 3.9.4
+		 */
+		public static function upgrade_to_pro_wc_notice() {
+			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$current_slug = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+
+			if ( '' !== $current_slug && function_exists( 'WC' ) && in_array( $current_slug, array( 'wc-admin', 'wc-reports', 'wc-status', 'wc-addons', 'wc-settings' ), true ) ) {
+
+				$image_path = ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg';
+
+				$astra_sites_notice_args = array(
+					'id'                         => 'astra-upgrade-pro-wc',
+					'type'                       => 'info',
+					'message'                    => sprintf(
+						'<div class="notice-image">
+							<img src="%1$s" class="custom-logo" alt="Astra" itemprop="logo"></div>
+							<div class="notice-content">
+								<h2 class="notice-heading">
+									%2$s
+								</h2>
+								<p>%3$s</p>
+								<div class="astra-review-notice-container">
+									<a class="%4$s" %5$s> %6$s </a>
+								</div>
+							</div>',
+						$image_path,
+						__( 'Astra Works Seamlessly with WooCommerce!', 'astra' ),
+						__( 'Use every tool at your disposal to optimize your online store for conversion. All the advantages you need to make more profit!', 'astra' ),
+						esc_attr( 'button button-primary' ),
+						'href="' . ASTRA_PRO_UPGRADE_URL . '" target="_blank"',
+						__( 'Upgrade Now', 'astra' )
+					),
+					'priority'                   => 5,
+					'show_if'                    => is_admin() ? true : false,
+					'display-with-other-notices' => false,
 				);
 
 				Astra_Notices::add_notice(
@@ -291,9 +531,9 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 		 */
 		public static function notice_assets() {
 			if ( is_rtl() ) {
-				wp_enqueue_style( 'astra-notices-rtl', ASTRA_THEME_URI . 'inc/assets/css/astra-notices-rtl.css', array(), ASTRA_THEME_VERSION );
+				wp_enqueue_style( 'astra-custom-notices-rtl', ASTRA_THEME_URI . 'inc/assets/css/astra-notices-rtl.css', array(), ASTRA_THEME_VERSION );
 			} else {
-				wp_enqueue_style( 'astra-notices', ASTRA_THEME_URI . 'inc/assets/css/astra-notices.css', array(), ASTRA_THEME_VERSION );
+				wp_enqueue_style( 'astra-custom-notices', ASTRA_THEME_URI . 'inc/assets/css/astra-notices.css', array(), ASTRA_THEME_VERSION );
 			}
 		}
 
@@ -423,7 +663,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 					 *
 					 * @since 3.7.9
 					 */
-					wp_enqueue_script( 'astra-column-block-comp-js', ASTRA_THEME_URI . 'inc/assets/js/column-block-compatibility.js', array( 'wp-util', 'wp-hooks' ), ASTRA_THEME_VERSION, false );
+					wp_enqueue_script( 'astra-column-block-comp-js', ASTRA_THEME_URI . 'inc/assets/js/column-block-compatibility.js', array( 'wp-util', 'wp-hooks', 'wp-blocks' ), ASTRA_THEME_VERSION, false );
 				}
 			}
 			/* Add CSS for the Submenu for BSF plugins added in Appearance Menu */
@@ -448,6 +688,11 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 					'recommendedPluiginSettingsText'     => __( 'Settings', 'astra' ),
 					'astraPluginManagerNonce'            => wp_create_nonce( 'astra-recommended-plugin-nonce' ),
 					'ajax_nonce'                         => wp_create_nonce( 'astra-builder-module-nonce' ),
+					'notices_ajax_nonce'                 => wp_create_nonce( 'astra-upgrade-notices-nonce' ),
+					'noticeEnableText'                   => __( 'Disabled', 'astra' ),
+					'noticeDisableText'                  => __( 'Enabled', 'astra' ),
+					'noticeEnablingText'                 => __( 'Enabling...', 'astra' ),
+					'noticeDisablingText'                => __( 'Disabling...', 'astra' ),
 					'old_header_footer'                  => __( 'Use Old Header/Footer', 'astra' ),
 					'migrate_to_builder'                 => __( 'Use New Header/Footer Builder', 'astra' ),
 				);
@@ -665,7 +910,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 		 */
 		public static function get_starter_templates_title() {
 
-			$astra_sites_name = __( '180+ Starter Templates', 'astra' );
+			$astra_sites_name = __( '230+ Starter Templates', 'astra' );
 
 			if ( method_exists( 'Astra_Ext_White_Label_Markup', 'get_whitelabel_string' ) ) {
 				$white_labelled_astra_sites_name = Astra_Ext_White_Label_Markup::get_whitelabel_string( 'astra-sites', 'name' );
@@ -1103,6 +1348,25 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 		}
 
 		/**
+		 * Check if Spectra is installed.
+		 *
+		 * @since 3.9.2
+		 *
+		 * @access public
+		 * @return array
+		 */
+		public static function astra_get_spectra_plugin_data() {
+			$path    = 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php';
+			$plugins = get_plugins();
+			/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			return array(
+				'is_exist' => isset( $plugins[ $path ] ),
+				'version'  => ( isset( $plugins[ $path ] ) && $plugins[ $path ]['Version'] ) ? $plugins[ $path ]['Version'] : '2.0.0',
+			);
+			/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		}
+
+		/**
 		 * Include Welcome page content
 		 *
 		 * @since 1.2.4
@@ -1123,9 +1387,25 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 				)
 			);
 
+			$spectra_plugin_data = self::astra_get_spectra_plugin_data();
+
+			/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			$spectra_plugin_slug = ( ! $spectra_plugin_data['is_exist'] ) || version_compare( $spectra_plugin_data['version'], '2.0.0', '>=' ) ? 'spectra' : 'uag';
+			/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+
 			$recommended_plugins = apply_filters(
 				'astra_recommended_plugins',
 				array(
+					'ultimate-addons-for-gutenberg' =>
+						array(
+							'plugin-name'        => __( 'Spectra — Free WordPress Page Builder Plugin', 'astra' ),
+							'plugin-init'        => 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
+							'settings-link'      => admin_url( 'options-general.php?page=' . esc_attr( $spectra_plugin_slug ) ),
+							'settings-link-text' => 'Settings',
+							'highlight-label'    => __( 'Popular', 'astra' ),
+							'display'            => function_exists( 'register_block_type' ),
+						),
+
 					'astra-import-export'           =>
 						array(
 							'plugin-name'        => __( 'Import / Export Customizer Settings', 'astra' ),
@@ -1188,15 +1468,6 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 						'settings-link'      => admin_url( 'edit.php?post_type=bsf-sidebar' ),
 						'settings-link-text' => 'Settings',
 					),
-
-					'ultimate-addons-for-gutenberg' =>
-						array(
-							'plugin-name'        => __( 'Ultimate Addons for Gutenberg', 'astra' ),
-							'plugin-init'        => 'ultimate-addons-for-gutenberg/ultimate-addons-for-gutenberg.php',
-							'settings-link'      => admin_url( 'options-general.php?page=uag' ),
-							'settings-link-text' => 'Settings',
-							'display'            => function_exists( 'register_block_type' ),
-						),
 				)
 			);
 
@@ -1214,6 +1485,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 									<ul class="ast-addon-list">
 										<?php
 										foreach ( $recommended_plugins as $slug => $plugin ) {
+											$highlight_label_attr = isset( $plugin['highlight-label'] ) ? 'highlight-label="' . esc_html( $plugin['highlight-label'] ) . '"' : '';
 
 											// If display condition for the plugin does not meet, skip the plugin from displaying.
 											if ( isset( $plugin['display'] ) && false === $plugin['display'] ) {
@@ -1234,7 +1506,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 												)
 											) . '>';
 
-												echo '<a href="' . esc_url( self::build_worg_plugin_link( $slug ) ) . '" target="_blank">';
+												echo '<a href="' . esc_url( self::build_worg_plugin_link( $slug ) ) . '" target="_blank"' . $highlight_label_attr . '>';
 													echo esc_html( $plugin['plugin-name'] );
 												echo '</a>';
 
@@ -1342,8 +1614,9 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 		 * @since 1.2.4
 		 */
 		public static function required_plugin_activate() {
-
+			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$nonce = ( isset( $_POST['nonce'] ) ) ? sanitize_key( $_POST['nonce'] ) : '';
+			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 			if ( false === wp_verify_nonce( $nonce, 'astra-recommended-plugin-nonce' ) ) {
 				wp_send_json_error( esc_html_e( 'WordPress Nonce not validated.', 'astra' ) );
@@ -1391,8 +1664,9 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 		 * @since 1.2.4
 		 */
 		public static function required_plugin_deactivate() {
-
+			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$nonce = ( isset( $_POST['nonce'] ) ) ? sanitize_key( $_POST['nonce'] ) : '';
+			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 			if ( false === wp_verify_nonce( $nonce, 'astra-recommended-plugin-nonce' ) ) {
 				wp_send_json_error( esc_html_e( 'WordPress Nonce not validated.', 'astra' ) );
@@ -1477,6 +1751,7 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 			echo '<style class="astra-menu-appearance-style">
 					#menu-appearance a[href^="edit.php?post_type=astra-"]:before,
 					#menu-appearance a[href^="themes.php?page=astra-"]:before,
+					#menu-appearance a[href^="themes.php?page=astra_"]:before,
 					#menu-appearance a[href^="edit.php?post_type=astra_"]:before,
 					#menu-appearance a[href^="edit-tags.php?taxonomy=bsf_custom_fonts"]:before,
 					#menu-appearance a[href^="themes.php?page=custom-typekit-fonts"]:before,

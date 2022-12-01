@@ -33,7 +33,7 @@ function astra_onload_function() {
 	wp.data.subscribe(function () {
 		setTimeout( function () {
 			// Compatibility for updating layout in editor with direct reflection.
-			const contentLayout = ( null !== wp.data.select( 'core/editor' ) && undefined !== wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) && wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-content-layout'] ) ? wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-content-layout'] : 'default',
+			const contentLayout = ( undefined !== wp.data.select( 'core/editor' ) && null !== wp.data.select( 'core/editor' ) && undefined !== wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) && wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-content-layout'] ) ? wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-content-layout'] : 'default',
 				bodyClass = document.querySelector('body');
 
 			switch( contentLayout ) {
@@ -53,6 +53,33 @@ function astra_onload_function() {
 					bodyClass.classList.add('ast-page-builder-template');
 					bodyClass.classList.remove('ast-two-container' , 'ast-plain-container' , 'ast-separate-container');
 				break;
+				case 'default':
+					if( bodyClass.classList.contains( 'ast-default-layout-boxed-container' ) ) {
+						bodyClass.classList.add('ast-separate-container' , 'ast-two-container');
+						bodyClass.classList.remove('ast-page-builder-template' , 'ast-plain-container');
+					} else if( bodyClass.classList.contains( 'ast-default-layout-content-boxed-container' ) ) {
+						bodyClass.classList.add('ast-separate-container');
+						bodyClass.classList.remove('ast-two-container' , 'ast-page-builder-template' , 'ast-plain-container');
+					} else if( bodyClass.classList.contains( 'ast-default-layout-page-builder' ) ) {
+						bodyClass.classList.add('ast-page-builder-template');
+						bodyClass.classList.remove('ast-two-container' , 'ast-plain-container' , 'ast-separate-container');
+					} else {
+						bodyClass.classList.add('ast-plain-container');
+						bodyClass.classList.remove('ast-two-container' , 'ast-page-builder-template' , 'ast-separate-container');
+					}
+				break;
+			}
+
+			const editorStylesWrapper = document.querySelector( '.editor-styles-wrapper' );
+
+			if( null !== editorStylesWrapper ) {
+				const editorStylesWrapperWidth = parseInt( editorStylesWrapper.offsetWidth )
+				if( editorStylesWrapperWidth < 1350 ) {
+					editorStylesWrapper.classList.remove( 'ast-stacked-title-visibility' );
+					editorStylesWrapper.classList.add( 'ast-stacked-title-visibility' );
+				} else {
+					editorStylesWrapper.classList.remove( 'ast-stacked-title-visibility' );
+				}
 			}
 
 			/**
@@ -73,10 +100,10 @@ function astra_onload_function() {
 			if( null === titleVisibility && null !== titleBlock ) {
 				var titleVisibilityTrigger = '';
 				if( 'disabled' === wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-post-title'] ) {
-					titleVisibilityTrigger = '<span class="dashicons dashicons-hidden title-visibility"></span>';
+					titleVisibilityTrigger = '<span class="dashicons dashicons-hidden title-visibility" data-tooltip="Enable Title"></span>';
 					titleBlock.classList.toggle( 'invisible' );
 				} else {
-					titleVisibilityTrigger = '<span class="dashicons dashicons-visibility title-visibility"></span>';
+					titleVisibilityTrigger = '<span class="dashicons dashicons-visibility title-visibility" data-tooltip="Disable Title"></span>';
 				}
 
 				titleBlock.insertAdjacentHTML( 'beforeend', titleVisibilityTrigger );
@@ -87,6 +114,7 @@ function astra_onload_function() {
 					if( this.classList.contains( 'dashicons-hidden' ) ) {
 						this.classList.add( 'dashicons-visibility' );
 						this.classList.remove( 'dashicons-hidden' );
+						this.dataset.tooltip = 'Disable Title';
 						wp.data.dispatch( 'core/editor' ).editPost(
 							{
 								meta: {
@@ -97,6 +125,7 @@ function astra_onload_function() {
 					} else {
 						this.classList.add( 'dashicons-hidden' );
 						this.classList.remove( 'dashicons-visibility' );
+						this.dataset.tooltip = 'Enable Title';
 						wp.data.dispatch( 'core/editor' ).editPost(
 							{
 								meta: {
@@ -114,6 +143,93 @@ function astra_onload_function() {
 			} else {
 				document.body.classList.remove( 'responsive-enabled' );
 			}
+
+			// Adding 'inherit-container-width' width to Group block externally.
+			let postBlocks = ( undefined !== wp.data.select( 'core/editor' ) && null !== wp.data.select( 'core/editor' ) && undefined !== wp.data.select( 'core/editor' ).getCurrentPost() && undefined !== wp.data.select( 'core/editor' ).getBlocks() ) ? wp.data.select( 'core/editor' ).getBlocks() : false,
+				groupBlocks = document.querySelectorAll( '.block-editor-block-list__layout.is-root-container > .wp-block-group' );
+			if( postBlocks && groupBlocks ) {
+				for ( let blockNum = 0; blockNum < postBlocks.length; blockNum++ ) {
+					if( 'core/group' === postBlocks[blockNum].name && undefined !== postBlocks[blockNum].attributes && undefined !== postBlocks[blockNum].attributes.layout && undefined !== postBlocks[blockNum].attributes.layout.inherit ) {
+						if( undefined === groupBlocks[blockNum] ) {
+							return;
+						}
+						if( ! postBlocks[blockNum].attributes.layout.inherit ) {
+							groupBlocks[blockNum].classList.remove( 'inherit-container-width' );
+						}
+						if( postBlocks[blockNum].attributes.layout.inherit && ! groupBlocks[blockNum].classList.contains( 'inherit-container-width' ) ) {
+							groupBlocks[blockNum].classList.add( 'inherit-container-width' );
+						}
+					}
+				}
+			}
+
 		}, 1 );
 	});
 }
+
+document.body.addEventListener('mousedown', function () {
+	var blockCssMode = document.querySelector('body').classList.contains('ast-block-legacy')
+	var fontCss = document.getElementById('astra-google-fonts-css');
+if(true === blockCssMode){
+	var blockCss = document.getElementById('astra-block-editor-styles-css');
+	var inlineCss = document.getElementById('astra-block-editor-styles-inline-css');
+	
+}else {
+	var blockCss = document.getElementById('astra-wp-editor-styles-css');
+	var inlineCss = document.getElementById('astra-wp-editor-styles-inline-css');
+}
+	
+
+	var blockFixCss = null !== blockCss ? blockCss.cloneNode(true) : null;
+	var blockInlineCss = null !== inlineCss ?  inlineCss.cloneNode(true) : null;
+	var blockfontCss = null !== fontCss ? fontCss.cloneNode(true) : null;
+
+	setTimeout( function() {
+
+		let tabletPreview = document.getElementsByClassName('is-tablet-preview');
+		let mobilePreview = document.getElementsByClassName('is-mobile-preview');
+
+		if (0 !== tabletPreview.length || 0 !== mobilePreview.length) {
+			var googleFontId = 'astra-google-fonts-css';
+			if(true === blockCssMode){
+				var styleTagId = 'astra-block-editor-styles-inline-css';
+				var styleTagBlockId = 'astra-block-editor-styles-css';
+				
+			} else{
+				var styleTagId = 'astra-wp-editor-styles-inline-css';
+				var styleTagBlockId = 'astra-wp-editor-styles-css';
+			}
+			var styleTagId = 'astra-block-editor-styles-inline-css';
+			var styleTagBlockId = 'astra-block-editor-styles-css';
+			var googleFontId = 'astra-google-fonts-css';
+			let preview = tabletPreview[0] || mobilePreview[0];
+
+				let iframe = preview.getElementsByTagName('iframe')[0];
+				let iframeDocument = iframe.contentWindow.document || iframe.contentDocument;
+
+				let element = iframeDocument.getElementById(
+					styleTagId
+				);
+				let elementBlock = iframeDocument.getElementById(
+					styleTagBlockId
+				);
+				let elementGoogleFont = iframeDocument.getElementById(
+					googleFontId
+				);
+				if ( (null === element || undefined === element)) {
+
+						iframeDocument.head.appendChild( blockInlineCss );
+				}
+				if ( (null === elementBlock || undefined === elementBlock )) {
+
+					iframeDocument.head.appendChild( blockFixCss );
+				}
+				if ( (null === elementGoogleFont || undefined === elementGoogleFont ) && null !== fontCss) {
+
+					iframeDocument.head.appendChild( blockfontCss );
+				}
+
+		}
+	}, 1000);
+
+});

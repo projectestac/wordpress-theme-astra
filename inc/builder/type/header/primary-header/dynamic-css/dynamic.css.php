@@ -26,7 +26,7 @@ add_filter( 'astra_dynamic_theme_css', 'astra_primary_header_breakpoint_style', 
  */
 function astra_primary_header_breakpoint_style( $dynamic_css, $dynamic_css_filtered = '' ) {
 
-	if ( ! is_customize_preview() && ( ! Astra_Builder_helper::is_row_empty( 'primary', 'header', 'desktop' ) && ! Astra_Builder_helper::is_row_empty( 'primary', 'header', 'mobile' ) ) ) {
+	if ( ! is_customize_preview() && ( ! Astra_Builder_Helper::is_row_empty( 'primary', 'header', 'desktop' ) && ! Astra_Builder_Helper::is_row_empty( 'primary', 'header', 'mobile' ) ) ) {
 		return $dynamic_css;
 	}
 
@@ -56,7 +56,15 @@ function astra_primary_header_breakpoint_style( $dynamic_css, $dynamic_css_filte
 		$common_css_cart_output = array(
 			'.ast-desktop .ast-primary-header-bar .ast-header-woo-cart, .ast-desktop .ast-primary-header-bar .ast-header-edd-cart' => array(
 				'line-height' => astra_get_css_value( $hb_header_height_desktop, 'px' ),
+				'min-height'  => astra_get_css_value( $hb_header_height_desktop, 'px' ),
 			),
+
+			'.woocommerce .ast-site-header-cart, .ast-site-header-cart' => array(
+				'display'     => 'flex',
+				'flex-wrap'   => 'wrap',
+				'align-items' => 'center',
+			),
+
 		);
 
 		$parse_css .= astra_parse_css( $common_css_cart_output );
