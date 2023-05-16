@@ -266,6 +266,10 @@
   display: none;
 }
 
+.media-position-setting .astra-popover-tabs [ID*="-gradient-view"] {
+    padding: 0 0 15px 0;
+}
+
 .ast-field-settings-modal .customize-control-content .color-button-wrap {
   right: 30px;
   top: 0;
@@ -304,7 +308,7 @@
 .customize-control-ast-responsive-color .ast-responsive-btns {
   position: relative;
   right: -5px;
-  top: 3px;
+  top: 2px;
 }
 .ast-field-settings-modal .customize-control-ast-responsive-background .ast-responsive-btns,
 .ast-field-settings-modal .customize-control-ast-responsive-color .ast-responsive-btns  {

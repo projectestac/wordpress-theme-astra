@@ -211,9 +211,11 @@ function astra_load_modern_block_editor_ui( $dynamic_css ) {
 
 	$ast_content_width = apply_filters( 'astra_block_content_width', $astra_block_editor_v2_ui ? $ast_container_width : '910px' );
 	$ast_wide_width    = apply_filters( 'astra_block_wide_width', $astra_block_editor_v2_ui ? 'calc(' . esc_attr( $ast_container_width ) . ' + var(--wp--custom--ast-default-block-left-padding) + var(--wp--custom--ast-default-block-right-padding))' : $ast_container_width );
+	$ast_narrow_width  = astra_get_option( 'narrow-container-max-width', apply_filters( 'astra_narrow_container_width', 750 ) ) . 'px';
 
 	// Spectra Compatibility - page title alignment with page container layouts.
 	$spectra_gutenberg_compat_css = Astra_Dynamic_CSS::spectra_gutenberg_compat_css();
+	$v4_block_editor_compat       = Astra_Dynamic_CSS::v4_block_editor_compat();
 
 	$dynamic_css .= '
 		html body {
@@ -225,6 +227,12 @@ function astra_load_modern_block_editor_ui( $dynamic_css ) {
 			--wp--custom--ast-content-width-size: ' . $ast_content_width . ';
 			--wp--custom--ast-wide-width-size: ' . $ast_wide_width . ';
 		}
+
+		.ast-narrow-container {
+			--wp--custom--ast-content-width-size: ' . $ast_narrow_width . ';
+			--wp--custom--ast-wide-width-size: ' . $ast_narrow_width . ';
+		}
+
 		@media(max-width: ' . $tablet_breakpoint . 'px) {
 			html body {
 				--wp--custom--ast-default-block-top-padding: ' . $tablet_top_spacing . ';
@@ -465,12 +473,11 @@ function astra_load_modern_block_editor_ui( $dynamic_css ) {
 			}
 		}
 	';
-	
 
 	// Spectra Compatibility - Container block alignment with page title for container layouts.
 	if ( $spectra_gutenberg_compat_css ) {
 		$dynamic_css .= '
-			.ast-separate-container .entry-content .wp-block-uagb-container {
+			.ast-separate-container .entry-content .uagb-is-root-container {
 				padding-' . esc_attr( $ltr_left ) . ': 0;
 			}
 			.ast-page-builder-template .entry-header {
@@ -482,8 +489,24 @@ function astra_load_modern_block_editor_ui( $dynamic_css ) {
 					margin-right: 0;
 				}
 			}
-			.entry-content[ast-blocks-layout] > ul, .entry-content[ast-blocks-layout] > ol {
-				margin-' . esc_attr( $ltr_left ) . ': 1em;
+		';
+	}
+
+	// Spectra compatibility for narrow width container.
+	$dynamic_css .= '
+		.ast-narrow-container .site-content .wp-block-uagb-image--align-full .wp-block-uagb-image__figure {
+			max-width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+		}
+	';
+
+	// Block editor experience improvements introduced with v4.0.0.
+	if ( $v4_block_editor_compat ) {
+		$dynamic_css .= '
+			.entry-content ul, .entry-content ol {
+				padding: revert;
+				margin: revert;
 			}
 		';
 	}

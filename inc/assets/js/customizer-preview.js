@@ -68,7 +68,7 @@
                             defaultTarget.wp.customize.panel( section_id ).focus();
                         }
                     }
-                  
+
                 }
             }
         );
@@ -230,6 +230,9 @@ wp.customize( 'astra-settings[blog-single-width]', function( value ) {
             dynamicStyle += 'max-width: ' + single_post_max_width + 'px;';
             dynamicStyle += '} ';
         }
+        else{
+            wp.customize.preview.send( 'refresh' );
+        }
         astra_add_dynamic_css( 'blog-single-width', dynamicStyle );
     } );
 } );
@@ -247,6 +250,9 @@ wp.customize( 'astra-settings[blog-width]', function( value ) {
             dynamicStyle += '.blog .site-content > .ast-container, .archive .site-content > .ast-container, .search .site-content > .ast-container {';
             dynamicStyle += 'max-width: ' + blog_max_width + 'px;';
             dynamicStyle += '} ';
+        }
+        else{
+            wp.customize.preview.send( 'refresh' );
         }
         astra_add_dynamic_css( 'blog-width', dynamicStyle );
     } );
@@ -304,19 +310,28 @@ wp.customize( 'astra-settings[store-notice-position]', function( setting ) {
     } );
 } );
 
+wp.customize( 'astra-settings[blog-meta-date-type]', function( setting ) {
+	setting.bind( function( val ) {
+		wp.customize.preview.send( 'refresh' );
+	} );
+} );
+wp.customize( 'astra-settings[blog-meta-date-format]', function( setting ) {
+	setting.bind( function( val ) {
+		wp.customize.preview.send( 'refresh' );
+	} );
+} );
+
 // Global Typography Refresh - START
 const bodyFontFamily = [
 	'body-font-family',
 	'body-font-variant',
 	'font-size-body',
 	'body-font-weight',
-	'body-text-transform',
-	'body-line-height',
+	'body-font-extras',
 	'headings-font-family',
 	'headings-font-variant',
 	'headings-font-weight',
-	'headings-text-transform',
-	'headings-line-height'
+	'headings-font-extras'
 ];
 
 bodyFontFamily.forEach(element => {

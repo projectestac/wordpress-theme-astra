@@ -8,6 +8,31 @@ window.addEventListener( "load", function(e) {
     astrawpWooQuantityButtons();
 });
 
+
+// Here we are selecting the node that will be observed for mutations.
+const astraminiCarttargetNode = document.getElementById("ast-site-header-cart");
+
+if (astraminiCarttargetNode != null) {
+    const config = { attributes: false, childList: true, subtree: true };
+
+    const astraMinicartObserver = () => {
+        astrawpWooQuantityButtons();
+    };
+
+    const observer = new MutationObserver(astraMinicartObserver);
+    observer.observe(astraminiCarttargetNode, config);
+}
+
+/**This comment explains that in order to refresh the wc_fragments_refreshed event when an AJAX call is made, jQuery is used to update the quantity button.
+ * Here plain JavaScript may not be able to trigger the wc_fragments_refreshed event in the same way,
+ * hence the need to use jQuery
+*/
+jQuery( function( $ ) {
+    $( document.body ).on( 'wc_fragments_refreshed', function() {
+        astrawpWooQuantityButtons();
+    });
+});
+
 (function() {
     var send = XMLHttpRequest.prototype.send
     XMLHttpRequest.prototype.send = function() {
@@ -78,14 +103,18 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
             }
 
             // Quantity input.
-            var objBody = document.getElementsByTagName( 'BODY' )[0];
-            if ( objBody.classList.contains( 'single-product' ) && ! $cart.classList.contains( 'grouped_form' ) ) {
+            let objbody = document.getElementsByTagName('BODY')[0];
+            let cart = document.getElementsByClassName('cart')[0];
+
+            if (objbody.classList.contains('single-product') && !cart.classList.contains('grouped_form')) {
+                let quantityInput = document.querySelector('.woocommerce input[type=number].qty');
                 // Check for single product page.
-                var $quantityInput = document.querySelector( '.woocommerce input[type=number].qty' );
-                $quantityInput.addEventListener( 'keyup' , function() {
-                    var qty_val = $quantityInput.value;
-                    $quantityInput.value = qty_val;
-                });
+                if (quantityInput) {
+                    quantityInput.addEventListener('keyup', function () {
+                        let qtyVal = quantityInput.value;
+                        quantityInput.value = qtyVal;
+                    });
+                }
             }
 
             var plus_minus_obj = e.querySelectorAll( '.plus, .minus' );
@@ -146,10 +175,18 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
 
                     }
 
+                    // Trigger the change event on the input.
+                    var changeEvent = new Event('change');
+                    $quantityBox.dispatchEvent(changeEvent);
+
                     // Trigger change event.
-                    var event = document.createEvent( 'HTMLEvents' );
-                    event.initEvent( 'change', true, false );
-                    $quantityBox.dispatchEvent( event );
+                    var update_cart_btn = document.getElementsByName("update_cart");
+                    if (update_cart_btn.length > 0) {
+                        for ( var btn = 0; btn < update_cart_btn.length; btn++ ) {
+                            update_cart_btn[btn].disabled = false;
+                            update_cart_btn[btn].click();
+                        }
+                    }
 
 
 					// Send AJAX request from mini cart.

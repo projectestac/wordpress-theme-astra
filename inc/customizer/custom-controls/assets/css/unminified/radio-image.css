@@ -123,7 +123,7 @@
   box-shadow: 0 1em 2em -.5em rgba(0, 0, 0, 0.35);
   background: var(--ast-customizer-color-12);
   color: var(--ast-customizer-color-10);
-  z-index: 1000;
+  z-index: 9;
   bottom: calc(100% + 5px);
   text-align: center;
   animation: tooltips-vert 300ms ease-out forwards;

@@ -1,7 +1,7 @@
 .ast-variant-select > div {
 	border-color: #dddddd;
 }
-.customize-control select, .ast-variant-select > div, .customize-control input, .customize-control-content .components-text-control__input {
+.customize-control select, .ast-variant-select > div, .customize-control input, .customize-control textarea, .customize-control-content .components-text-control__input {
 	border-color: var(--ast-customizer-color-7);
 	color: var(--ast-customizer-color-5);
 	padding-top: 1px;

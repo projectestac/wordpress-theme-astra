@@ -176,7 +176,7 @@ body.customize-partial-edit-shortcuts-shown .customize-partial-edit-shortcut but
 
 .ast-post-banner-highlight:hover {
 	outline: 1px solid #007cba;
-	z-index: 99;
+	z-index: 9;
 }
 .ast-post-banner-highlight .banner-editor-shortcut {
     top: -2px;
@@ -186,4 +186,8 @@ body.customize-partial-edit-shortcuts-shown .customize-partial-edit-shortcut but
 	box-shadow: unset;
 	border: unset;
 	border-radius: 0 0 2px 0;
+}
+.ast-archive-entry-banner .customize-partial-edit-shortcut button, .ast-single-entry-banner .customize-partial-edit-shortcut button {
+    font-size: 20px;
+    line-height: 1em;
 }

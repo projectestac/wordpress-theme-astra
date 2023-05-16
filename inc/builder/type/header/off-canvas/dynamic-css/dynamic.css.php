@@ -156,6 +156,11 @@ function astra_off_canvas_static_css() {
 		display: flex;
 		box-shadow: none;
 	}
+
+	.ast-mobile-popup-drawer .ast-mobile-popup-header .menu-toggle-close:focus {
+		outline: thin dotted;
+	}
+
 	.ast-mobile-popup-drawer.ast-mobile-popup-full-width .ast-mobile-popup-inner {
 		max-width: none;
 		transition: transform 0s ease-in, opacity 0.2s ease-in;
@@ -247,11 +252,11 @@ function astra_off_canvas_static_css() {
 		}
 		.ast-mobile-popup-drawer .ast-mobile-popup-inner {
 			width: 100%;
-			transform: translateX(100%);
-			max-width: 90%;
+			transform: translateX(-115%);
+			max-width: 0;
 			left: 0;
 			top: 0;
-			background: #fafafa;
+			background: transparent;
 			color: #3a3a3a;
 			bottom: 0;
 			opacity: 0;
@@ -265,7 +270,7 @@ function astra_off_canvas_static_css() {
 			overflow-x:hidden;
 		}
 		.ast-mobile-popup-drawer.ast-mobile-popup-left .ast-mobile-popup-inner {
-			transform: translateX(-100%);
+			transform: translateX(-115%);
 			left: auto;
 			right: 0;
 		}
@@ -337,10 +342,10 @@ function astra_off_canvas_static_css() {
 		.ast-mobile-popup-drawer .ast-mobile-popup-inner {
 			width: 100%;
 			transform: translateX(100%);
-			max-width: 90%;
+			max-width: 0;
 			right: 0;
 			top: 0;
-			background: #fafafa;
+			background: transparent;
 			color: #3a3a3a;
 			bottom: 0;
 			opacity: 0;
@@ -489,6 +494,7 @@ function astra_dropdown_type_static_css() {
 		.ast-mobile-header-content.content-align-flex-end .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle,
 		.ast-desktop-header-content.content-align-flex-end .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle {
 		  	right: calc( 20px - 0.907em);
+			left: auto;
 		}
 		.ast-mobile-header-content .ast-search-menu-icon,
 		.ast-mobile-header-content .ast-search-menu-icon.slide-search,
@@ -541,7 +547,8 @@ function astra_dropdown_type_static_css() {
 		$dropdown_type_css .= '
 		.ast-mobile-header-content.content-align-flex-end .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle,
 		.ast-desktop-header-content.content-align-flex-end .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle {
-		  	left: calc( 20px - 0.907em);
+			left: calc( 20px - 0.907em);
+			right: auto;
 		}
 		.ast-mobile-header-content .ast-search-menu-icon,
 		.ast-mobile-header-content .ast-search-menu-icon.slide-search,

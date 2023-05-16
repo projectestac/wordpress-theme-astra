@@ -123,7 +123,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 				} elseif ( 0 === strpos( $func, 'menu_' ) ) {
 					$index = (int) substr( $func, strrpos( $func, '_' ) + 1 );
 					if ( $index ) {
-						Astra_Header_Menu_Component::menu_markup( $index );
+						Astra_Header_Menu_Component::menu_markup( $index, $params['0'] );
 					}
 				} elseif ( 0 === strpos( $func, 'header_social_' ) ) {
 					$index = (int) substr( $func, strrpos( $func, '_' ) + 1 );

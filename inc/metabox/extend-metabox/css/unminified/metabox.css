@@ -1,3 +1,7 @@
+.ast-header-settings-modal .components-modal__header svg {
+    width: 30px;
+    height: 30px;
+}
 .ast-sidebar-container .ast-sidebar-layout-meta-wrap .components-input-control__container .components-select-control__input {
 	padding: 3px 24px 3px 8px;
 	font-size: 14px;
