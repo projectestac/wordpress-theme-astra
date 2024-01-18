@@ -304,6 +304,11 @@ class Astra_Customizer_Footer_Builder_Configs extends Astra_Customizer_Config_Ba
 			),
 		);
 
+        // XTEC ************ AFEGIT - Hide Astra customizer sections.
+        // 2024.01.18 @aginard
+        $_configs = apply_filters('astra_footer_builder_sections', $_configs);
+        // ************ FI
+
 		if ( astra_showcase_upgrade_notices() ) {
 			$_configs[] = array(
 				'name'     => ASTRA_THEME_SETTINGS . '[footer-builder-pro-items]',
