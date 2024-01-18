@@ -320,6 +320,11 @@ function astra_builder_footer_configuration( $configurations = array() ) {
 		);
 	}
 
+    // XTEC ************ AFEGIT - Hide Astra customizer sections.
+    // 2024.01.18 @aginard
+    $_configs = apply_filters('astra_footer_builder_sections', $_configs);
+    // ************ FI
+
 	$_configs = array_merge( $_configs, Astra_Extended_Base_Configuration::prepare_advanced_tab( 'section-footer-builder-layout' ) );
 
 	$_configs = array_merge( $_configs, $configurations );

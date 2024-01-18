@@ -27,6 +27,11 @@ if ( ! class_exists( 'Astra_Heading_Colors_Configs' ) ) {
 		 */
 		public function register_configuration( $configurations, $wp_customize ) {
 
+            // XTEC ************ AFEGIT - Hide Astra customizer sections.
+            // 2024.01.18 @aginard
+            $configurations = apply_filters('astra_customizer_sections', $configurations);
+            // ************ FI
+
 			$_section = 'section-colors-background';
 
 			if ( class_exists( 'Astra_Ext_Extension' ) && Astra_Ext_Extension::is_active( 'colors-and-background' ) && ! astra_has_gcp_typo_preset_compatibility() ) {
