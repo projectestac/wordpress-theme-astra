@@ -15,6 +15,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'Astra_Body_Colors_Configs' ) ) {
 
+	function new_astra_get_palette_colors() {
+		$current_palette = get_option( 'astra-color-palettes', '')['currentPalette'] ?? 'palette_1';
+		
+		include WP_CONTENT_DIR . '/themes/reactor/custom-tac/colors_nodes.php';
+	
+		$palettes =
+		[
+			"currentPalette" => $current_palette,
+			"palettes" => []
+		];
+	
+		$i = 0;
+	
+		foreach($colors_nodes as $theme => $colors)
+		{
+			$i++;
+	
+			// Reactor theme colors
+	
+			$primary = $colors["primary"];
+			$secondary = $colors["secondary"];
+			$tertiary = $colors["tertiary"] ?? $secondary;
+			$footer = $colors["footer"] ?? $secondary;
+			$link = $colors["link"] ?? $secondary;
+			$calendar = $colors["calendar"] ?? $secondary;
+	
+			// Astra theme colors
+			// 9 colors, in order : accent - links - header , mouse over link , ??? , body text , site background , content background , borders , ??? , ???
+	
+			$list = [$primary , $link , $primary , "white", $secondary , $secondary , $secondary , $primary , $primary];
+	
+			$palettes["palettes"]["palette_" . $i] = $list;
+		}
+	
+		return $palettes;
+	}
+
 	/**
 	 * Register Body Color Customizer Configurations.
 	 */
@@ -55,7 +92,7 @@ if ( ! class_exists( 'Astra_Body_Colors_Configs' ) ) {
 					'section'   => $_section,
 					'priority'  => 5,
 					'title'     => __( 'Global Palette', 'astra' ),
-					'default'   => astra_get_palette_colors(),
+					'default'   => new_astra_get_palette_colors(),//astra_get_palette_colors(),
 					'transport' => 'postMessage',
 					'divider'   => array( 'ast_class' => 'ast-section-spacing ast-bottom-section-divider' ),
 				),
