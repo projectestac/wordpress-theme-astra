@@ -101,40 +101,132 @@ echo '<div ';
 			</script>
 
 		<style>
-				div.widget-area {
-					margin-top: 25px !important;
-				}
+			/* CSS styles for the accordion menu */
+			.accordion {
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+				font-family: sans-serif;
+			}
+			
+			.accordion li {
+				/* margin-bottom: 10px; */
+				color: #444;
+				border-bottom: 1px solid #DBDBDB;
+			}
 
-				div.sidebar-main {
-					background-color: #f4f4f4;
-					padding: 10px;
-					border-radius: 25px;
-				}
+			.accordion li ul li {
+				/* margin-bottom: 10px; */
+				border-bottom: 1px solid #ededed;
+			}
+		
+			.accordion li a {
+				display: block;
+				color: #1EA19B;
+				text-decoration: none;
+				padding: 15px;
+				/* background-color: #ddd; */
+				/* border-radius: 5px; */
+				position: relative;
+			
+				font-weight: 500;
+			}
 
-				div.sidebar-main li {
-					list-style-type: none;
-					margin: 0;
-					padding: 5px;
-					cursor: pointer;
-				}
+			/* .accordion li a:last-of-type {
+				border-bottom: 0px solid #DBDBDB;
+			} */
+			
+			.accordion li a.active {
+				background-color: #f4f4f4;
+			}
+			
+			.accordion li a .angle {
+				
+				position: absolute;
+				top: 50%;
+				right: 10px;
+				transform: translateY(-50%) rotate(180deg);
+				width: 15px;
+				height: 15px;
+				/* border-top: 5px solid transparent;
+				border-bottom: 5px solid transparent;
+				border-left: 5px solid #000; */
+			}
+			
+			.accordion li a.active .angle {
+				transform: translateY(-50%) rotate(0deg);
+			}
+			
+			.accordion li ul {
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+				display: none;
+			}
+			
+			.accordion li ul li a {
+				padding-left: 20px;
+				/* background-color: #eee; */
+				font-weight: 300;
+				color: #444;
+			}
 
-				div.sidebar-main li.current-menu-item {
-					background-color: #e7e7e7;
-					border-right: 3px solid #007cba;
-				}
+			.accordion li ul li ul li a {
+				padding-left: 40px;
+				color: gray;
+				font-size: 90%;
+				/* background-color: #eee; */
+			}
 
-				div.sidebar-main ul.accordion {
-					margin: 0;
-					padding: 0;
-				}
+			.accordion li:last-of-type {
+				border-bottom: 0px solid #DBDBDB;
+			}
+			
+			div.widget-area {
+				margin-top: 25px !important;
+			}
 
-				div.sidebar-main li:hover {
-					background-color: #efefef;
-				}
+			div.sidebar-main {
+				background-color: #f4f4f4;
+				padding: 10px;
+				border-radius: 25px;
+			}
 
-				div.sidebar-main a:hover {
-					text-decoration: underline;
-				}
+			div.sidebar-main li {
+				list-style-type: none;
+				margin: 0;
+				padding: 5px;
+				cursor: pointer;
+			}
+
+			div.sidebar-main li.current-menu-item {
+				background-color: #e7e7e7;
+				border-right: 3px solid #1EA19B;
+			}
+
+			div.sidebar-main ul.accordion {
+				margin: 0;
+				padding: 0;
+			}
+
+			div.sidebar-main li:hover {
+				background-color: #ededed;
+			}
+
+			div.sidebar-main a:hover {
+				text-decoration: underline;
+			}
+
+			/* Breadcrumb styles */
+			span[itemprop="name"] {
+				color: #1EA19B;
+				text-transform: uppercase;
+			}
+
+			.trail-items li::after {
+				padding: 0 0.3em;
+				content: "\/";
+			}
 		</style>
 
 	</div><!-- .sidebar-main -->
