@@ -43,7 +43,9 @@ echo '<div ';
 
 			<ul class="accordion">
 				<?php
-				$pages = get_pages();
+				$pages = get_pages(array(
+					'post_type' => 'page'
+				));
 
 				foreach ($pages as $page) {
 					if ($page->post_parent === 0) {
@@ -226,6 +228,18 @@ echo '<div ';
 			.trail-items li::after {
 				padding: 0 0.3em;
 				content: "\/";
+			}
+
+			.accordion li a {
+				padding: 5px 15px;
+			}
+
+			.accordion li ul.submenu a {
+				color: #606060;
+			}
+
+			.accordion li ul li {
+				border-bottom: 1px solid #e3e3e3;
 			}
 		</style>
 
