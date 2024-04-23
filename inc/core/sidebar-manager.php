@@ -33,6 +33,7 @@ if ( ! function_exists( 'astra_page_layout' ) ) {
 			// Then get the POST_TYPE sidebar.
 			$layout = astra_get_option_meta( 'site-sidebar-layout', '', true );
 
+			// If post meta value is empty or in editor and sidebar set as default.
 			if ( empty( $layout ) ) {
 
 				$post_type = strval( get_post_type() );
@@ -55,6 +56,9 @@ if ( ! function_exists( 'astra_page_layout' ) ) {
 
 				// Check only post type archive option value.
 				$layout = astra_get_option( 'archive-post-sidebar-layout' );
+
+				$search_sidebar_layout = astra_get_option( 'ast-search-sidebar-layout', 'default' );
+				$layout                = 'default' !== $search_sidebar_layout ? $search_sidebar_layout : $layout;
 
 				if ( 'default' == $layout || empty( $layout ) ) {
 

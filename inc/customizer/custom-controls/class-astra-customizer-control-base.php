@@ -70,6 +70,7 @@ if ( ! class_exists( 'Astra_Customizer_Control_Base' ) ) {
 			// Enqueue Customizer React.JS script.
 			$custom_controls_react_deps = array(
 				'astra-custom-control-plain-script',
+				'astra-customizer-controls-js',
 				'wp-i18n',
 				'wp-components',
 				'wp-element',
@@ -78,6 +79,7 @@ if ( ! class_exists( 'Astra_Customizer_Control_Base' ) ) {
 			);
 
 			wp_enqueue_script( 'astra-custom-control-script', ASTRA_THEME_URI . 'inc/customizer/extend-custom-controls/build/index.js', $custom_controls_react_deps, ASTRA_THEME_VERSION, true );
+			wp_set_script_translations( 'astra-custom-control-script', 'astra' );
 
 			$astra_typo_localize = array(
 				'100'       => __( 'Thin 100', 'astra' ),
@@ -87,6 +89,7 @@ if ( ! class_exists( 'Astra_Customizer_Control_Base' ) ) {
 				'300'       => __( 'Light 300', 'astra' ),
 				'300italic' => __( '300 Italic', 'astra' ),
 				'400'       => __( 'Normal 400', 'astra' ),
+				'normal'    => __( 'Normal 400', 'astra' ),
 				'italic'    => __( '400 Italic', 'astra' ),
 				'500'       => __( 'Medium 500', 'astra' ),
 				'500italic' => __( '500 Italic', 'astra' ),

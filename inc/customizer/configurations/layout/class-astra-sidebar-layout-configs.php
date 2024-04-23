@@ -43,6 +43,7 @@ if ( ! class_exists( 'Astra_Sidebar_Layout_Configs' ) ) {
 					'section'           => 'section-sidebars',
 					'default'           => astra_get_option( 'site-sidebar-layout' ),
 					'priority'          => 5,
+					'description'       => __( 'Sidebar will only apply when container layout is set to normal.', 'astra' ),
 					'title'             => __( 'Default Layout', 'astra' ),
 					'choices'           => array(
 						'no-sidebar'    => array(
@@ -58,7 +59,26 @@ if ( ! class_exists( 'Astra_Sidebar_Layout_Configs' ) ) {
 							'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'right-sidebar', false ) : '',
 						),
 					),
-					'divider'           => array( 'ast_class' => 'ast-bottom-section-divider ast-section-spacing' ),
+				),
+
+				/**
+				 * Option: Site Sidebar Style.
+				 */
+				array(
+					'name'       => ASTRA_THEME_SETTINGS . '[site-sidebar-style]',
+					'type'       => 'control',
+					'control'    => 'ast-selector',
+					'section'    => 'section-sidebars',
+					'default'    => astra_get_option( 'site-sidebar-style', 'unboxed' ),
+					'priority'   => 9,
+					'title'      => __( 'Sidebar Style', 'astra' ),
+					'choices'    => array(
+						'unboxed' => __( 'Unboxed', 'astra' ),
+						'boxed'   => __( 'Boxed', 'astra' ),
+					),
+					'responsive' => false,
+					'renderAs'   => 'text',
+					'divider'    => array( 'ast_class' => 'ast-top-divider ast-bottom-section-divider' ),
 				),
 
 				/**
@@ -92,6 +112,20 @@ if ( ! class_exists( 'Astra_Sidebar_Layout_Configs' ) ) {
 					'help'     => __( 'Sidebar width will apply only when one of the above sidebar is set.', 'astra' ),
 					'divider'  => array( 'ast_class' => 'ast-bottom-section-divider' ),
 					'settings' => array(),
+				),
+
+				/**
+				 * Option: Sticky Sidebar
+				 */
+				array(
+					'name'     => ASTRA_THEME_SETTINGS . '[site-sticky-sidebar]',
+					'default'  => astra_get_option( 'site-sticky-sidebar' ),
+					'type'     => 'control',
+					'section'  => 'section-sidebars',
+					'title'    => __( 'Enable Sticky Sidebar', 'astra' ),
+					'priority' => 15,
+					'control'  => 'ast-toggle-control',
+					'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
 				),
 			);
 

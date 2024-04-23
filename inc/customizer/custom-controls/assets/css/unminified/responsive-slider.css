@@ -143,6 +143,7 @@
 
 .customize-control-ast-slider .components-input-control__container, .customize-control-ast-responsive-slider .components-input-control__container {
 	margin-left: 5px;
+  width: 48px;
 }
 .customize-control-ast-slider .components-input-control__container div.components-input-control__backdrop, .customize-control-ast-responsive-slider .components-input-control__container div.components-input-control__backdrop {
   border: none;
@@ -160,6 +161,7 @@
 .customize-control-ast-responsive-slider .ast-resp-slider-reset-wrap,
 .customize-control-ast-slider .ast-resp-slider-reset-wrap {
 	top: 1px;
+	right: -8px;
 }
 
 

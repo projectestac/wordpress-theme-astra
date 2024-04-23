@@ -417,7 +417,7 @@
 }
 .ast-reset-btn-preset-wrap .components-button.is-secondary,
 .ast-reset-btn-preset-wrap .components-button.is-secondary:hover{
-	box-shadow: none;
+	box-shadow: none !important;
 	background: transparent;
 	color: var(--ast-customizer-color-1);
 }
@@ -547,10 +547,6 @@
   display: none;
 }
 
-#customize-control-astra-color-palettes .ast-color-palette-wrap > div {
-	margin-bottom: 8px;
-	position: relative;
-}
 
 #customize-control-astra-color-palettes .color-button-wrap {
 	display: unset;
@@ -625,40 +621,132 @@
 	opacity: 0.6;
 }
 
-#customize-control-astra-color-palettes .ast-single-color-container {
-	width: 25%;
-	height: 48px;
-	display: inline-block;
+#customize-control-astra-color-palettes .ast-palette-presets-inner-wrap .ast-preset-label-wrap {
+    font-size: 14px;
+	line-height: 18px;
+	color: var(--ast-customizer-color-4);
+	text-align: right;
 }
-
-#customize-control-astra-color-palettes .ast-color-palette-wrap > section {
-    text-align: center;
-	outline: none;
-	border-radius: 3px;
-	cursor: pointer;
-    transition: all 0.2s;
-	box-shadow: 0 0 0 1px #ddd;
+.ast-color-preset-container {
+    max-height: 425px;
+    overflow: scroll;
+	overflow-x: hidden;
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: #d8d8d8 #f1f1f1;
 }
-
+.ast-color-preset-container::-webkit-scrollbar {
+	width: 5px;
+}
+.ast-color-preset-container::-webkit-scrollbar-track {
+	background: #f1f1f1;
+}
+.ast-color-preset-container::-webkit-scrollbar-thumb {
+	background: #d8d8d8;
+}
 .ast-color-palette-container {
-	width: 100%;
-	display: inline-grid;
-	grid-template-columns: auto auto;
-	column-gap: 16px;
-	row-gap: 16px;
-}
-
-#customize-control-astra-color-palettes .ast-field-settings-modal {
-	display: none;
-	padding: 16px;
+    width: 100%;
+    display: inline-grid;
+    grid-template-columns: repeat( 2,1fr );
+    column-gap: 16px;
+    row-gap: 16px;
+	margin-top: 12px;
+	margin-bottom: 12px;
 }
 .ast-color-palette-wrap {
     transition: all 0.2s;
+	background: #fff;
+}
+#customize-control-astra-color-palettes .ast-color-palette-wrap > section {
+    text-align: center;
+    outline: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 0 1px #ddd;
+}
+#customize-control-astra-color-palettes .ast-single-color-container {
+    width: 20%;
+    height: 48px;
+    display: inline-block;
+}
+.ast-palette-label-wrap {
+    text-align: center;
+    color: #9CA3AF;
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 10px;
+    line-height: 22px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
 }
 .ast-color-palette-wrap.active {
     box-shadow: 0px 12px 20px -8px rgb(30 41 59 / 16%);
 }
+#customize-control-astra-color-palettes .ast-color-palette-wrap.active > section {
+    box-shadow: 0 0 0 1px var(--ast-customizer-color-5);
+}
+.ast-color-palette-wrap.active .ast-palette-label-wrap {
+    color: var(--ast-customizer-color-5);
+}
+.ast-color-palette-wrap .ast-single-color-container:first-child {
+    border-top-right-radius: 3px;
+}
+.ast-color-palette-wrap .ast-single-color-container:nth-child(5) {
+    border-top-left-radius: 3px;
+}
+.ast-palette-individual-item {
+    height: 21px;
+    width: 21px;
+    display: block;
+    box-shadow: 0px 0px 0px 15px inset;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(146, 155, 164);
+    border-image: initial;
+    border-radius: 50%;
+    transition: box-shadow 100ms ease 0s;
+}
 
+.ast-palette-individual-item-wrap:not(:last-child) {
+    margin-left: 4px;
+}
+.components-button.ast-preset-palette-item {
+    width: 100%;
+    padding: 0;
+	margin-top: 4px;
+}
+.ast-palette-presets-inner-wrap:last-child .ast-preset-palette-item {
+    margin-bottom: 0;
+}
+.components-button.ast-preset-palette-item:hover {
+	border: none;
+	box-shadow: none;
+	outline: none;
+}
+.customize-control-ast-color-palette .ast-field-settings-modal::before {
+    left: 12px;
+}
+section.ast-palette-presets-inner-wrap {
+    padding: 12px 10px 8px;
+    transition: all 0.2s;
+}
+section.ast-palette-presets-inner-wrap:last-child {
+    padding-bottom: 12px;
+}
+.ast-palette-presets-inner-wrap:hover {
+    background: #F3F5F7;
+	border-radius: 3px;
+}
+.ast-color-preset-container .components-button.ast-preset-palette-item:focus {
+    outline: none;
+    box-shadow: none;
+}
 #customize-control-astra-color-palettes .ast-color-palette-wrapper {
 	clear: both;
 }
@@ -678,31 +766,11 @@
 	}
 }
 
-#customize-control-astra-color-palettes .ast-color-palette-wrap.active > section {
-    box-shadow: 0 0 0 1px #334155;
-}
-.ast-palette-label-wrap{
-    text-align: center;
-	color: #9CA3AF;
-	overflow: hidden;
-	width: 100%;
-    box-sizing: border-box;
-    padding: 0;
-    transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
-	font-style: normal;
-    font-weight: 600;
-    font-size: 10px;
-    line-height: 22px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-}
-
-.ast-color-palette-wrap.active .ast-palette-label-wrap {
-    color: #334155;
-}
-
 #customize-control-astra-color-palettes .ast-field-settings-modal {
-    margin-top: -35px;
+	margin-right: -8px;
+    margin-left: -8px;
+	display: none;
+	padding: 0;
 }
 
 .astra-advanced-color-indicate .global-color{
@@ -787,26 +855,6 @@
 .customize-control .components-tooltip {
     z-index: 8 !important;
 }
-.color-group-item .components-popover .components-popover__content,
-.ast-color-palette .components-popover .components-popover__content {
-    min-width: 3em;
-    max-width: 10em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 1ch 1.5ch;
-    border-radius: 0.3ch;
-    box-shadow: 0 1em 2em -0.5em rgb(0 0 0 / 35%);
-    background: var(--ast-customizer-color-12);
-    color: var(--ast-customizer-color-10);
-    z-index: 1000;
-    text-align: center;
-    text-transform: none;
-    font-size: .9em;
-    line-height: 1;
-    user-select: none;
-    pointer-events: none;
-}
 .ast-color-palette .components-popover .components-popover__content {
     bottom: calc(100% + 5px);
     animation: tooltips-vert .3s ease-out forwards;
@@ -859,6 +907,7 @@
     height: 28px;
     border-radius: 50%;
     margin: 0;
+	background: inherit;
 }
 .component-color-indicator {
     width: 25px;
@@ -1191,7 +1240,7 @@
 	width: 20px;
 	padding: 4px;
 	background: transparent;
-	box-shadow: none;
+	box-shadow: none !important;
 	cursor: pointer;
 }
 .astra-color-clear-button.components-button:focus:not(:disabled) {
@@ -1223,10 +1272,6 @@
 }
 .ast-field-settings-modal .ast-color-btn-clear-wrap {
     left: 78px;
-}
-.ast-field-settings-modal .customize-control-ast-color.customize-control,
-.ast-field-settings-modal .customize-control-ast-color.customize-control:first-child {
-    margin-top: 25px;
 }
 .astra-color-picker-wrap .components-color-picker__inputs-wrapper {
 	min-width: unset;
@@ -1315,10 +1360,6 @@
         width: 20px;
         top: -2px;
     }
-    .ast-color-palette .components-circular-option-picker__option-wrapper .components-circular-option-picker__option:focus::after {
-        width: 24px;
-        height: 24px;
-    }
     .astra-popover-color .ast-color-palette.components-circular-option-picker {
         width: auto;
         padding: 16px 8px 0px 0px;
@@ -1343,6 +1384,16 @@
 		top: -2px;
 		width: 18px;
 	}
+    .astra-popover-color .components-circular-option-picker__option[aria-pressed=true]+svg, .components-circular-option-picker__option[aria-selected=true]+svg {
+        width: 20px;
+        right: 1px;
+        top: -1px;
+        mix-blend-mode: difference;
+    }
+	.ast-color-palette .components-circular-option-picker__option-wrapper .components-circular-option-picker__option:focus::after {
+        width: 24px;
+        height: 24px;
+    }
 }
 @supports (-moz-appearance:none) {
 	@media (max-width: 1845px) {
@@ -1409,6 +1460,11 @@
 }
 .ast-color-palette.components-circular-option-picker .components-circular-option-picker__swatches{
     width: 100%;
+}
+
+/* Instead of updating above CSS, handled this control's edge case separately. */
+li#customize-control-astra-settings-transparent-content-section-text-color-responsive .ast-control-wrap .ast-responsive-btns {
+    top: 2px;
 }
 
 /* Global customizer color palette */
@@ -1553,6 +1609,11 @@ input[type="text"], input[type="password"], input[type="color"], input[type="dat
   top: 0;
   left: 0;
   color: var(--ast-customizer-color-6);
+  cursor: help;
+}
+
+.customize-control .ast-control-tooltip:hover {
+    color: var(--ast-customizer-color-1);
 }
 
 .customize-control.customize-control-ast-toggle-control .ast-control-tooltip {
@@ -1572,6 +1633,10 @@ input[type="text"], input[type="password"], input[type="color"], input[type="dat
   top: 55%;
   left: 40px;
   transform: translateY(0);
+}
+
+.customize-control-ast-selector.customize-control .ast-control-tooltip {
+    top: -3px;
 }
 
 .customize-control.customize-control-ast-toggle-control.ast-top-divider .ast-control-tooltip {
@@ -1596,6 +1661,22 @@ input[type="text"], input[type="password"], input[type="color"], input[type="dat
 .ast-fields-wrap .customize-control .ast-control-tooltip {
   left: 15px;
   top: 6px;
+}
+
+.customize-control .ast-sortable-subfields-wrap .ast-control-tooltip {
+    position: absolute !important;
+    top: 40%;
+    left: 0px;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+.customize-control .ast-sortable-subfields-wrap .customize-control-ast-toggle .ast-control-tooltip {
+	left: 30px;
+	top: 50%;
+}
+.ast-top-dotted-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip,
+.ast-top-section-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip {
+    top: 24px;
 }
 
 /* Select2 WP 5.3 compatibility */
@@ -1717,30 +1798,77 @@ input[type="text"].select2-search__field {
 
 /* Toggle Section Control */
 .ast-section-toggle {
-  display: grid;
-  grid-template-columns: 80% 1fr 1fr;
+	display: grid;
+    grid-template-columns: 70% 20% 10%;
+    align-items: center;
+    padding: 0 12px 0 0;
+    height: 100%;
+	align-items: center;
+    align-content: center;
+	max-height: 46px;
 }
 
 .ast-section-toggle label {
-  font-size: 14px;
-  line-height: 1;
-  font-weight: 600;
+	font-size: 14px;
+    line-height: 1;
+    font-weight: 600;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+}
+
+.ast-section-toggle > label {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: auto;
+    line-height: 50px;
 }
 
 .ast-section-toggle:not(.active) > label {
   cursor: default;
 }
 
+.customize-control.customize-control-ast-section-toggle {
+    border: 1px dashed var(--ast-customizer-color-1);
+    background: var(--ast-customizer-color-11);
+    cursor: pointer;
+    box-shadow: none !important;
+    line-height: 42px;
+    font-size: 14px;
+    display: inline-grid;
+    align-items: center;
+    height: auto;
+    color: var(--ast-customizer-color-5);
+    position: relative;
+    white-space: nowrap;
+    border-radius: 4px;
+    transition: all 0.2s;
+    padding-top: 0;
+    padding-bottom: 0;
+	margin-top: 24px;
+	margin-bottom: 9px;
+	margin-top: 24px;
+}
+.customize-control.customize-control-ast-section-toggle:hover {
+    background: var(--ast-customizer-color-9);
+    border-style: solid;
+}
 .ast-section-toggle-icon {
-  color: var(--wp-admin-theme-color);
-  cursor: pointer;
-  margin-bottom: -4px;
-  margin-right: 10px;
+    color: var(--wp-admin-theme-color);
+    cursor: pointer;
+    line-height: 20px;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
 }
 
 .ast-section-toggle-icon span {
-  font-size: 16px;
-  line-height: 16px;
+	font-size: 16px;
+	line-height: 16px;
+	width: 16px;
+	height: 16px;
 }
 
 .customize-control-ast-section-toggle {
@@ -1748,8 +1876,14 @@ input[type="text"].select2-search__field {
   padding-bottom: 16px;
 }
 
+li#customize-control-astra-settings-related-posts-title {
+    margin-top: 32px;
+}
+
 li[ID*="accordion-section-ast-dynamic-single-"].control-section-ast_section,
-li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
+li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section,
+li#accordion-section-section-search-page-title.control-section-ast_section,
+li[ID*="accordion-section-ast-sub-section-"].control-section-ast_section {
   display: none !important;
 }
 
@@ -1759,6 +1893,8 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
   font-size: 11px;
   line-height: 16px;
   font-weight: 400;
+  text-wrap: wrap;
+  display: inline-block;
 }
 
 .customize-control-ast-description a.button {
@@ -1772,6 +1908,10 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
   font-size: 11px;
   line-height: 16px;
   font-weight: 400;
+}
+
+.customize-control .customize-control-description {
+	display: none;
 }
 
 .customize-control-ast-divider hr {
@@ -1873,12 +2013,17 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
 * CSS for ast-spacing attribute started.
 */
 
-.customize-control.ast-bottom-spacing {
+.customize-control.ast-bottom-spacing, .ast-field-settings-modal .customize-control.ast-bottom-spacing {
 	margin-bottom: 16px;
 }
-
-.customize-control.ast-top-spacing {
+.customize-control.ast-top-spacing, .ast-field-settings-modal .customize-control.ast-top-spacing {
 	margin-top: 16px;
+}
+li.customize-control.ast-bottom-section-spacing {
+	margin-bottom: 24px;
+}
+li.customize-control.ast-top-section-spacing {
+	margin-top: 24px;
 }
 
 /*
@@ -1925,7 +2070,6 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
     bottom: 25px;
 }
 
-
 /*
 * CSS for ast-section-divider attribute started.
 */
@@ -1951,7 +2095,6 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
 
 .customize-control.ast-sub-bottom-dotted-divider {
     padding-bottom: 20px;
-	margin-bottom: 10px;
 }
 
 .customize-control.ast-top-section-divider::before,
@@ -2018,6 +2161,22 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
 
 #sub-accordion-section-section-sidebars > .customize-control-ast-heading ~ .customize-control-ast-heading  {
     margin-top: 32px;
+}
+
+/* Sub controls divider support */
+.ast-fields-wrap .customize-control.ast-bottom-section-divider::after, .ast-fields-wrap .customize-control.ast-top-section-divider::before {
+    width: 100%;
+    right: 0px;
+}
+
+.ast-top-dotted-divider .ast-control-tooltip {
+    top: 22px;
+}
+.ast-top-section-divider .ast-control-tooltip {
+    top: 30px;
+}
+.ast-field-settings-modal .customize-control.ast-top-dotted-divider {
+    margin-top: 0;
 }
 
 .ast-typo-presets {
@@ -2362,6 +2521,21 @@ div .ast-field-settings-modal .customize-control-ast-font-extras {
     z-index: 1;
 }
 
+#customize-control-astra-settings-ast-headings-font-settings .ast-fields-wrap,
+#customize-control-astra-settings-ast-body-font-settings .ast-fields-wrap {
+    overflow: visible;
+}
+
+/**
+ * Hide normal font weight from font weight dropdown and display only if its set as font weight.
+ */
+.customize-control-ast-font select option[value="normal"], .customize-control-ast-font select[data-value="normal"] option[value="400"] {
+    display: none;
+}
+.customize-control-ast-font select[data-value="normal"] option[value="normal"] {
+    display: block;
+}
+
 span.customize-control-title.ast-group-section-title {
     margin-bottom: 4px;
     font-weight: 600;
@@ -2495,21 +2669,6 @@ span.customize-control-title.ast-group-section-title {
   border-top: 1px dashed var(--ast-customizer-color-7);
 }
 
-.ast-menu-setting-wrap {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-.ast-menu-setting-wrap .dashicon {
-    width: 14px;
-    height: 14px;
-    font-size: 14px;
-	color: #9CA3AF;
-}
-.ast-menu-location-btn {
-	cursor: pointer;
-}
-
 .customize-control-ast-multi-selector .input-wrapper {
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -2544,6 +2703,125 @@ span.customize-control-title.ast-group-section-title {
 .customize-control-ast-multi-selector .ast-multiselector-inner-wrap:first-child {
 	border-radius: 0px 3px 3px 0px;
 }
+.customize-control-ast-multi-selector .ast-multiselector-inner-wrap span[label] {
+    color: var(--ast-customizer-color-6);
+}
+.customize-control-ast-multi-selector .ast-multiselector-inner-wrap.active span[label] {
+    color: var(--ast-customizer-multiselect-icon-color);
+}
+.ast-alignment-wrapper.stack-after-2 .ast-multiselector-inner-wrap {
+    flex: 0 0 calc(50% - 10px);
+    margin: 5px;
+}
+.ast-alignment-wrapper.stack-after-2 .ast-multiselector-inner-wrap:nth-child(2n) {
+    margin-left: 0;
+}
+.ast-alignment-wrapper.stack-after-3 .ast-multiselector-inner-wrap {
+    flex: 0 0 calc(33.33% - 10px);
+    margin: 5px;
+}
+.ast-alignment-wrapper.stack-after-3 .ast-multiselector-inner-wrap:nth-child(3n) {
+    margin-left: 0;
+}
+
+[CLASS*="stack-after-"].ast-alignment-wrapper {
+    margin-right: -5px;
+    margin-left: -5px;
+	display: flex;
+	flex-wrap: wrap;
+}
+[CLASS*="stack-after-"].ast-alignment-wrapper .ast-multiselector-inner-wrap {
+	margin: 5px;
+    align-items: center;
+    padding: 5px;
+    height: 30px;
+    border-radius: 0;
+}
+.ast-alignment-wrapper.stack-after-2 .ast-multiselector-inner-wrap {
+    flex: 0 0 calc(45% - 10px);
+}
+.ast-alignment-wrapper.stack-after-3 .ast-multiselector-inner-wrap {
+	flex: 0 0 calc(28% - 10px);
+}
+
+.customize-control-ast-number .ast-number-single{
+    display: flex;
+    border: 1px solid #D1D5DB;
+    border-radius: 3px;
+    background-color: #fff;
+    width: 96px;
+}
+
+.customize-control-ast-number .components-input-control__container, .customize-control-ast-number .components-input-control__input {
+    text-align: center;
+}
+
+.customize-control-ast-number .ast-number-single .dashicon.dashicons  {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #676879;
+    font-size: 10px;
+    padding: 0.5em;
+    cursor: pointer;
+}
+
+.customize-control-ast-number .components-input-control__backdrop {
+    border: 0 !important;
+}
+
+.customize-control-ast-number .ast-number-single input[type=number]::-webkit-inner-spin-button,
+.customize-control-ast-number .ast-number-single input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.customize-control-ast-number .ast-control-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customize-control-ast-number .ast-title-wrapper {
+    width: 50%;
+}
+
+.customize-control-ast-number .ast-number-single {
+    display: none
+}
+
+.customize-control-ast-number .ast-number-single.active {
+    display: flex;
+}
+
+.customize-control-ast-number .ast-responsive-btns {
+    margin-right: 0.5em;
+}
+
+/* Hide spin buttons for WebKit (Chrome, Safari) */
+.customize-control-ast-number input[type="number"]::-webkit-inner-spin-button,
+.customize-control-ast-number input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0; /* Adjust as needed */
+}
+
+/* Hide spin buttons for Firefox */
+.customize-control-ast-number input[type="number"] {
+  -moz-appearance: textfield;
+  text-align: center;
+}
+
+/* Hide spin buttons for Edge & IE */
+.customize-control-ast-number input[type="number"]::-webkit-outer-spin-button,
+.customize-control-ast-number input[type="number"]::-webkit-inner-spin-button,
+.customize-control-ast-number input[type="number"]::-ms-clear,
+.customize-control-ast-number input[type="number"]::-ms-reveal {
+  display: none;
+}
+
 
 .customize-control-ast-radio-icon .ast-control-wrap {
     display: flex;
@@ -2563,7 +2841,7 @@ span.customize-control-title.ast-group-section-title {
 }
 
 .customize-control-ast-radio-icon .ast-options {
-    background-color: var(--ast-customizer-color-9);
+    background-color: transparent;
     margin: 0;
     line-height: 0;
 }
@@ -2585,6 +2863,7 @@ span.customize-control-title.ast-group-section-title {
     text-align: center;
     line-height: 28px;
     width: 100%;
+	font-size: 16px;
 }
 
 .customize-control-ast-radio-icon .ast-options li {
@@ -2606,6 +2885,7 @@ span.customize-control-title.ast-group-section-title {
     background-color: var(--ast-customizer-color-1);
     color: var(--ast-customizer-color-10);
     border-color: var(--ast-customizer-color-1);
+    margin-left: 1px;
 }
 
 .customize-control-ast-row-layout .ast-responsive-btns {
@@ -3301,6 +3581,7 @@ span.customize-control-title.ast-group-section-title {
 
 .customize-control-ast-slider .components-input-control__container, .customize-control-ast-responsive-slider .components-input-control__container {
 	margin-right: 5px;
+  width: 48px;
 }
 .customize-control-ast-slider .components-input-control__container div.components-input-control__backdrop, .customize-control-ast-responsive-slider .components-input-control__container div.components-input-control__backdrop {
   border: none;
@@ -3318,6 +3599,7 @@ span.customize-control-title.ast-group-section-title {
 .customize-control-ast-responsive-slider .ast-resp-slider-reset-wrap,
 .customize-control-ast-slider .ast-resp-slider-reset-wrap {
 	top: 1px;
+	left: -8px;
 }
 
 
@@ -3328,6 +3610,7 @@ span.customize-control-title.ast-group-section-title {
 .customize-control-ast-responsive-slider .ast-slider-wrap .components-range-control__number input{
   text-align: center;
 }
+
 .customize-control-ast-responsive-spacing .customize-control-title {
   display: inline-block;
 }
@@ -3600,6 +3883,80 @@ span.customize-control-title.ast-group-section-title {
   width: 100%;
 }
 
+.ast-customizer-select-multi .ast-multi-select__input-container input:focus{
+    box-shadow: none;
+}
+
+.ast-customizer-select-multi {
+    position: relative;
+}
+
+.ast-customizer-select-multi .ast-multi-select__value-container {
+    overflow-x: hidden;
+    flex-wrap: nowrap;
+    padding-right: 10px;
+    padding-left: 30px;
+}
+
+.ast-customizer-select-multi:before {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 1px;
+    width: 50px;
+    height: 37px;
+    background: rgb(247,247,247);
+    background: linear-gradient(-90deg, rgba(247,247,247,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.ast-customizer-select-multi:after {
+    content: "\f11c";
+    position: absolute;
+    font-family: dashicons;
+    font-size: 16px;
+    margin-left: 15px;
+    pointer-events: none;
+    z-index: 1;
+    top: 13px;
+    left: 0;
+}
+
+.ast-customizer-select-multi .ast-multi-select__multi-value__label {
+    margin-left: 0.2em;
+}
+
+.ast-customizer-select-multi .ast-multi-select__multi-value {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    padding: 2px 5px 2px 5px;
+    min-width: auto;
+    color: #4B5563;
+    background-color: #F5F5F5;
+    border: 1px solid #D1D5DB;
+    border-radius: 2px;
+}
+
+.ast-customizer-select-multi .ast-multi-select__multi-value__remove {
+    color: #4B5563;
+    padding-left: 0;
+}
+
+.ast-customizer-select-multi .ast-multi-select__multi-value__remove:hover {
+    background-color: transparent;
+    color: #4B5563;
+}
+
+.ast-customizer-select-multi .ast-multi-select__menu *, .ast-customizer-select-multi .ast-multi-select__multi-value__remove {
+    cursor: pointer;
+}
+
+.ast-customizer-select-multi .ast-multi-select__menu {
+    z-index: 2;
+}
+
 .ast-variant-select > div {
 	border-color: #dddddd;
 }
@@ -3847,10 +4204,6 @@ span.customize-control-title.ast-group-section-title {
   top: 2px;
 }
 
-.ast-field-settings-modal .customize-control {
-  margin-top: 2px;
-}
-
 #customize-control-headings-font-extras.ast-sub-top-dotted-divider {
   margin-top: 12px;
 }
@@ -3951,7 +4304,7 @@ span.customize-control-title.ast-group-section-title {
 }
 
 .astra-media-tab .ast-danger-btn {
-  color: var(--ast-customizer-color-13);
+  color: var(--ast-customizer-color-14);
   margin-top: 10px;
 }
 
@@ -3960,7 +4313,7 @@ span.customize-control-title.ast-group-section-title {
 }
 
 .astra-media-tab .ast-danger-btn:hover {
-  border-color: var(--ast-customizer-color-13);
+  border-color: var(--ast-customizer-color-14);
 }
 
 .components-base-control.ast-text-control-input {
@@ -4087,11 +4440,10 @@ span.customize-control-title.ast-group-section-title {
 
 .customize-control-ast-responsive-slider .ast-responsive-units {
   position: absolute;
-  top: 3px;
-  left: 23px;
+  top: 4px;
+  left: 15px;
   font-size: 11px;
   line-height: normal;
-  border-left: 1px solid #ddd;
   padding-left: 5px;
   text-transform: uppercase;
   width: auto;
@@ -4140,6 +4492,7 @@ span.customize-control-title.ast-group-section-title {
 }
 .customize-control-ast-sortable .sortable .ast-sortable-subcontrols {
     border: none;
+	padding: 0 0 0 9px;
     border-top: 1px solid #d1d5db;
     border-radius: 0 0 3px 3px;
 }
@@ -4195,13 +4548,7 @@ span.customize-control-title.ast-group-section-title {
 .ast-sortable-subcontrols {
 	display: none;
 	padding: 12px 0;
-    margin-right: -12px !important;
     border-top: 1px solid #d1d5db;
-	margin-left: -3px!important;
-}
-.ast-sortable-subcontrols > * {
-	padding-left: 9px;
-	padding-bottom: 12px;
 }
 .show .ast-sortable-subcontrols {
 	display: block;
@@ -4209,7 +4556,6 @@ span.customize-control-title.ast-group-section-title {
 .ast-sortable-subfields-wrap .customize-control {
 	box-sizing: border-box;
     position: relative;
-    padding-right: 9px;
 }
 /**
  * ast-list-icons inside sortable compatibility CSS.
@@ -4298,8 +4644,12 @@ span.customize-control-title.ast-group-section-title {
 }
 .customize-control-ast-sortable .ast-sortable-subfields-wrap .customize-control-title {
     margin-bottom: 16px;
-    font-size: 13px;
-    margin-top: 3px;
+    font-size: 14px;
+}
+.ast-sortable-subfields-wrap .customize-control-ast-color .ast-control-wrap .astra-popover-color {
+    margin-right: -10px;
+    margin-left: 10px;
+    width: calc(100% + 15px);
 }
 
 .customize-control-ast-sortable .ast-sortable-subfields-wrap .ast-responsive-btns {
@@ -4307,8 +4657,7 @@ span.customize-control-title.ast-group-section-title {
 }
 
 .ast-sortable-subfields-wrap .ast-fields-wrap {
-    margin-right: -12px;
-	padding-bottom: 10px;
+	padding-bottom: 16px;
 }
 .customize-control-content {
     width: 100%;
@@ -4393,14 +4742,12 @@ span.customize-control-title.ast-group-section-title {
 
 .ast-togglecontrol-wrapper .toggle-control-label, .ast-togglecontrol-wrapper .components-toggle-control__label {
   font-size: 14px;
-  font-weight: 600;
 }
 
 .customize-control-ast-toggle-control .components-toggle-control .components-toggle-control__label, .ast-togglecontrol-wrapper label {
   display: flex;
   flex: 1 1 auto;
   font-size: 14px;
-  font-weight: 600;
 }
 
 .ast-switch ~ label {
@@ -4444,6 +4791,10 @@ span.customize-control-title.ast-group-section-title {
 }
 .ast-switch:not(:checked), .ast-switch:checked {
   opacity: 0;
+}
+.customize-control-ast-section-toggle .components-form-toggle {
+	margin-right: 5px;
+	text-align: left;
 }
 
 /* Wordpress 6.1 Compatibility CSS for toggle UI */
@@ -4507,6 +4858,24 @@ span.customize-control-title.ast-group-section-title {
 	display: flex;
 	white-space: break-spaces;
 	inline-size: max-content;
+}
+.ast-top-dotted-divider .ast-control-tooltip.dashicons-editor-help {
+    top: 22px;
+}
+.customize-control.ast-bottom-dotted-divider.customize-control-ast-toggle-control .ast-control-tooltip {
+    top: 8px;
+}
+.customize-control.customize-control-ast-select.ast-top-dotted-divider .ast-control-tooltip {
+    top: 36px;
+}
+.customize-control-ast-sortable .customize-control-ast-selector .dashicons.ast-control-tooltip {
+    top: 18%;
+    padding: 0;
+    font-size: 20px;
+}
+.customize-control.customize-control-ast-color i.ast-control-tooltip {
+    top: 5px;
+    left: 60px;
 }
 
 .select2-container {

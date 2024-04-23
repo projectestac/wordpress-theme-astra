@@ -105,6 +105,11 @@
   top: 0;
   left: 0;
   color: var(--ast-customizer-color-6);
+  cursor: help;
+}
+
+.customize-control .ast-control-tooltip:hover {
+    color: var(--ast-customizer-color-1);
 }
 
 .customize-control.customize-control-ast-toggle-control .ast-control-tooltip {
@@ -124,6 +129,10 @@
   top: 55%;
   left: 40px;
   transform: translateY(0);
+}
+
+.customize-control-ast-selector.customize-control .ast-control-tooltip {
+    top: -3px;
 }
 
 .customize-control.customize-control-ast-toggle-control.ast-top-divider .ast-control-tooltip {
@@ -148,6 +157,22 @@
 .ast-fields-wrap .customize-control .ast-control-tooltip {
   left: 15px;
   top: 6px;
+}
+
+.customize-control .ast-sortable-subfields-wrap .ast-control-tooltip {
+    position: absolute !important;
+    top: 40%;
+    left: 0px;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+.customize-control .ast-sortable-subfields-wrap .customize-control-ast-toggle .ast-control-tooltip {
+	left: 30px;
+	top: 50%;
+}
+.ast-top-dotted-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip,
+.ast-top-section-divider .dashicons-editor-help[data-title]:hover ~ .ast-dashicons-custom-tooltip {
+    top: 24px;
 }
 
 /* Select2 WP 5.3 compatibility */
@@ -269,30 +294,77 @@ input[type="text"].select2-search__field {
 
 /* Toggle Section Control */
 .ast-section-toggle {
-  display: grid;
-  grid-template-columns: 80% 1fr 1fr;
+	display: grid;
+    grid-template-columns: 70% 20% 10%;
+    align-items: center;
+    padding: 0 12px 0 0;
+    height: 100%;
+	align-items: center;
+    align-content: center;
+	max-height: 46px;
 }
 
 .ast-section-toggle label {
-  font-size: 14px;
-  line-height: 1;
-  font-weight: 600;
+	font-size: 14px;
+    line-height: 1;
+    font-weight: 600;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
+}
+
+.ast-section-toggle > label {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: auto;
+    line-height: 50px;
 }
 
 .ast-section-toggle:not(.active) > label {
   cursor: default;
 }
 
+.customize-control.customize-control-ast-section-toggle {
+    border: 1px dashed var(--ast-customizer-color-1);
+    background: var(--ast-customizer-color-11);
+    cursor: pointer;
+    box-shadow: none !important;
+    line-height: 42px;
+    font-size: 14px;
+    display: inline-grid;
+    align-items: center;
+    height: auto;
+    color: var(--ast-customizer-color-5);
+    position: relative;
+    white-space: nowrap;
+    border-radius: 4px;
+    transition: all 0.2s;
+    padding-top: 0;
+    padding-bottom: 0;
+	margin-top: 24px;
+	margin-bottom: 9px;
+	margin-top: 24px;
+}
+.customize-control.customize-control-ast-section-toggle:hover {
+    background: var(--ast-customizer-color-9);
+    border-style: solid;
+}
 .ast-section-toggle-icon {
-  color: var(--wp-admin-theme-color);
-  cursor: pointer;
-  margin-bottom: -4px;
-  margin-right: 10px;
+    color: var(--wp-admin-theme-color);
+    cursor: pointer;
+    line-height: 20px;
+    height: 100%;
+    display: inline-flex;
+    align-items: center;
 }
 
 .ast-section-toggle-icon span {
-  font-size: 16px;
-  line-height: 16px;
+	font-size: 16px;
+	line-height: 16px;
+	width: 16px;
+	height: 16px;
 }
 
 .customize-control-ast-section-toggle {
@@ -300,7 +372,13 @@ input[type="text"].select2-search__field {
   padding-bottom: 16px;
 }
 
+li#customize-control-astra-settings-related-posts-title {
+    margin-top: 32px;
+}
+
 li[ID*="accordion-section-ast-dynamic-single-"].control-section-ast_section,
-li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section {
+li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section,
+li#accordion-section-section-search-page-title.control-section-ast_section,
+li[ID*="accordion-section-ast-sub-section-"].control-section-ast_section {
   display: none !important;
 }

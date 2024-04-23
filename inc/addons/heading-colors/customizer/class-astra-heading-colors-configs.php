@@ -67,6 +67,22 @@ if ( ! class_exists( 'Astra_Heading_Colors_Configs' ) ) {
 				),
 
 				/**
+				 * Option: Outline Button Typography Heading
+				 */
+				array(
+					'name'      => ASTRA_THEME_SETTINGS . '[secondary-button-text-typography]',
+					'default'   => astra_get_option( 'secondary-button-text-typography' ),
+					'type'      => 'control',
+					'control'   => 'ast-settings-group',
+					'title'     => __( 'Font', 'astra' ),
+					'section'   => 'section-buttons',
+					'transport' => 'postMessage',
+					'priority'  => 10,
+					'divider'   => array( 'ast_class' => 'ast-bottom-dotted-divider' ),
+					'context'   => Astra_Builder_Helper::$design_tab,
+				),
+
+				/**
 				 * Option: Button Font Family
 				 */
 				array(
@@ -79,6 +95,23 @@ if ( ! class_exists( 'Astra_Heading_Colors_Configs' ) ) {
 					'title'     => __( 'Font Family', 'astra' ),
 					'default'   => astra_get_option( 'font-family-button' ),
 					'connect'   => ASTRA_THEME_SETTINGS . '[font-weight-button]',
+					'priority'  => 1,
+					'divider'   => array( 'ast_class' => 'ast-sub-bottom-dotted-divider' ),
+				),
+
+				/**
+				 * Option: Outline Button Font Family
+				 */
+				array(
+					'name'      => 'secondary-font-family-button',
+					'type'      => 'sub-control',
+					'parent'    => ASTRA_THEME_SETTINGS . '[secondary-button-text-typography]',
+					'section'   => 'section-buttons',
+					'control'   => 'ast-font',
+					'font_type' => 'ast-font-family',
+					'title'     => __( 'Font Family', 'astra' ),
+					'default'   => astra_get_option( 'secondary-font-family-button' ),
+					'connect'   => ASTRA_THEME_SETTINGS . '[secondary-font-weight-button]',
 					'priority'  => 1,
 					'divider'   => array( 'ast_class' => 'ast-sub-bottom-dotted-divider' ),
 				),
@@ -102,6 +135,24 @@ if ( ! class_exists( 'Astra_Heading_Colors_Configs' ) ) {
 				),
 
 				/**
+				 * Option: Button Font Weight
+				 */
+				array(
+					'name'              => 'secondary-font-weight-button',
+					'type'              => 'sub-control',
+					'parent'            => ASTRA_THEME_SETTINGS . '[secondary-button-text-typography]',
+					'section'           => 'section-buttons',
+					'control'           => 'ast-font',
+					'font_type'         => 'ast-font-weight',
+					'title'             => __( 'Font Weight', 'astra' ),
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_font_weight' ),
+					'default'           => astra_get_option( 'secondary-font-weight-button' ),
+					'connect'           => 'secondary-font-family-button',
+					'priority'          => 2,
+					'divider'           => array( 'ast_class' => 'ast-sub-bottom-dotted-divider' ),
+				),
+
+				/**
 				 * Option: Button Font Size
 				 */
 
@@ -116,20 +167,70 @@ if ( ! class_exists( 'Astra_Heading_Colors_Configs' ) ) {
 					'title'             => __( 'Font Size', 'astra' ),
 					'priority'          => 3,
 					'default'           => astra_get_option( 'font-size-button' ),
-					'suffix'            => array( 'px', 'em' ),
+					'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
 					'input_attrs'       => array(
-						'px' => array(
+						'px'  => array(
 							'min'  => 0,
 							'step' => 1,
-							'max'  => 100,
+							'max'  => 200,
 						),
-						'em' => array(
+						'em'  => array(
 							'min'  => 0,
-							'step' => 1,
+							'step' => 0.01,
+							'max'  => 20,
+						),
+						'vw'  => array(
+							'min'  => 0,
+							'step' => 0.1,
+							'max'  => 25,
+						),
+						'rem' => array(
+							'min'  => 0,
+							'step' => 0.1,
 							'max'  => 20,
 						),
 					),
 				),
+
+				/**
+				 * Option: Outline Button Font Size
+				 */
+
+				 array(
+					 'name'              => 'secondary-font-size-button',
+					 'parent'            => ASTRA_THEME_SETTINGS . '[secondary-button-text-typography]',
+					 'type'              => 'sub-control',
+					 'control'           => 'ast-responsive-slider',
+					 'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+					 'section'           => 'section-buttons',
+					 'transport'         => 'postMessage',
+					 'title'             => __( 'Font Size', 'astra' ),
+					 'priority'          => 3,
+					 'default'           => astra_get_option( 'secondary-font-size-button' ),
+					 'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
+					 'input_attrs'       => array(
+						 'px'  => array(
+							 'min'  => 0,
+							 'step' => 1,
+							 'max'  => 200,
+						 ),
+						 'em'  => array(
+							 'min'  => 0,
+							 'step' => 0.01,
+							 'max'  => 20,
+						 ),
+						 'vw'  => array(
+							 'min'  => 0,
+							 'step' => 0.1,
+							 'max'  => 25,
+						 ),
+						 'rem' => array(
+							 'min'  => 0,
+							 'step' => 0.1,
+							 'max'  => 20,
+						 ),
+					 ),
+				 ),
 
 				/**
 				* Option: Button Font Extras
@@ -142,6 +243,19 @@ if ( ! class_exists( 'Astra_Heading_Colors_Configs' ) ) {
 					'section'  => 'section-buttons',
 					'priority' => 4,
 					'default'  => astra_get_option( 'font-extras-button' ),
+				),
+
+				/**
+				* Option: Outline Button Font Extras
+				*/
+				array(
+					'name'     => 'secondary-font-extras-button',
+					'type'     => 'sub-control',
+					'parent'   => ASTRA_THEME_SETTINGS . '[secondary-button-text-typography]',
+					'control'  => 'ast-font-extras',
+					'section'  => 'section-buttons',
+					'priority' => 4,
+					'default'  => astra_get_option( 'secondary-font-extras-button' ),
 				),
 			);
 

@@ -62,7 +62,29 @@ if ( ! class_exists( 'Astra_Woo_Shop_Sidebar_Configs' ) ) {
 							'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'right-sidebar', false ) : '',
 						),
 					),
+					'description'       => __( 'Sidebar will only apply when container layout is set to normal.', 'astra' ),
 					'divider'           => array( 'ast_class' => 'ast-top-section-divider' ),
+				),
+
+				/**
+				 * Option: Woocommerce Sidebar Style.
+				 */
+				array(
+					'name'       => ASTRA_THEME_SETTINGS . '[woocommerce-sidebar-style]',
+					'type'       => 'control',
+					'control'    => 'ast-selector',
+					'section'    => 'section-woo-general',
+					'default'    => astra_get_option( 'woocommerce-sidebar-style', 'default' ),
+					'priority'   => 5,
+					'title'      => __( 'Sidebar Style', 'astra' ),
+					'choices'    => array(
+						'default' => __( 'Default', 'astra' ),
+						'unboxed' => __( 'Unboxed', 'astra' ),
+						'boxed'   => __( 'Boxed', 'astra' ),
+					),
+					'responsive' => false,
+					'renderAs'   => 'text',
+					'divider'    => array( 'ast_class' => 'ast-top-divider' ),
 				),
 
 				/**
@@ -78,6 +100,7 @@ if ( ! class_exists( 'Astra_Woo_Shop_Sidebar_Configs' ) ) {
 					'settings' => array(),
 					'divider'  => array( 'ast_class' => 'ast-section-spacing ast-bottom-spacing' ),
 				),
+
 			);
 
 			return array_merge( $configurations, $_configs );

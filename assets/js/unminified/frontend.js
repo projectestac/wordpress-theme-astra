@@ -180,7 +180,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 	var menu_toggle_all 	 = document.querySelectorAll( '#masthead .main-header-menu-toggle' ),
 		main_header_masthead = document.getElementById('masthead'),
-		menu_click_listeners = {},
+		menu_click_listeners_nav = {},
 		mobileHeaderType = '',
 		body = document.body,
 		mobileHeader = '';
@@ -597,27 +597,31 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 		// Account login form popup.
 		var header_account_trigger =  document.querySelectorAll( '.ast-account-action-login' );
 
-		if ( undefined !== header_account_trigger ) {
+		if (!header_account_trigger.length) {
+			return;
+		}
 
-			var header_account__close_trigger =  document.querySelectorAll( '#ast-hb-login-close' );
-			var login_popup = document.querySelectorAll('#ast-hb-account-login-wrap');
-			if ( 0 < header_account__close_trigger.length ) {
-				for ( let index = 0; index < header_account_trigger.length; index++ ) {
+		const formWrapper = document.querySelector('#ast-hb-account-login-wrap');
 
-					header_account_trigger[ index ].onclick = function (event) {
-						event.preventDefault();
-						event.stopPropagation();
-						if ( ! login_popup[ index ].classList.contains('show')) {
-							login_popup[ index ].classList.add('show');
-						}
-					};
+		if (!formWrapper) {
+			return;
+		}
 
-					header_account__close_trigger[ index ].onclick = function (event) {
-						event.preventDefault();
-						login_popup[ index ].classList.remove('show');
-					};
-				}
-			}
+		const formCloseBtn = document.querySelector('#ast-hb-login-close');
+
+		header_account_trigger.forEach(function(_trigger) {
+			_trigger.addEventListener('click', function(e) {
+				e.preventDefault();
+
+				formWrapper.classList.add('show');
+			});
+		});
+
+		if (formCloseBtn) {
+			formCloseBtn.addEventListener('click', function(e) {
+				e.preventDefault();
+				formWrapper.classList.remove('show');
+			});
 		}
 	}
 
@@ -683,7 +687,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 	AstraToggleSetup = function () {
 
 		if( typeof astraAddon != 'undefined' && typeof astraToggleSetupPro === "function" ) {
-			astraToggleSetupPro( mobileHeaderType, body, menu_click_listeners );
+			astraToggleSetupPro( mobileHeaderType, body, menu_click_listeners_nav );
 		} else {
 			var flag = false;
 			var menuToggleAllLength;
@@ -711,8 +715,8 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 						menu_toggle_all[i].setAttribute('data-index', i);
 
-						if ( ! menu_click_listeners[i] ) {
-							menu_click_listeners[i] = menu_toggle_all[i];
+						if ( ! menu_click_listeners_nav[i] ) {
+							menu_click_listeners_nav[i] = menu_toggle_all[i];
 							menu_toggle_all[i].addEventListener('click', astraNavMenuToggle, false);
 						}
 					}
@@ -867,6 +871,22 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
             }
         }
 	}
+	var SearchInputs = document.querySelectorAll( '.search-field' );
+	SearchInputs.forEach(input => {
+		input.addEventListener('focus', function (e) {
+			var sibling = this.parentNode.parentNode.parentNode.querySelector( '.ast-search-menu-icon' );
+			if ( sibling ) {
+				astraToggleClass( sibling, 'ast-dropdown-active' );
+			}
+		});
+		input.addEventListener('blur', function (e) {
+			var sibling = this.parentNode.parentNode.parentNode.querySelector( '.ast-search-menu-icon' );
+			if ( sibling ) {
+				sibling.classList.remove( 'ast-dropdown-active' );
+				astraToggleClass( sibling, 'ast-dropdown-active' );
+			}
+		});
+	});
 
 	/* Hide Dropdown on body click*/
 	body.onclick = function( event ) {
@@ -910,20 +930,24 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			menu.className += ' nav-menu';
 		}
 
-		if ( 'off-canvas' === mobileHeaderType ) {
-			var popupClose = document.getElementById( 'menu-toggle-close' );
-			popupClose.onclick = function() {
-				if ( -1 !== containerMenu.className.indexOf( 'toggled' ) ) {
-					containerMenu.className = containerMenu.className.replace( ' toggled', '' );
-					button.setAttribute( 'aria-expanded', 'false' );
-					menu.setAttribute( 'aria-expanded', 'false' );
-				} else {
-					containerMenu.className += ' toggled';
-					button.setAttribute( 'aria-expanded', 'true' );
-					menu.setAttribute( 'aria-expanded', 'true' );
+		document.addEventListener('DOMContentLoaded', function () {
+			if ('off-canvas' === mobileHeaderType) {
+				var popupClose = document.getElementById('menu-toggle-close');
+				if (popupClose) {
+					popupClose.onclick = function () {
+						if (-1 !== containerMenu.className.indexOf('toggled')) {
+							containerMenu.className = containerMenu.className.replace(' toggled', '');
+							button.setAttribute('aria-expanded', 'false');
+							menu.setAttribute('aria-expanded', 'false');
+						} else {
+							containerMenu.className += ' toggled';
+							button.setAttribute('aria-expanded', 'true');
+							menu.setAttribute('aria-expanded', 'true');
+						}
+					};
 				}
-			};
-		}
+			}
+		});
 
 		button.onclick = function() {
 			if ( -1 !== containerMenu.className.indexOf( 'toggled' ) ) {
@@ -1152,12 +1176,16 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 	 * @since x.x.x
 	 */
 	if ( astra.is_scroll_to_id ) {
-		const links = document.querySelectorAll('a[href*="#"]:not([href="#"]):not([href="#0"]):not([href*="uagb-tab"])');
+		let hashLinks = [];
+		const links = document.querySelectorAll('a[href*="#"]:not([href="#"]):not([href="#0"]):not([href*="uagb-tab"]):not(.uagb-toc-link__trigger):not(.skip-link):not(.nav-links a):not([href*="tab-"])');
 		if (links) {
 
 			for (const link of links) {
 
-				if (link.hash !== "") {
+				if (link.href.split('#')[0] !== location.href.split('#')[0]) {
+					// Store the hash
+					hashLinks.push({hash: link.hash, url: link.href.split('#')[0]});
+				} else if (link.hash !== "") {
 					link.addEventListener("click", scrollToIDHandler);
 				}
 			}
@@ -1191,6 +1219,31 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 				}
 			}
 		}
+
+		window.addEventListener('DOMContentLoaded', (event) => {
+			for (let link of hashLinks) {
+				if (window.location.href.split('#')[0] === link.url) {
+					const siteHeader = document.querySelector('.site-header');
+					let offset = 0;
+	
+					// Check and add offset to scroll top if header is sticky.
+					const headerHeight = siteHeader.querySelectorAll('div[data-stick-support]');
+					if (headerHeight) {
+						headerHeight.forEach(single => {
+							offset += single.clientHeight;
+						});
+					}
+					
+					const scrollId = document.querySelector(link.hash);
+					if (scrollId) {
+						const scrollOffsetTop = scrollId.offsetTop - offset;
+						if (scrollOffsetTop) {
+							astraSmoothScroll(event, scrollOffsetTop);
+						}
+					}
+				}
+			}
+		});
 	}
 
 	/**
@@ -1218,4 +1271,18 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			}
 		});
 	}
+
+	/**
+	 * To remove the blank space when the store notice gets dismissed.
+	 *
+	 * @since x.x.x
+	 */
+	window.addEventListener('DOMContentLoaded', (event) => {
+		document
+			.querySelector('.woocommerce-store-notice__dismiss-link')
+			?.addEventListener('click', () =>
+				!wp?.customize && document.body.classList.remove('ast-woocommerce-store-notice-hanged')
+			);
+	});
+
 })();

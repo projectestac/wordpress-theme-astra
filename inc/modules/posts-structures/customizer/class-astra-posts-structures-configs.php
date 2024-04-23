@@ -33,7 +33,13 @@ class Astra_Posts_Structures_Configs extends Astra_Customizer_Config_Base {
 	 * @since 4.0.0
 	 */
 	public static function get_narrow_width_exculde_cpts() {
-		return apply_filters( 'astra_exculde_narrow_width_support_posttypes', array( 'product', 'download', 'course', 'lesson', 'tutor_quiz', 'tutor_assignments', 'sfwd-assignment', 'sfwd-essays', 'sfwd-transactions', 'sfwd-certificates', 'sfwd-quiz' ) );
+		$exclude_cpts = array();
+		if ( ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() ) ) {
+			return apply_filters( 'astra_exculde_narrow_width_support_posttypes', array( 'product', 'download', 'course', 'lesson', 'tutor_quiz', 'tutor_assignments', 'sfwd-assignment', 'sfwd-essays', 'sfwd-transactions', 'sfwd-certificates', 'sfwd-quiz' ) );
+		}
+
+		// Excluded some more cpts for narrow.
+		return apply_filters( 'astra_exculde_narrow_width_support_posttypes', array( 'product', 'download', 'course', 'lesson', 'tutor_quiz', 'tutor_assignments', 'sfwd-assignment', 'sfwd-essays', 'sfwd-transactions', 'sfwd-certificates', 'sfwd-quiz', 'sfwd-courses', 'sfwd-lessons', 'sfwd-topic', 'groups' ) );
 	}
 
 	/**
@@ -95,13 +101,22 @@ class Astra_Posts_Structures_Configs extends Astra_Customizer_Config_Base {
 
 				$section_title = self::astra_get_dynamic_section_title( $post_type_object, $label );
 
-				$_configs[] = array(
-					'name'     => 'section-posttype-' . $label,
-					'type'     => 'section',
-					'section'  => $parent_section,
-					'title'    => $section_title,
-					'priority' => 69,
-				);
+				if ( 'sc_product' === $label ) {
+					$_configs[] = array(
+						'name'     => 'section-posttype-' . $label,
+						'type'     => 'section',
+						'title'    => $section_title,
+						'priority' => 69,
+					);
+				} else {
+					$_configs[] = array(
+						'name'     => 'section-posttype-' . $label,
+						'type'     => 'section',
+						'section'  => $parent_section,
+						'title'    => $section_title,
+						'priority' => 69,
+					);
+				}
 
 				if ( ! in_array( $label, $ignore_archive_for_posttypes ) ) {
 					$_configs[] = array(

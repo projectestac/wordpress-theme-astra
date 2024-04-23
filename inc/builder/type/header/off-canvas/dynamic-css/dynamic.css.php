@@ -82,6 +82,20 @@ function astra_off_canvas_row_setting( $dynamic_css, $dynamic_css_filtered = '' 
 		),
 	);
 
+	if ( is_rtl() ) {
+
+		/**
+		 * Off-Canvas CSS if RTL mode is enabled.
+		 */
+		$css_output['.rtl #ast-mobile-popup-wrapper #ast-mobile-popup'] = array(
+			'pointer-events' => 'none',
+		);
+
+		$css_output['.rtl #ast-mobile-popup-wrapper #ast-mobile-popup.active'] = array(
+			'pointer-events' => 'unset',
+		);
+	}
+
 	$css_output[ $selector . ' .menu-toggle-close' ]['color'] = $off_canvas_close_color;
 
 	/* Parse CSS from array() */
@@ -155,10 +169,6 @@ function astra_off_canvas_static_css() {
 		-js-display: flex;
 		display: flex;
 		box-shadow: none;
-	}
-
-	.ast-mobile-popup-drawer .ast-mobile-popup-header .menu-toggle-close:focus {
-		outline: thin dotted;
 	}
 
 	.ast-mobile-popup-drawer.ast-mobile-popup-full-width .ast-mobile-popup-inner {
@@ -253,10 +263,10 @@ function astra_off_canvas_static_css() {
 		.ast-mobile-popup-drawer .ast-mobile-popup-inner {
 			width: 100%;
 			transform: translateX(-115%);
-			max-width: 0;
+			max-width: 90%;
 			left: 0;
 			top: 0;
-			background: transparent;
+			background: #fafafa;
 			color: #3a3a3a;
 			bottom: 0;
 			opacity: 0;
@@ -342,10 +352,10 @@ function astra_off_canvas_static_css() {
 		.ast-mobile-popup-drawer .ast-mobile-popup-inner {
 			width: 100%;
 			transform: translateX(100%);
-			max-width: 0;
+			max-width: 90%;
 			right: 0;
 			top: 0;
-			background: transparent;
+			background: #fafafa;
 			color: #3a3a3a;
 			bottom: 0;
 			opacity: 0;

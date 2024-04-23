@@ -104,13 +104,13 @@ function astra_primary_header_breakpoint_style( $dynamic_css, $dynamic_css_filte
 	}
 
 	$padding_below_breakpoint = array(
-		'#masthead .ast-mobile-header-wrap .ast-primary-header-bar, #masthead .ast-mobile-header-wrap .ast-below-header-bar' => array(
+		'.ast-header-break-point #masthead .ast-mobile-header-wrap .ast-primary-header-bar, .ast-header-break-point #masthead .ast-mobile-header-wrap .ast-below-header-bar, .ast-header-break-point #masthead .ast-mobile-header-wrap .ast-above-header-bar' => array(
 			'padding-left'  => '20px',
 			'padding-right' => '20px',
 		),
 	);
 
-	$parse_css .= astra_parse_css( $padding_below_breakpoint, '', astra_get_tablet_breakpoint() );
+	$parse_css .= astra_parse_css( $padding_below_breakpoint );
 
 	// Header Separator.
 	$header_separator = astra_get_option( 'hb-header-main-sep' );
@@ -194,7 +194,7 @@ function astra_primary_header_breakpoint_style( $dynamic_css, $dynamic_css_filte
 
 	$parent_selector = '.ast-desktop .ast-primary-header-bar.main-header-bar, .ast-header-break-point #masthead .ast-primary-header-bar.main-header-bar';
 
-	$dynamic_css .= Astra_Builder_Base_Dynamic_CSS::prepare_advanced_margin_padding_css( $_section, $parent_selector );
+	$dynamic_css .= Astra_Extended_Base_Dynamic_CSS::prepare_advanced_margin_padding_css( $_section, $parent_selector );
 
 	$dynamic_css .= Astra_Builder_Base_Dynamic_CSS::prepare_visibility_css( $_section, '.ast-primary-header-bar', 'block', 'grid' );
 

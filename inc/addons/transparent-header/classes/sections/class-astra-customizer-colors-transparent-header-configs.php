@@ -43,6 +43,26 @@ if ( ! class_exists( 'Astra_Customizer_Colors_Transparent_Header_Configs' ) ) {
 
 			$_configs = array(
 
+
+
+				/**
+				* Option: Transparent Header logo color
+				*/
+				array(
+					'name'        => ASTRA_THEME_SETTINGS . '[transparent-header-logo-color]',
+					'default'     => astra_get_option( 'transparent-header-logo-color' ),
+					'section'     => 'section-transparent-header',
+					'type'        => 'control',
+					'priority'    => 34,
+					'control'     => 'ast-color',
+					'title'       => __( 'Logo Color', 'astra' ),
+					'context'     => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+					'responsive'  => false,
+					'rgba'        => true,
+					'description' => __( 'Use it with transparent images for optimal results.', 'astra' ),
+					'divider'     => array( 'ast_class' => 'ast-section-spacing' ),
+				),
+
 				/**
 				 * Option: Header background overlay color
 				 */
@@ -58,7 +78,6 @@ if ( ! class_exists( 'Astra_Customizer_Colors_Transparent_Header_Configs' ) ) {
 					'context'    => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
 					'responsive' => true,
 					'rgba'       => true,
-					'divider'    => array( 'ast_class' => 'ast-section-spacing' ),
 				),
 
 				/**

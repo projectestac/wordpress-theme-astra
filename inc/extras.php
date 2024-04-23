@@ -51,34 +51,36 @@ if ( ! function_exists( 'astra_header_breakpoint_style' ) ) {
 	 */
 	function astra_header_breakpoint_style( $dynamic_css, $dynamic_css_filtered = '' ) {
 
+		$astra_header_width = astra_get_option( 'header-main-layout-width' );
+
+		if ( 'content' === $astra_header_width ) {
+			return $dynamic_css;
+		}
+
 		// Header Break Point.
 		$header_break_point = astra_header_break_point();
 
-		$astra_header_width = astra_get_option( 'header-main-layout-width' );
-
 		/* Width for Header */
-		if ( 'content' != $astra_header_width ) {
-			$genral_global_responsive = array(
-				'#masthead .ast-container, .ast-header-breadcrumb .ast-container' => array(
-					'max-width'     => '100%',
-					'padding-left'  => '35px',
-					'padding-right' => '35px',
-				),
-			);
-			$padding_below_breakpoint = array(
-				'#masthead .ast-container, .ast-header-breadcrumb .ast-container' => array(
-					'padding-left'  => '20px',
-					'padding-right' => '20px',
-				),
-			);
+		$genral_global_responsive = array(
+			'#masthead .ast-container, .ast-header-breadcrumb .ast-container' => array(
+				'max-width'     => '100%',
+				'padding-left'  => '35px',
+				'padding-right' => '35px',
+			),
+		);
+		$padding_below_breakpoint = array(
+			'#masthead .ast-container, .ast-header-breadcrumb .ast-container' => array(
+				'padding-left'  => '20px',
+				'padding-right' => '20px',
+			),
+		);
 
-			/* Parse CSS from array()*/
-			$dynamic_css .= astra_parse_css( $genral_global_responsive );
-			$dynamic_css .= astra_parse_css( $padding_below_breakpoint, '', $header_break_point );
+		/* Parse CSS from array()*/
+		$dynamic_css .= astra_parse_css( $genral_global_responsive );
+		$dynamic_css .= astra_parse_css( $padding_below_breakpoint, '', $header_break_point );
 
-			// trim white space for faster page loading.
-			$dynamic_css .= Astra_Enqueue_Scripts::trim_css( $dynamic_css );
-		}
+		// trim white space for faster page loading.
+		$dynamic_css .= Astra_Enqueue_Scripts::trim_css( $dynamic_css );
 
 		return $dynamic_css;
 	}
@@ -111,12 +113,12 @@ if ( ! function_exists( 'astra_404_page_layout' ) ) {
 add_filter( 'astra_page_layout', 'astra_404_page_layout', 10, 1 );
 
 /**
- * Return current content layout
+ * Return current content layout.
  */
 if ( ! function_exists( 'astra_get_content_layout' ) ) {
 
 	/**
-	 * Return current content layout
+	 * Return current content layout.
 	 *
 	 * @since 1.0.0
 	 * @return mixed content layout.
@@ -125,44 +127,147 @@ if ( ! function_exists( 'astra_get_content_layout' ) ) {
 
 		if ( is_singular() ) {
 
-			// If post meta value is empty,
-			// Then get the POST_TYPE content layout.
-			$content_layout = astra_get_option_meta( 'site-content-layout', '', true );
+			// Old meta layout migration to new layout.
+			$old_meta_content_layout = astra_get_option_meta( 'site-content-layout', '', true );
+
+			if ( $old_meta_content_layout ) {
+				$content_layout = astra_toggle_layout( 'ast-site-content-layout', 'meta', false, $old_meta_content_layout );
+			} else {
+				$content_layout = astra_get_option_meta( 'ast-site-content-layout', '', true );
+
+				// If post meta value is present, apply new layout option.
+				if ( $content_layout ) {
+					$content_layout = astra_toggle_layout( 'ast-site-content-layout', 'meta', false );
+				}
+			}
 
 			if ( empty( $content_layout ) ) {
 
-				$post_type = strval( get_post_type() );
-
-				$content_layout = astra_get_option( 'single-' . $post_type . '-content-layout' );
+				$post_type      = strval( get_post_type() );
+				$content_layout = astra_toggle_layout( 'single-' . $post_type . '-ast-content-layout', 'single', false );
 
 				if ( 'default' == $content_layout || empty( $content_layout ) ) {
 
 					// Get the GLOBAL content layout value.
 					// NOTE: Here not used `true` in the below function call.
-					$content_layout = astra_get_option( 'site-content-layout', 'full-width' );
+					$content_layout = astra_toggle_layout( 'ast-site-content-layout', 'global', false );
 				}
 			}
 		} else {
 
 			$content_layout = '';
 			$post_type      = strval( get_post_type() );
-
-			$content_layout = astra_get_option( 'archive-' . $post_type . '-content-layout' );
+			$content_layout = astra_toggle_layout( 'archive-' . $post_type . '-ast-content-layout', 'archive', false );
 
 			if ( is_search() ) {
-				$content_layout = astra_get_option( 'archive-post-content-layout' );
+				$search_content_layout = astra_get_option( 'ast-search-content-layout', 'default' );
+				$content_layout_key    = 'default' !== $search_content_layout ? 'ast-search-content-layout' : 'archive-post-ast-content-layout';
+				$content_layout        = astra_toggle_layout( $content_layout_key, 'archive', false );
 			}
 
 			if ( 'default' == $content_layout || empty( $content_layout ) ) {
 
 				// Get the GLOBAL content layout value.
 				// NOTE: Here not used `true` in the below function call.
-				$content_layout = astra_get_option( 'site-content-layout', 'full-width' );
+				$content_layout = astra_toggle_layout( 'ast-site-content-layout', 'global', false );
 			}
 		}
 
 		return apply_filters( 'astra_get_content_layout', $content_layout );
 	}
+}
+
+/**
+ * Return current content layout as per new layout selection.
+ *
+ * @since 4.2.0
+ * @param mixed $new_content_option The new content layout option.
+ * @param mixed $level The level of the layout.
+ * @param mixed $post_id The id to fetch post meta.
+ * @param mixed $old_meta The old content layout option for migration cases.
+ * @return mixed content layout.
+ */
+function astra_toggle_layout( $new_content_option, $level, $post_id = false, $old_meta = false ) {
+
+	// Dynamic layout option for meta case.
+	$dynamic_layout_option = 'meta' === $level ? astra_get_option_meta( $new_content_option, '', true ) : astra_get_option( $new_content_option, 'post' === strval( get_post_type() ) ? 'narrow-width-container' : 'default' );
+	$current_layout        = '';
+
+	// Get meta value by ID if specified.
+	if ( $post_id ) {
+		$dynamic_layout_option = get_post_meta( $post_id, $new_content_option, true );
+	}
+
+	// Meta layout migrations.
+	$meta_key              = astra_get_option_meta( 'astra-migrate-meta-layouts', '', true );
+	$migrated_user         = ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() );
+	$third_party_meta_page = astra_third_party_archive_meta( 'site-content-layout' );
+	if ( 'meta' === $level && $migrated_user ) {
+		if ( false !== $third_party_meta_page ) {
+			$old_meta = $third_party_meta_page;
+			$meta_key = astra_third_party_archive_meta( 'astra-migrate-meta-layouts' );
+		}
+		if ( $old_meta && 'set' !== $meta_key ) {
+			$dynamic_layout_option = astra_migrate_meta_layout( $old_meta );
+		}
+	}
+
+	switch ( $dynamic_layout_option ) {
+		case 'normal-width-container':
+			$current_layout = 'plain-container';
+			break;
+		case 'narrow-width-container':
+			$current_layout = 'narrow-container';
+
+			// Exclude narrow layout for third party cases.
+			if ( astra_with_third_party() && ( ! $migrated_user ) ) {
+				$current_layout = 'plain-container';
+			}
+			break;
+		case 'full-width-container':
+			$current_layout = 'page-builder';
+			break;
+		default:
+			if ( 'meta' === $level && ! $migrated_user && 'set' !== $meta_key && $old_meta ) {
+				$current_layout = $old_meta;
+			} else {
+				$current_layout = $dynamic_layout_option;
+			}
+			break;
+	}
+	return $current_layout;
+}
+
+/**
+ * Migrate old meta layout to new layout.
+ *
+ * @since 4.2.0
+ * @param mixed $meta_layout Meta Layout.
+ * @return mixed new layout.
+ */
+function astra_migrate_meta_layout( $meta_layout ) {
+	$new_layout = '';
+	switch ( $meta_layout ) {
+		case 'boxed-container':
+			$new_layout = 'normal-width-container';
+			break;
+		case 'content-boxed-container':
+			$new_layout = 'normal-width-container';
+			break;
+		case 'plain-container':
+			$new_layout = 'normal-width-container';
+			break;
+		case 'page-builder':
+			$new_layout = 'full-width-container';
+			break;
+		case 'narrow-container':
+			$new_layout = 'narrow-width-container';
+			break;
+		default:
+			$new_layout = 'default';
+			break;
+	}
+	return $new_layout;
 }
 
 /**
@@ -271,7 +376,7 @@ if ( ! function_exists( 'astra_get_prop' ) ) :
 	 * @param string $prop    Name of the property to be retrieved.
 	 * @param string $default Optional. Value that should be returned if the property is not set or empty. Defaults to null.
 	 *
-	 * @return null|string|mixed The value
+	 * @return string|mixed The value
 	 */
 	function astra_get_prop( $array, $prop, $default = null ) {
 
@@ -331,35 +436,6 @@ function astra_get_theme_author_details() {
 }
 
 /**
- * Remove Base Color > Background Color option from the customize array.
- *
- * @since 2.4.0
- * @param WP_Customize_Manager $wp_customize instance of WP_Customize_Manager.
- * @return $wp_customize
- */
-function astra_remove_controls( $wp_customize ) {
-
-	if ( defined( 'ASTRA_EXT_VER' ) && version_compare( ASTRA_EXT_VER, '2.4.0', '<=' ) ) {
-		$layout = array(
-			array(
-				'name'      => ASTRA_THEME_SETTINGS . '[site-layout-outside-bg-obj]',
-				'type'      => 'control',
-				'transport' => 'postMessage',
-				'control'   => 'ast-hidden',
-				'section'   => 'section-colors-body',
-				'priority'  => 25,
-			),
-		);
-
-		$wp_customize = array_merge( $wp_customize, $layout );
-	}
-
-	return $wp_customize;
-}
-
-add_filter( 'astra_customizer_configurations', 'astra_remove_controls', 99 );
-
-/**
  * Add dropdown icon if menu item has children.
  *
  * @since 3.3.0
@@ -414,10 +490,40 @@ function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 		}
 	}
 
-	if ( $load_svg_menu_icons ) {
+	if ( $load_svg_menu_icons || ( defined( 'ASTRA_EXT_VER' ) && ! Astra_Ext_Extension::is_active( 'nav-menu' ) ) ) {
 		// Assign icons to only those menu which are registered by Astra.
 		$icon = Astra_Icons::get_icons( 'arrow' );
 	}
+
+	// Dropdown svg arrow for submenu for non Astra registered menu's
+	$is_nav_menu_extension_inactive = defined( 'ASTRA_EXT_VER' ) && ! Astra_Ext_Extension::is_active( 'nav-menu' );
+
+	$special_menu_ids = array(
+		'ast-hf-menu-3',
+		'ast-hf-menu-4',
+		'ast-hf-menu-5',
+		'ast-hf-menu-6',
+		'ast-hf-menu-7',
+		'ast-hf-menu-8',
+		'ast-hf-menu-9',
+		'ast-hf-menu-10',
+		'ast-hf-menu-3-sticky',
+		'ast-hf-menu-4-sticky',
+		'ast-hf-menu-5-sticky',
+		'ast-hf-menu-6-sticky',
+		'ast-hf-menu-7-sticky',
+		'ast-hf-menu-8-sticky',
+		'ast-hf-menu-9-sticky',
+		'ast-hf-menu-10-sticky',
+		'ast-hf-account-menu',
+	);
+	
+	$is_special_menu = in_array( $args->menu_id, $special_menu_ids );
+	
+	if ( $is_nav_menu_extension_inactive || $is_special_menu ) {
+		$icon = Astra_Icons::get_icons( 'arrow' );
+	}   
+
 	$custom_tabindex  = true === Astra_Builder_Helper::$is_header_footer_builder_active ? 'tabindex="0"' : '';
 	$astra_arrow_icon = '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle ast-header-navigation-arrow" ' . $custom_tabindex . ' aria-expanded="false" aria-label="' . esc_attr__( 'Menu Toggle', 'astra' ) . '" >' . $icon . '</span>';
 
@@ -642,8 +748,9 @@ function astra_load_preload_local_fonts( $url, $format = 'woff2' ) {
  * @since 3.6.0
  */
 function astra_get_transparent_header_default_value() {
-	$astra_settings                                      = get_option( ASTRA_THEME_SETTINGS );
-	$astra_settings['transparent-header-default-border'] = isset( $astra_settings['transparent-header-default-border'] ) ? false : true;
+	$astra_settings                                      = get_option( ASTRA_THEME_SETTINGS, array() );
+	$astra_settings['transparent-header-default-border'] = isset( $astra_settings['transparent-header-default-border'] ) ? $astra_settings['transparent-header-default-border'] : true;
+
 	return apply_filters( 'astra_transparent_header_default_border', $astra_settings['transparent-header-default-border'] );
 }
 
@@ -660,15 +767,27 @@ function astra_has_gcp_typo_preset_compatibility() {
 }
 
 /**
- * Check whether user is exising or new to apply the updated default values for button padding & support GB button paddings with global button padding options.
+ * Check whether user is existing or new to apply the updated default values for button padding & support GB button paddings with global button padding options.
  *
  * @since 3.6.3
  * @return string
  */
 function astra_button_default_padding_updated() {
-	$astra_settings                                = get_option( ASTRA_THEME_SETTINGS );
-	$astra_settings['btn-default-padding-updated'] = isset( $astra_settings['btn-default-padding-updated'] ) ? $astra_settings['btn-default-padding-updated'] : true;
-	return apply_filters( 'astra_update_button_padding_defaults', $astra_settings['btn-default-padding-updated'] );
+	$astra_settings  = get_option( ASTRA_THEME_SETTINGS, array() );
+	$padding_updated = isset( $astra_settings['btn-default-padding-updated'] ) ? $astra_settings['btn-default-padding-updated'] : true;
+	return apply_filters( 'astra_update_button_padding_defaults', $padding_updated );
+}
+
+/**
+ * Check whether user is existing or new to apply the updated default values for secondary button padding.
+ *
+ * @since 4.5.2
+ * @return string
+ */
+function astra_scndry_btn_default_padding() {
+	$astra_settings  = get_option( ASTRA_THEME_SETTINGS, array() );
+	$padding_updated = isset( $astra_settings['scndry-btn-default-padding'] ) ? $astra_settings['scndry-btn-default-padding'] : true;
+	return apply_filters( 'astra_update_secondary_button_padding_defaults', $padding_updated );
 }
 
 /**
@@ -698,6 +817,17 @@ function astra_can_remove_elementor_toc_margin_space() {
 }
 
 /**
+ * Check whether user is exising or new to override the hr tag styling for elementor
+ *
+ * @since 4.3.0
+ * @return boolean
+ */
+function astra_can_add_styling_for_hr() {
+	$astra_settings                       = get_option( ASTRA_THEME_SETTINGS );
+	$astra_settings['add-styling-for-hr'] = isset( $astra_settings['add-styling-for-hr'] ) ? false : true;
+	return apply_filters( 'astra_highlight_elementor_hr_tag', $astra_settings['add-styling-for-hr'] );
+}
+/**
  * This will check if user is new and apply global color format. This is to manage backward compatibility for colors.
  *
  * @since 3.7.0
@@ -707,43 +837,6 @@ function astra_has_global_color_format_support() {
 	$astra_settings                                = get_option( ASTRA_THEME_SETTINGS );
 	$astra_settings['support-global-color-format'] = isset( $astra_settings['support-global-color-format'] ) ? false : true;
 	return apply_filters( 'astra_apply_global_color_format_support', $astra_settings['support-global-color-format'] );
-}
-
-/**
- * Check whether widget specific config, dynamic CSS, preview JS needs to remove or not. Following cases considered while implementing this.
- *
- * 1. Is user is from old Astra setup.
- * 2. Check if user is new but on lesser WordPress 5.8 versions.
- * 3. User is new with block widget editor.
- *
- * @since 3.6.8
- * @return boolean
- */
-function astra_remove_widget_design_options() {
-	$astra_settings               = get_option( ASTRA_THEME_SETTINGS );
-	$remove_widget_design_options = isset( $astra_settings['remove-widget-design-options'] ) ? false : true;
-
-	// True -> Hide widget sections, False -> Display widget sections.
-	$is_widget_design_sections_hidden = true;
-
-	if ( ! $remove_widget_design_options ) {
-		// For old users we will show widget design options by anyways.
-		return apply_filters( 'astra_remove_widget_design_options', false );
-	}
-
-	// Considering the user is new now.
-	if ( isset( $astra_settings['remove-widget-design-options'] ) && $astra_settings['remove-widget-design-options'] ) {
-		// User was on WP-5.8 lesser version previously and he may update their WordPress to 5.8 in future. So we display the options in this case.
-		$is_widget_design_sections_hidden = false;
-	} elseif ( astra_has_widgets_block_editor() ) {
-		// User is new & having block widgets active. So we will hide those options.
-		$is_widget_design_sections_hidden = true;
-	} else {
-		// Setting up flag because user is on lesser WP versions and may update WP to 5.8.
-		astra_update_option( 'remove-widget-design-options', true );
-	}
-
-	return apply_filters( 'astra_remove_widget_design_options', $is_widget_design_sections_hidden );
 }
 
 /**
@@ -870,7 +963,7 @@ function astra_search_static_css() {
 	.ast-search-menu-icon .search-field {
 		border: none;
 		background-color: transparent;
-		transition: width .2s;
+		transition: all .3s;
 		border-radius: inherit;
 		color: inherit;
 		font-size: inherit;
@@ -889,7 +982,7 @@ function astra_search_static_css() {
 		opacity: 1;
 		position: relative;
 	}
-	.ast-search-menu-icon.ast-dropdown-active .search-field {
+	.ast-search-menu-icon.ast-dropdown-active .search-field, .ast-dropdown-active.ast-search-menu-icon.slide-search input.search-field {
 		width: 235px;
 	}
 	.ast-header-search .ast-search-menu-icon.slide-search .search-form, .ast-header-search .ast-search-menu-icon.ast-inline-search .search-form {
@@ -904,16 +997,16 @@ function astra_search_static_css() {
 			width : 100%;
 			padding : 0.60em;
 			padding-left : 5.5em;
+			transition: all 0.2s;
 		}
 		.site-header-section-left .ast-search-menu-icon.slide-search .search-form {
-			padding-right: 3em;
+			padding-right: 2em;
 			padding-left: unset;
 			right: -1em;
 			left: unset;
 		}
 		.site-header-section-left .ast-search-menu-icon.slide-search .search-form .search-field {
 			margin-left: unset;
-			margin-right: 10px;
 		}
 		.ast-search-menu-icon.slide-search .search-form {
 			-webkit-backface-visibility: visible;
@@ -933,16 +1026,16 @@ function astra_search_static_css() {
 			width : 100%;
 			padding : 0.60em;
 			padding-right : 5.5em;
+			transition: all 0.2s;
 		}
 		.site-header-section-left .ast-search-menu-icon.slide-search .search-form {
-			padding-left: 3em;
+			padding-left: 2em;
 			padding-right: unset;
 			left: -1em;
 			right: unset;
 		}
 		.site-header-section-left .ast-search-menu-icon.slide-search .search-form .search-field {
 			margin-right: unset;
-			margin-left: 10px;
 		}
 		.ast-search-menu-icon.slide-search .search-form {
 			-webkit-backface-visibility: visible;
@@ -985,7 +1078,9 @@ function astra_get_font_extras( $config, $setting, $unit = false ) {
 	$css = isset( $config[ $setting ] ) ? $config[ $setting ] : '';
 
 	if ( $unit && $css ) {
-		$css .= isset( $config[ $unit ] ) ? $config[ $unit ] : '';
+		$unit_val = isset( $config[ $unit ] ) ? $config[ $unit ] : '';
+		$unit_val = 'line-height-unit' === $unit ? apply_filters( 'astra_font_line_height_unit', $unit_val ) : $unit_val;
+		$css     .= $unit_val;
 	}
 
 	return $css;
@@ -1027,4 +1122,324 @@ function astra_get_font_array_css( $font_family, $font_weight, $font_size, $font
 		'letter-spacing'  => astra_get_font_extras( $font_extras_ast_option, 'letter-spacing', 'letter-spacing-unit' ),
 		'text-decoration' => astra_get_font_extras( $font_extras_ast_option, 'text-decoration' ),
 	);
+}
+
+/**
+ * Return the array of site's available image size.
+ *
+ * @param boolean $add_custom Add custom image size.
+ * @since 4.4.0
+ * @return array
+ */
+function astra_get_site_image_sizes( $add_custom = false ) {
+	$image_sizes = array(
+		'thumbnail'    => __( 'Thumbnail', 'astra' ),
+		'medium'       => __( 'Medium', 'astra' ),
+		'medium_large' => __( 'Medium Large', 'astra' ),
+		'large'        => __( 'Large', 'astra' ),
+		'full'         => __( 'Full Size', 'astra' ),
+	);
+
+	// Gets the available intermediate image size names on site.
+	$all_sizes = get_intermediate_image_sizes();  // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.get_intermediate_image_sizes_get_intermediate_image_sizes -- Required for image sizes to work.
+
+
+	$refactored_sizes = array(
+		'full' => __( 'Full Size', 'astra' ),
+	);
+
+	foreach ( $all_sizes as $size ) {
+		if ( isset( $image_sizes[ $size ] ) ) {
+			$refactored_sizes[ $size ] = $image_sizes[ $size ];
+		} else {
+			$refactored_sizes[ $size ] = $size;
+		}
+	}
+
+	/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+	if ( $add_custom && defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) {
+		/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$refactored_sizes['custom'] = __( 'Custom', 'astra' );
+	}
+
+	return $refactored_sizes;
+}
+
+/**
+ * Return the aspect-ratio for dynamic image.
+ *
+ * @param string $aspect_ratio_type Aspect ratio type.
+ * @param string $predefined_scale Predefined scale.
+ * @param string $custom_scale_width Custom scale width.
+ * @param string $custom_scale_height Custom scale height.
+ *
+ * @since 4.4.0
+ * @return string
+ */
+function astra_get_dynamic_image_aspect_ratio( $aspect_ratio_type, $predefined_scale, $custom_scale_width, $custom_scale_height ) {
+	$aspect_ratio_css = '';
+	if ( 'default' !== $aspect_ratio_type ) {
+		if ( 'custom' === $aspect_ratio_type ) {
+			$aspect_ratio_css = absint( $custom_scale_width ) . '/' . absint( $custom_scale_height );
+		} else {
+			$aspect_ratio_css = $predefined_scale;
+		}
+	}
+	return $aspect_ratio_css;
+}
+
+/**
+ * Getting site active language & compatible with other plugins.
+ *
+ * @since 4.4.0
+ * @return string
+ */
+function astra_get_current_language_slug() {
+	$lang = '';
+	if ( function_exists( 'pll_current_language' ) ) {
+		$lang = pll_current_language();
+	}
+	return apply_filters( 'astra_addon_site_current_language', $lang );
+}
+
+/**
+ * Function which will return the supported post types from core.
+ *
+ * Further processing includes:
+ * 1. Dynamic customizer
+ * 2. Live Search
+ *
+ * @since 4.4.0
+ * @return array
+ */
+function astra_get_queried_post_types() {
+	$queried_post_types = array_keys(
+		get_post_types(
+			apply_filters(
+				'astra_dynamic_get_post_types_query_args',
+				array(
+					'public'   => true,
+					'_builtin' => false,
+				)
+			)
+		)
+	);
+
+	$queried_post_types   = array_diff(
+		$queried_post_types,
+		array(
+			'astra-advanced-hook',
+			'astra_adv_header',
+			'elementor_library',
+			'brizy_template',
+			'sc_collection',
+
+			'course',
+			'lesson',
+			'llms_membership',
+
+			'tutor_quiz',
+			'tutor_assignments',
+
+			'testimonial',
+			'frm_display',
+			'mec_esb',
+			'mec-events',
+
+			'sfwd-assignment',
+			'sfwd-essays',
+			'sfwd-transactions',
+			'sfwd-certificates',
+			'sfwd-quiz',
+			'e-landing-page',
+		)
+	);
+	$queried_post_types[] = 'post';
+	$queried_post_types[] = 'page';
+
+	return $queried_post_types;
+}
+
+/**
+ * Get Global Color Palette's presets
+ *
+ * @return array color presets array.
+ * @since 4.5.0
+ */
+function astra_get_palette_presets() {
+	return array(
+		'preset_1'  => array(
+			'#0067FF',
+			'#005EE9',
+			'#0F172A',
+			'#364151',
+			'#E7F6FF',
+			'#FFFFFF',
+			'#D1DAE5',
+			'#070614',
+			'#222222',
+		),
+		'preset_2'  => array(
+			'#6528F7',
+			'#5511F8',
+			'#0F172A',
+			'#454F5E',
+			'#F2F0FE',
+			'#FFFFFF',
+			'#D8D8F5',
+			'#0D0614',
+			'#222222',
+		),
+		'preset_3'  => array(
+			'#DD183B',
+			'#CC1939',
+			'#0F172A',
+			'#3A3A3A',
+			'#FFEDE6',
+			'#FFFFFF',
+			'#FFD1BF',
+			'#140609',
+			'#222222',
+		),
+		'preset_4'  => array(
+			'#54B435',
+			'#379237',
+			'#0F172A',
+			'#2F3B40',
+			'#EDFBE2',
+			'#FFFFFF',
+			'#D5EAD8',
+			'#0C1406',
+			'#222222',
+		),
+		'preset_5'  => array(
+			'#DCA54A',
+			'#D09A40',
+			'#0F172A',
+			'#4A4A4A',
+			'#FAF5E5',
+			'#FFFFFF',
+			'#F0E6C5',
+			'#141004',
+			'#222222',
+		),
+		'preset_6'  => array(
+			'#FB5FAB',
+			'#EA559D',
+			'#0F172A',
+			'#454F5E',
+			'#FCEEF5',
+			'#FFFFFF',
+			'#FAD8E9',
+			'#140610',
+			'#222222',
+		),
+		'preset_7'  => array(
+			'#1B9C85',
+			'#178E79',
+			'#0F172A',
+			'#454F5E',
+			'#EDF6EE',
+			'#FFFFFF',
+			'#D4F3D7',
+			'#06140C',
+			'#222222',
+		),
+		'preset_8'  => array(
+			'#FD9800',
+			'#E98C00',
+			'#0F172A',
+			'#454F5E',
+			'#FEF9E1',
+			'#FFFFFF',
+			'#F9F0C8',
+			'#141006',
+			'#222222',
+		),
+		'preset_9'  => array(
+			'#FF6210',
+			'#F15808',
+			'#1C0D0A',
+			'#353535',
+			'#FEF1E4',
+			'#FFFFFF',
+			'#E5D7D1',
+			'#140B06',
+			'#222222',
+		),
+		'preset_10' => array(
+			'#737880',
+			'#65696F',
+			'#151616',
+			'#393C40',
+			'#F6F6F6',
+			'#FFFFFF',
+			'#F1F0F0',
+			'#232529',
+			'#222222',
+		),
+	);
+}
+
+/**
+ * Get Astra blog layout design.
+ * Search / Blog.
+ *
+ * @return string $blog_layout.
+ * @since 4.6.0
+ */
+function astra_get_blog_layout() {
+	return ( is_search() && '' !== astra_get_option( 'ast-search-results-style' ) ) ? astra_get_option( 'ast-search-results-style' ) : astra_get_option( 'blog-layout' );
+}
+
+/**
+ * Get Astra blog posts per page count.
+ * Search / Blog.
+ *
+ * @return int $blog_layout.
+ * @since 4.6.0
+ */
+function astra_get_blog_posts_per_page() {
+	return ( is_search() && astra_get_option( 'ast-search-results-per-page' ) ) ? astra_get_option( 'ast-search-results-per-page' ) : astra_get_option( 'blog-post-per-page' );
+}
+
+/**
+ * Get the remote WP-Astra docs data.
+ *
+ * @since 4.6.0
+ */
+function astra_remote_docs_data() {
+	$astra_docs_instance = astra_docs_loader_instance( 'https://wpastra.com/wp-json/powerful-docs/v1/get-docs', 'astra-docs' );
+	return json_decode( $astra_docs_instance->get_remote_data() );
+}
+
+/**
+ * Post types for live search.
+ *
+ * @since 4.4.0
+ */
+function astra_customizer_live_search_posttypes() {
+	$supported_post_types = array();
+	if ( is_customize_preview() ) {
+		$supported_post_types = astra_get_queried_post_types();
+	}
+	return apply_filters( 'astra_live_search_posttypes', $supported_post_types );
+}
+
+/**
+ * Get formatted live search post types.
+ *
+ * @since 4.4.0
+ * @return array
+ */
+function astra_customizer_search_post_types_choices() {
+	$all_post_types    = astra_customizer_live_search_posttypes();
+	$post_type_choices = array();
+	foreach ( $all_post_types as $post_type ) {
+		$post_type_object = get_post_type_object( $post_type );
+		/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$post_type_choices[ $post_type ] = ! empty( $post_type_object->labels->name ) ? $post_type_object->labels->name : $post_type;
+		/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+	}
+	return $post_type_choices;
 }

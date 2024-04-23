@@ -20,7 +20,7 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 		/**
 		 * Member Variable
 		 *
-		 * @var instance
+		 * @var mixed instance
 		 */
 		private static $instance = null;
 
@@ -30,7 +30,9 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 		 */
 		public static function get_instance() {
 
+			/** @psalm-suppress RedundantConditionGivenDocblockType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			if ( is_null( self::$instance ) ) {
+				/** @psalm-suppress RedundantConditionGivenDocblockType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 				self::$instance = new self();
 			}
 
@@ -44,87 +46,6 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 
 			add_filter( 'astra_dynamic_theme_css', array( $this, 'footer_dynamic_css' ) );
 			add_filter( 'astra_dynamic_theme_css', array( $this, 'mobile_header_logo_css' ) );
-		}
-
-		/**
-		 * Prepare Advanced Margin / Padding Dynamic CSS.
-		 *
-		 * @param string $section_id section id.
-		 * @param string $selector selector.
-		 * @return string
-		 */
-		public static function prepare_advanced_margin_padding_css( $section_id, $selector ) {
-
-			if ( isset( $section_id ) && isset( $selector ) ) {
-
-				$padding = astra_get_option( $section_id . '-padding' );
-				$margin  = astra_get_option( $section_id . '-margin' );
-
-				// Desktop CSS.
-				$css_output_desktop = array(
-
-					$selector => array(
-
-						// Padding CSS.
-						'padding-top'    => astra_responsive_spacing( $padding, 'top', 'desktop' ),
-						'padding-bottom' => astra_responsive_spacing( $padding, 'bottom', 'desktop' ),
-						'padding-left'   => astra_responsive_spacing( $padding, 'left', 'desktop' ),
-						'padding-right'  => astra_responsive_spacing( $padding, 'right', 'desktop' ),
-
-						// Margin CSS.
-						'margin-top'     => astra_responsive_spacing( $margin, 'top', 'desktop' ),
-						'margin-bottom'  => astra_responsive_spacing( $margin, 'bottom', 'desktop' ),
-						'margin-left'    => astra_responsive_spacing( $margin, 'left', 'desktop' ),
-						'margin-right'   => astra_responsive_spacing( $margin, 'right', 'desktop' ),
-					),
-				);
-
-				// Tablet CSS.
-				$css_output_tablet = array(
-
-					$selector => array(
-
-						// Padding CSS.
-						'padding-top'    => astra_responsive_spacing( $padding, 'top', 'tablet' ),
-						'padding-bottom' => astra_responsive_spacing( $padding, 'bottom', 'tablet' ),
-						'padding-left'   => astra_responsive_spacing( $padding, 'left', 'tablet' ),
-						'padding-right'  => astra_responsive_spacing( $padding, 'right', 'tablet' ),
-
-						// Margin CSS.
-						'margin-top'     => astra_responsive_spacing( $margin, 'top', 'tablet' ),
-						'margin-bottom'  => astra_responsive_spacing( $margin, 'bottom', 'tablet' ),
-						'margin-left'    => astra_responsive_spacing( $margin, 'left', 'tablet' ),
-						'margin-right'   => astra_responsive_spacing( $margin, 'right', 'tablet' ),
-					),
-				);
-
-				// Mobile CSS.
-				$css_output_mobile = array(
-
-					$selector => array(
-
-						// Padding CSS.
-						'padding-top'    => astra_responsive_spacing( $padding, 'top', 'mobile' ),
-						'padding-bottom' => astra_responsive_spacing( $padding, 'bottom', 'mobile' ),
-						'padding-left'   => astra_responsive_spacing( $padding, 'left', 'mobile' ),
-						'padding-right'  => astra_responsive_spacing( $padding, 'right', 'mobile' ),
-
-						// Margin CSS.
-						'margin-top'     => astra_responsive_spacing( $margin, 'top', 'mobile' ),
-						'margin-bottom'  => astra_responsive_spacing( $margin, 'bottom', 'mobile' ),
-						'margin-left'    => astra_responsive_spacing( $margin, 'left', 'mobile' ),
-						'margin-right'   => astra_responsive_spacing( $margin, 'right', 'mobile' ),
-					),
-				);
-
-				$css_output  = astra_parse_css( $css_output_desktop );
-				$css_output .= astra_parse_css( $css_output_tablet, '', astra_get_tablet_breakpoint() );
-				$css_output .= astra_parse_css( $css_output_mobile, '', astra_get_mobile_breakpoint() );
-
-				return $css_output;
-			}
-
-			return '';
 		}
 
 		/**

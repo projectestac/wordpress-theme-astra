@@ -209,6 +209,18 @@ class Astra_Posts_Structure_Loader {
 			$archive_title_font_weight = astra_get_option( $title_section . '-title-font-weight' );
 			Astra_Fonts::add_font( $archive_title_font_family, $archive_title_font_weight );
 		}
+
+		foreach ( self::get_special_page_types() as $index => $special_type ) {
+			$title_section = 'section-' . $special_type . '-page-title';
+
+			$instance_text_font_family = astra_get_option( $title_section . '-text-font-family' );
+			$instance_text_font_weight = astra_get_option( $title_section . '-text-font-weight' );
+			Astra_Fonts::add_font( $instance_text_font_family, $instance_text_font_weight );
+
+			$instance_title_font_family = astra_get_option( $title_section . '-title-font-family' );
+			$instance_title_font_weight = astra_get_option( $title_section . '-title-font-weight' );
+			Astra_Fonts::add_font( $instance_title_font_family, $instance_title_font_weight );
+		}
 	}
 
 	/**
@@ -227,6 +239,7 @@ class Astra_Posts_Structure_Loader {
 		require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'customizer/class-astra-posts-structures-configs.php';
 		require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'customizer/class-astra-posts-single-structures-configs.php';
 		require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'customizer/class-astra-posts-archive-structures-configs.php';
+		require_once ASTRA_THEME_POST_STRUCTURE_DIR . 'customizer/class-astra-posts-special-archive-structures-configs.php';
 		// @codingStandardsIgnoreEnd WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 	}
 
@@ -238,53 +251,24 @@ class Astra_Posts_Structure_Loader {
 	 */
 	public static function get_supported_post_types() {
 		if ( empty( self::$supported_post_types ) || is_customize_preview() ) {
-			$queried_post_types = array_keys(
-				get_post_types(
-					apply_filters(
-						'astra_dynamic_get_post_types_query_args',
-						array(
-							'public'   => true,
-							'_builtin' => false,
-						)
-					)
-				)
-			);
-
-			$queried_post_types   = array_diff(
-				$queried_post_types,
-				array(
-					'astra-advanced-hook',
-					'astra_adv_header',
-					'elementor_library',
-					'brizy_template',
-
-					'course',
-					'lesson',
-					'llms_membership',
-
-					'tutor_quiz',
-					'tutor_assignments',
-
-					'testimonial',
-					'frm_display',
-					'mec_esb',
-					'mec-events',
-
-					'sfwd-assignment',
-					'sfwd-essays',
-					'sfwd-transactions',
-					'sfwd-certificates',
-					'sfwd-quiz',
-					'e-landing-page',
-				)
-			);
-			$queried_post_types[] = 'post';
-			$queried_post_types[] = 'page';
-
-			self::$supported_post_types = $queried_post_types;
+			self::$supported_post_types = astra_get_queried_post_types();
 		}
 
 		return apply_filters( 'astra_dynamic_post_structure_posttypes', self::$supported_post_types );
+	}
+
+	/**
+	 * Get special pages query.
+	 *
+	 * @since 4.6.0
+	 * @return array $special_pages
+	 */
+	public static function get_special_page_types() {
+		$special_pages = array(
+			'search',
+		);
+
+		return apply_filters( 'astra_dynamic_special_pages', $special_pages );
 	}
 
 	/**
@@ -309,6 +293,7 @@ class Astra_Posts_Structure_Loader {
 			'AstraPostStrcturesData',
 			array(
 				'post_types'           => self::get_supported_post_types(),
+				'special_pages'        => self::get_special_page_types(),
 				'tablet_break_point'   => astra_get_tablet_breakpoint(),
 				'mobile_break_point'   => astra_get_mobile_breakpoint(),
 				'enabled_related_post' => astra_get_option( 'enable-related-posts', false ),

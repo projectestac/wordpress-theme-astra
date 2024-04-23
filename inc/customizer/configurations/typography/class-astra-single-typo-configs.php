@@ -49,7 +49,7 @@ if ( ! class_exists( 'Astra_Single_Typo_Configs' ) ) {
 						'renderAs' => 'list',
 						'choices'  => array(
 							'one'   => array(
-								'title' => __( 'Author info', 'astra' ),
+								'title' => __( 'Author Box with Social Share', 'astra' ),
 							),
 							'two'   => array(
 								'title' => __( 'Auto load previous posts', 'astra' ),
@@ -77,7 +77,7 @@ if ( ! class_exists( 'Astra_Single_Typo_Configs' ) ) {
 						'default'  => '',
 						'priority' => 999,
 						'context'  => array(),
-						'title'    => __( 'Extensive range of tools to help blog pages stand out', 'astra' ),
+						'title'    => __( 'Extensive range of tools to help blog pages stand out.', 'astra' ),
 						'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 					),
 				);

@@ -28,7 +28,8 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 	 */
 	function astra_default_strings( $key, $echo = true ) {
 
-		$defaults = apply_filters(
+		$post_comment_dynamic_string = ( true === Astra_Dynamic_CSS::astra_core_form_btns_styling() ) ? __( 'Post Comment', 'astra' ) : __( 'Post Comment &raquo;', 'astra' );
+		$defaults                    = apply_filters(
 			'astra_default_strings',
 			array(
 
@@ -42,9 +43,9 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 				'string-search-nothing-found'            => __( 'Nothing Found', 'astra' ),
 				'string-search-nothing-found-message'    => __( 'Sorry, but nothing matched your search terms. Please try again with some different keywords.', 'astra' ),
 				'string-full-width-search-message'       => __( 'Start typing and press enter to search', 'astra' ),
-				'string-full-width-search-placeholder'   => __( 'Search &hellip;', 'astra' ),
-				'string-header-cover-search-placeholder' => __( 'Search &hellip;', 'astra' ),
-				'string-search-input-placeholder'        => __( 'Search &hellip;', 'astra' ),
+				'string-full-width-search-placeholder'   => __( 'Search...', 'astra' ),
+				'string-header-cover-search-placeholder' => __( 'Search...', 'astra' ),
+				'string-search-input-placeholder'        => __( 'Search...', 'astra' ),
 
 				// Comment Template Strings.
 				'string-comment-reply-link'              => __( 'Reply', 'astra' ),
@@ -52,7 +53,7 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 				'string-comment-awaiting-moderation'     => __( 'Your comment is awaiting moderation.', 'astra' ),
 				'string-comment-title-reply'             => __( 'Leave a Comment', 'astra' ),
 				'string-comment-cancel-reply-link'       => __( 'Cancel Reply', 'astra' ),
-				'string-comment-label-submit'            => __( 'Post Comment &raquo;', 'astra' ),
+				'string-comment-label-submit'            => $post_comment_dynamic_string,
 				'string-comment-label-message'           => __( 'Type here..', 'astra' ),
 				'string-comment-label-name'              => __( 'Name*', 'astra' ),
 				'string-comment-label-email'             => __( 'Email*', 'astra' ),
@@ -68,8 +69,10 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 				'string-blog-meta-leave-a-comment'       => __( 'Leave a Comment', 'astra' ),
 				'string-blog-meta-one-comment'           => __( '1 Comment', 'astra' ),
 				'string-blog-meta-multiple-comment'      => __( '% Comments', 'astra' ),
-				'string-blog-navigation-next'            => __( 'Next Page', 'astra' ) . ' <span class="ast-right-arrow">&rarr;</span>',
-				'string-blog-navigation-previous'        => '<span class="ast-left-arrow">&larr;</span> ' . __( 'Previous Page', 'astra' ),
+				'string-blog-navigation-next'            => __( 'Next', 'astra' ) . ' <span class="ast-right-arrow">&rarr;</span>',
+				'string-blog-navigation-previous'        => '<span class="ast-left-arrow">&larr;</span> ' . __( 'Previous', 'astra' ),
+				'string-next-text'                       => __( 'Next', 'astra' ),
+				'string-previous-text'                   => __( 'Previous', 'astra' ),
 
 				// Single Post Default Strings.
 				'string-single-page-links-before'        => __( 'Pages:', 'astra' ),
@@ -85,8 +88,8 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 		);
 
 		if ( is_rtl() ) {
-			$defaults['string-blog-navigation-next']     = __( 'Next Page', 'astra' ) . ' <span class="ast-left-arrow">&larr;</span>';
-			$defaults['string-blog-navigation-previous'] = '<span class="ast-right-arrow">&rarr;</span> ' . __( 'Previous Page', 'astra' );
+			$defaults['string-blog-navigation-next']     = __( 'Next', 'astra' ) . ' <span class="ast-left-arrow">&larr;</span>';
+			$defaults['string-blog-navigation-previous'] = '<span class="ast-right-arrow">&rarr;</span> ' . __( 'Previous', 'astra' );
 
 			/* translators: 1: Post type label */
 			$defaults['string-single-navigation-next'] = __( 'Next %s', 'astra' ) . ' <span class="ast-left-arrow">&larr;</span>';

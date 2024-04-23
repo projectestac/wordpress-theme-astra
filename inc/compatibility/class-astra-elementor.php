@@ -9,6 +9,7 @@ namespace Elementor;// phpcs:ignore PHPCompatibility.Keywords.NewKeywords.t_name
 
 // @codingStandardsIgnoreStart PHPCompatibility.Keywords.NewKeywords.t_useFound
 use Astra_Global_Palette;
+use Astra_Dynamic_CSS;
 use Elementor\Core\Settings\Manager as SettingsManager;
 // @codingStandardsIgnoreEnd PHPCompatibility.Keywords.NewKeywords.t_useFound
 
@@ -76,19 +77,22 @@ if ( ! class_exists( 'Astra_Elementor' ) ) :
 
 
 		/**
-		 * Hide elementor title.
+		 * Astra post layout 2 disable compatibility.
 		 *
 		 * @param array $classes Array of elementor edit mode check.
 		 *
 		 * @since 4.1.0
 		 */
 		function astra_entry_header_class_custom( $classes ) {
-			$post_id = astra_get_post_id(); 
-			/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-			$edit_mode = get_post_meta( $post_id, '_elementor_edit_mode', true ); 
+			$edit_mode         = get_post_meta( astra_get_post_id(), '_elementor_edit_mode', true );
+			$astra_layout_type = astra_get_option( 'ast-dynamic-single-' . get_post_type() . '-layout', 'layout-1' );
 
-			if ( $edit_mode && $edit_mode === 'builder' ) { 
+			if ( ( $edit_mode && $edit_mode === 'builder' ) || ( $edit_mode === 'builder' && $astra_layout_type === 'layout-2' ) ) {
 				$classes[] = 'ast-header-without-markup';
+				/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+				if ( $astra_layout_type === 'layout-2' && in_array( 'ast-header-without-markup', $classes ) ) {
+					unset( $classes[ array_search( 'ast-header-without-markup', $classes ) ] );
+				}
 			}
 
 			return $classes;
@@ -145,6 +149,13 @@ if ( ! class_exists( 'Astra_Elementor' ) ) :
 					);
 				}
 
+				if ( astra_can_add_styling_for_hr() ) {
+					$elementor_base_css['body .elementor hr'] = array(
+						'background-color' => '#ccc',
+						'margin'           => '0',
+					);
+				}
+
 				// Load base static CSS when Elmentor is activated.
 				$parse_css .= astra_parse_css( $elementor_base_css );
 
@@ -169,9 +180,21 @@ if ( ! class_exists( 'Astra_Elementor' ) ) :
 				$dynamic_css .= $parse_css;
 			}
 
+			// To visible proper column structure with elementor flexbox model.
+			$elementor_posts_container_css = array(
+				'.elementor-posts-container [CLASS*="ast-width-"]' => array(
+					'width' => '100%',
+				),
+			);
+			
+			$dynamic_css .= astra_parse_css( $elementor_posts_container_css );
+
 			$elementor_archive_page_css = array(
 				'.elementor-template-full-width .ast-container' => array(
 					'display' => 'block',
+				),
+				'.elementor-screen-only, .screen-reader-text, .screen-reader-text span, .ui-helper-hidden-accessible' => array(
+					'top' => '0 !important',
 				),
 			);
 			$dynamic_css               .= astra_parse_css( $elementor_archive_page_css );
@@ -223,9 +246,19 @@ if ( ! class_exists( 'Astra_Elementor' ) ) :
 					update_post_meta( $id, 'ast-title-bar-display', 'disabled' );
 					update_post_meta( $id, 'ast-featured-img', 'disabled' );
 
-					$content_layout = get_post_meta( $id, 'site-content-layout', true );
+					// Compatibility with revamped layouts to update default layout to page builder.
+					$migrated_user = ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() );
+					if ( $migrated_user ) {
+						$content_layout = get_post_meta( $id, 'site-content-layout', true );
+					} else {
+						$content_layout = get_post_meta( $id, 'ast-site-content-layout', true );
+					}
+
 					if ( empty( $content_layout ) || 'default' == $content_layout ) {
-						update_post_meta( $id, 'site-content-layout', 'page-builder' );
+						if ( $migrated_user ) {
+							update_post_meta( $id, 'site-content-layout', 'page-builder' );
+						}
+						update_post_meta( $id, 'ast-site-content-layout', 'full-width-container' );
 					}
 
 					$sidebar_layout = get_post_meta( $id, 'site-sidebar-layout', true );
@@ -430,6 +463,69 @@ if ( ! class_exists( 'Astra_Elementor' ) ) :
 				$dynamic_css           .= astra_parse_css( $palette_style );
 			}
 
+			// Apply Astra Mini Cart CSS if Elementor Mini Cart Template is disabled.
+			$is_site_rtl = is_rtl();
+			$ltr_left    = $is_site_rtl ? 'right' : 'left';
+			$ltr_right   = $is_site_rtl ? 'left' : 'right';
+			if ( defined( 'ELEMENTOR_PRO_VERSION' ) && 'no' === get_option( 'elementor_' . 'use_mini_cart_template' ) ) {
+				$mini_cart_template_css = array(
+					'.woocommerce-js .woocommerce-mini-cart' => array(
+						'margin-inline-start' => '0',
+						'list-style'          => 'none',
+						'padding'             => '1.3em',
+						'flex'                => '1',
+						'overflow'            => 'auto',
+						'position'            => 'relative',
+					),
+					'.woocommerce-js .widget_shopping_cart_content ul li.mini_cart_item' => array(
+						'min-height'            => '60px',
+						'padding-top'           => '1.2em',
+						'padding-bottom'        => '1.2em',
+						'padding-' . $ltr_left  => '5em',
+						'padding-' . $ltr_right => '0',
+					),
+					'.woocommerce-js .woocommerce-mini-cart-item .ast-mini-cart-price-wrap' => array(
+						'float'      => 'right',
+						'margin-top' => '0.5em',
+						'position'   => 'absolute',
+						$ltr_left    => 'auto',
+						$ltr_right   => '0',
+						'top'        => '3.5em',
+					),
+					'.woocommerce-js .widget_shopping_cart_content a.remove' => array(
+						'position' => 'absolute',
+						$ltr_left  => 'auto',
+						$ltr_right => '0',
+					),
+					'.woocommerce-js .woocommerce-mini-cart__total' => array(
+						'display'         => 'flex',
+						'justify-content' => 'space-between',
+						'padding'         => '0.7em 0',
+						'margin-bottom'   => '0',
+						'font-size'       => '16px',
+						'border-top'      => '1px solid var(--ast-border-color)',
+						'border-bottom'   => '1px solid var(--ast-border-color)',
+					),
+					'.woocommerce-mini-cart__buttons' => array(
+						'display'        => 'flex',
+						'flex-direction' => 'column',
+						'gap'            => '20px',
+						'padding-top'    => '1.34em',
+					),
+					'.woocommerce-mini-cart__buttons .button' => array(
+						'text-align'  => 'center',
+						'font-weight' => '500',
+						'font-size'   => '16px',
+					),
+					'.woocommerce-js ul.product_list_widget li a img' => array(
+						'top' => '52%',
+					),
+					'.ast-mini-cart-empty .ast-mini-cart-message' => array(
+						'display' => 'none',
+					),
+				);
+				$dynamic_css           .= astra_parse_css( $mini_cart_template_css );
+			}
 			return $dynamic_css;
 		}
 

@@ -6,22 +6,26 @@
 
 window.addEventListener( "load", function(e) {
     astrawpWooQuantityButtons();
+    quantityInput();
 });
 
 
 // Here we are selecting the node that will be observed for mutations.
-const astraminiCarttargetNode = document.getElementById("ast-site-header-cart");
+const astraminiCarttargetNodes = document.querySelectorAll(".ast-site-header-cart");
 
-if (astraminiCarttargetNode != null) {
-    const config = { attributes: false, childList: true, subtree: true };
-
-    const astraMinicartObserver = () => {
-        astrawpWooQuantityButtons();
-    };
-
-    const observer = new MutationObserver(astraMinicartObserver);
-    observer.observe(astraminiCarttargetNode, config);
-}
+astraminiCarttargetNodes.forEach(function(astraminiCarttargetNode) {
+    if (astraminiCarttargetNode != null) {
+        const config = { attributes: false, childList: true, subtree: true };
+    
+        const astraMinicartObserver = () => {
+            astrawpWooQuantityButtons();
+            quantityInput();
+        };
+    
+        const observer = new MutationObserver(astraMinicartObserver);
+        observer.observe(astraminiCarttargetNode, config);
+    }
+});
 
 /**This comment explains that in order to refresh the wc_fragments_refreshed event when an AJAX call is made, jQuery is used to update the quantity button.
  * Here plain JavaScript may not be able to trigger the wc_fragments_refreshed event in the same way,
@@ -30,17 +34,21 @@ if (astraminiCarttargetNode != null) {
 jQuery( function( $ ) {
     $( document.body ).on( 'wc_fragments_refreshed', function() {
         astrawpWooQuantityButtons();
+        quantityInput();
     });
 });
 
 (function() {
-    var send = XMLHttpRequest.prototype.send
-    XMLHttpRequest.prototype.send = function() {
-        this.addEventListener('load', function() {
-            astrawpWooQuantityButtons();
-        })
-        return send.apply(this, arguments)
-    }
+    // Delay the method override so that we do not interfere with the Metrix test.
+    setTimeout(() => {
+        var send = XMLHttpRequest.prototype.send
+        XMLHttpRequest.prototype.send = function() {
+            this.addEventListener('load', function() {
+                astrawpWooQuantityButtons();
+            })
+            return send.apply(this, arguments)
+        }
+    }, 2000);
 })();
 
 /**
@@ -176,7 +184,7 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
                     }
 
                     // Trigger the change event on the input.
-                    var changeEvent = new Event('change');
+                    var changeEvent = new Event('change', { bubbles: true });
                     $quantityBox.dispatchEvent(changeEvent);
 
                     // Trigger change event.
@@ -187,48 +195,87 @@ function astrawpWooQuantityButtons( $quantitySelector ) {
                             update_cart_btn[btn].click();
                         }
                     }
+                    
+                    const quantity = $quantityBox.value;
+                    const itemHash = $quantityBox.getAttribute('name').replace(/cart\[([\w]+)\]\[qty\]/g, '$1');
 
-
-					// Send AJAX request from mini cart.
-
-                    const miniCart = ev.currentTarget.closest( '.woocommerce-mini-cart' );
-
-					if ( miniCart && astra && astra.single_product_qty_ajax_nonce && astra.ajax_url ) {
-						let quantity = $quantityBox.value;
-						let itemHash = $quantityBox.getAttribute('name').replace(/cart\[([\w]+)\]\[qty\]/g, '$1');
-						let qtyNonce = astra.single_product_qty_ajax_nonce;
-
-                        miniCart.classList.add('ajax-mini-cart-qty-loading');
-
-						// Creating a XMLHttpRequest object.
-						let xhrRequest = new XMLHttpRequest();
-						xhrRequest.open( 'POST', astra.ajax_url, true );
-
-						// Send the proper header information along with the request
-						xhrRequest.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
-
-						xhrRequest.send( 'action=astra_add_cart_single_product_quantity&hash=' + itemHash + '&quantity=' + quantity + '&qtyNonce=' + qtyNonce );
-
-						xhrRequest.onload = function () {
-							if ( xhrRequest.readyState == XMLHttpRequest.DONE ) {   // XMLHttpRequest.DONE == 4
-								if ( 200 <= xhrRequest.status || 400 <= xhrRequest.status ) {
-									// Trigger event so themes can refresh other areas.
-									var event = document.createEvent( 'HTMLEvents' );
-									event.initEvent( 'wc_fragment_refresh', true, false );
-									document.body.dispatchEvent(event);
-
-                                    miniCart.classList.remove('ajax-mini-cart-qty-loading');
-
-									if ( typeof wc_add_to_cart_params === 'undefined' ) {
-										return;
-									}
-								}
-							}
-						};
-					}
+                    sendAjaxQuantityRequest(ev.currentTarget, quantity, itemHash)
 
                 }, false);
             }
         }
+    }
+}
+
+
+function sendAjaxQuantityRequest(currentTarget, quantity, itemHash ) {
+
+    // Send AJAX request from mini cart.
+    const miniCart = currentTarget.closest( '.woocommerce-mini-cart' );
+
+    if ( miniCart && astra && astra.single_product_qty_ajax_nonce && astra.ajax_url ) {
+
+        let qtyNonce = astra.single_product_qty_ajax_nonce;
+
+        miniCart.classList.add('ajax-mini-cart-qty-loading');
+
+        // Creating a XMLHttpRequest object.
+        let xhrRequest = new XMLHttpRequest();
+        xhrRequest.open( 'POST', astra.ajax_url, true );
+
+        // Send the proper header information along with the request
+        xhrRequest.setRequestHeader( "Content-Type", "application/x-www-form-urlencoded" );
+
+        xhrRequest.send( 'action=astra_add_cart_single_product_quantity&hash=' + itemHash + '&quantity=' + quantity + '&qtyNonce=' + qtyNonce );
+
+        xhrRequest.onload = function () {
+            if ( xhrRequest.readyState == XMLHttpRequest.DONE ) {   // XMLHttpRequest.DONE == 4
+                if ( 200 <= xhrRequest.status || 400 <= xhrRequest.status ) {
+                    // Trigger event so themes can refresh other areas.
+                    var event = document.createEvent( 'HTMLEvents' );
+                    event.initEvent( 'wc_fragment_refresh', true, false );
+                    document.body.dispatchEvent(event);
+
+                    setTimeout(() => {
+                        miniCart.classList.remove('ajax-mini-cart-qty-loading');
+                    }, 500);
+                   
+
+                    if ( typeof wc_add_to_cart_params === 'undefined' ) {
+                        return;
+                    }
+                }
+            }
+        };
+    }
+
+}
+
+
+
+let typingTimer; //timer identifier
+let doneTypingInterval = 500;
+
+function quantityInput() {
+    const quantityInputContainer = document.querySelector('.woocommerce-mini-cart');
+
+    if( quantityInputContainer ) {
+        const quantityInput = document.querySelectorAll('.input-text.qty');
+
+        quantityInput.forEach( single => {
+            single.addEventListener('keyup', (e) => {
+                clearTimeout(typingTimer);
+                if (single.value) {
+                    typingTimer = setTimeout(() => {
+                        const quantity = e.target.value;
+                        const itemHash = e.target.getAttribute('name').replace(/cart\[([\w]+)\]\[qty\]/g, '$1');
+
+                        if( quantity ) {
+                            sendAjaxQuantityRequest(e.target, quantity,itemHash);
+                        }
+                    }, doneTypingInterval);
+                }
+            });
+        });
     }
 }

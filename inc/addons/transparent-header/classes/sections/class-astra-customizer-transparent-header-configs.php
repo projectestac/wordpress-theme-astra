@@ -200,7 +200,7 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 					'default'  => $diff_trans_logo,
 					'type'     => 'control',
 					'section'  => $_section,
-					'title'    => __( 'Different Logo for Transparent Header?', 'astra' ),
+					'title'    => __( 'Different Transparent Logo', 'astra' ),
 					'priority' => 30,
 					'control'  => 'ast-toggle-control',
 				),
@@ -685,6 +685,17 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 						'priority'  => 60,
 						'context'   => Astra_Builder_Helper::$design_tab,
 					),
+					array(
+						'name'      => ASTRA_THEME_SETTINGS . '[transparent-header-buttons-border-group]',
+						'default'   => astra_get_option( 'transparent-header-buttons-border-group' ),
+						'type'      => 'control',
+						'control'   => 'ast-color-group',
+						'title'     => __( 'Border Color', 'astra' ),
+						'section'   => 'section-transparent-header',
+						'transport' => 'postMessage',
+						'priority'  => 60,
+						'context'   => Astra_Builder_Helper::$design_tab,
+					),
 
 					/**
 					 * Option: Button Text Color
@@ -752,6 +763,38 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 						'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_alpha_color' ),
 						'priority'          => 11,
 						'title'             => __( 'Hover', 'astra' ),
+					),
+
+					/**
+					 * Option: Button Border Color
+					 */
+					array(
+						'name'      => 'transparent-header-button-border-color',
+						'transport' => 'postMessage',
+						'default'   => astra_get_option( 'transparent-header-button-border-color' ),
+						'type'      => 'sub-control',
+						'parent'    => ASTRA_THEME_SETTINGS . '[transparent-header-buttons-border-group]',
+						'section'   => 'section-transparent-header',
+						'tab'       => __( 'Normal', 'astra' ),
+						'control'   => 'ast-color',
+						'priority'  => 5,
+						'title'     => __( 'Normal', 'astra' ),
+					),
+
+					/**
+					 * Option: Button Border Hover Color
+					 */
+					array(
+						'name'      => 'transparent-header-button-border-h-color', 
+						'default'   => astra_get_option( 'transparent-header-button-border-h-color' ),
+						'transport' => 'postMessage',
+						'type'      => 'sub-control',
+						'parent'    => ASTRA_THEME_SETTINGS . '[transparent-header-buttons-border-group]',
+						'section'   => 'section-transparent-header',
+						'tab'       => __( 'Hover', 'astra' ),
+						'control'   => 'ast-color',
+						'priority'  => 7,
+						'title'     => __( 'Hover', 'astra' ),
 					),
 
 					array(
@@ -874,7 +917,6 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 					),
 				);
 
-				if ( ! astra_remove_widget_design_options() ) {
 					$widget_configs = array(
 						/**
 						 * Option: Transparent Header Builder - Widget Elements configs.
@@ -955,11 +997,7 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 							'context'           => Astra_Builder_Helper::$general_tab,
 						),
 					);
-
-					$_hfb_configs = array_merge( $_hfb_configs, $widget_configs );
-				}
-
-				$_configs = array_merge( $_configs, $_hfb_configs );
+					$_configs = array_merge( $_configs, $_hfb_configs );
 
 			} else {
 				$_old_content_configs = array(
