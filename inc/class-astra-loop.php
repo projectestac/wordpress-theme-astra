@@ -184,6 +184,18 @@ if ( ! class_exists( 'Astra_Loop' ) ) {
 		 * @return void
 		 */
 		public function loop_markup( $is_page = false ) {
+
+            // XTEC ************ AFEGIT - Remove empty <article> tag in front page, caused by having an empty page. It is
+            //                            removed for better stiling of the front page.
+            // 2024.05.22 @aginard
+            if (is_page() && is_front_page()) {
+                global $post;
+                if (empty($post->post_content)) {
+                    return;
+                }
+            }
+            // ************ FI
+
 			?>
 			<main id="main" class="site-main">
 				<?php
