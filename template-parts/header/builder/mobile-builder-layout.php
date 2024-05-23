@@ -43,4 +43,12 @@ if ( ( 'dropdown' === astra_get_option( 'mobile-header-type' ) && Astra_Builder_
 		<?php do_action( 'astra_mobile_header_content', 'popup', 'content' ); ?>
 	</div>
 <?php } ?>
+
+<?php
+    // XTEC ************ AFEGIT - Hook to insert the header buttons in the mobile version.
+    // 2024.05.23 @aginard
+    do_action('astra_nodes_mobile_under_header');
+    // ************ FI
+?>
+
 </div>
