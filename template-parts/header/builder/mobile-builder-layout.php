@@ -54,6 +54,12 @@ if ( 'full-width' === $astra_mobile_header_type ) {
 				<?php do_action( 'astra_mobile_header_content', 'popup', 'content' ); ?>
 			</div>
 			<?php
+
+            // XTEC ************ AFEGIT - Hook to insert the header buttons in the mobile version.
+            // 2024.05.23 @aginard
+            do_action('astra_nodes_mobile_under_header');
+            // ************ FI
+
 		}
 	}
 	?>
