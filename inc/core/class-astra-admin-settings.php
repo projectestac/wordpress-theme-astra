@@ -306,6 +306,13 @@ if ( ! class_exists( 'Astra_Admin_Settings' ) ) {
 		 */
 		public static function minimum_addon_version_notice() {
 
+            // XTEC ************ AFEGIT - Only show admin notices to xtecadmin.
+            // 2024.06.06 @aginard
+            if (!is_xtec_super_admin()) {
+                return;
+            }
+            // ************ FI
+
 			if ( ! defined( 'ASTRA_EXT_VER' ) ) {
 				return;
 			}
