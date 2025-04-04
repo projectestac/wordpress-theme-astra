@@ -14,7 +14,7 @@ if ( ! class_exists( 'LifterLMS' ) ) {
 /**
  * Astra Lifter LMS Compatibility
  */
-if ( ! class_exists( 'Astra_LifterLMS' ) ) :
+if ( ! class_exists( 'Astra_LifterLMS' ) ) {
 
 	/**
 	 * Astra Lifter LMS Compatibility
@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 	 * @since 1.2.0
 	 */
 	class Astra_LifterLMS {
-
 		/**
 		 * Member Variable
 		 *
@@ -69,7 +68,6 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 
 			// Course builder custom fields.
 			add_filter( 'llms_builder_register_custom_fields', array( $this, 'register_builder_fields' ) );
-
 		}
 
 		/**
@@ -305,6 +303,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 					</div>
 					<?php
 				} else {
+					$post_id = absint( get_the_ID() );
 					?>
 					<div class="review_box" id="review_box">
 					<h3><?php esc_html_e( 'Write a Review', 'astra' ); ?></h3>
@@ -314,7 +313,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 						<h5 style="color:red; display:none" id="review_text_error"><?php esc_html_e( 'Review Text is required.', 'astra' ); ?></h5>
 						<?php wp_nonce_field( 'submit_review', 'submit_review_nonce_code' ); ?>
 						<input name="action" value="submit_review" type="hidden">
-						<input name="post_ID" value="<?php echo get_the_ID(); ?>" type="hidden" id="post_ID">
+						<input name="post_ID" value="<?php /** @psalm-suppress InvalidScalarArgument */ echo esc_attr( $post_id ); ?>" type="hidden" id="post_ID">
 						<input type="submit" class="button" value="<?php esc_attr_e( 'Leave Review', 'astra' ); ?>" id="llms_review_submit_button">
 					</div>
 					<div id="thank_you_box" style="display:none;">
@@ -404,16 +403,42 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 			$btn_bg_color   = astra_get_option( 'button-bg-color', '', $link_color );
 			$btn_bg_h_color = astra_get_option( 'button-bg-h-color', '', $link_h_color );
 
+			$btn_border_size    = astra_get_option( 'theme-button-border-group-border-size' );
+			$btn_border_color   = astra_get_option( 'theme-button-border-group-border-color', $link_color );
+			$btn_border_h_color = astra_get_option( 'theme-button-border-group-border-h-color', $link_h_color );
+
 			$btn_border_radius_fields = astra_get_option( 'button-radius-fields' );
 			$theme_btn_padding        = astra_get_option( 'theme-button-padding' );
 
+			/**
+			 * Theme Button Typography
+			 */
+			$theme_btn_font_family     = astra_get_option( 'font-family-button' );
+			$theme_btn_font_size       = astra_get_option( 'font-size-button' );
+			$theme_btn_font_weight     = astra_get_option( 'font-weight-button' );
+			$theme_btn_font_extras     = astra_get_option( 'font-extras-button' );
+			$theme_btn_text_transform  = astra_get_font_extras( $theme_btn_font_extras, 'text-transform' );
+			$theme_btn_line_height     = astra_get_font_extras( $theme_btn_font_extras, 'line-height', 'line-height-unit' );
+			$theme_btn_letter_spacing  = astra_get_font_extras( $theme_btn_font_extras, 'letter-spacing', 'letter-spacing-unit' );
+			$theme_btn_text_decoration = astra_get_font_extras( $theme_btn_font_extras, 'text-decoration' );
+
 			$css_output = array(
-				'a.llms-button-primary, .llms-button-secondary, .llms-button-action, button.llms-field-button, a.llms-field-button' => array(
-					'color'            => $btn_color,
-					'border-color'     => $btn_bg_color,
-					'background-color' => $btn_bg_color,
-				),
-				'a.llms-button-primary, .llms-button-secondary, .llms-button-action, .llms-field-button, .llms-button-action.large' => array(
+				'.lifterlms a.llms-button-primary, .lifterlms a.llms-button-secondary, .lifterlms .llms-button-action, .lifterlms button.llms-field-button, .lifterlms a.llms-field-button' => array(
+					'color'                      => $btn_color,
+					'background-color'           => $btn_bg_color,
+					'border-style'               => 'solid',
+					'border-color'               => $btn_border_color,
+					'border-top-width'           => isset( $btn_border_size['top'] ) && '' !== $btn_border_size['top'] ? astra_get_css_value( $btn_border_size['top'], 'px' ) : '0',
+					'border-right-width'         => isset( $btn_border_size['right'] ) && '' !== $btn_border_size['right'] ? astra_get_css_value( $btn_border_size['right'], 'px' ) : '0',
+					'border-left-width'          => isset( $btn_border_size['left'] ) && '' !== $btn_border_size['left'] ? astra_get_css_value( $btn_border_size['left'], 'px' ) : '0',
+					'border-bottom-width'        => isset( $btn_border_size['bottom'] ) && '' !== $btn_border_size['bottom'] ? astra_get_css_value( $btn_border_size['bottom'], 'px' ) : '0',
+					'font-family'                => astra_get_font_family( $theme_btn_font_family ),
+					'font-weight'                => esc_attr( $theme_btn_font_weight ),
+					'line-height'                => esc_attr( $theme_btn_line_height ),
+					'text-transform'             => esc_attr( $theme_btn_text_transform ),
+					'text-decoration'            => esc_attr( $theme_btn_text_decoration ),
+					'letter-spacing'             => esc_attr( $theme_btn_letter_spacing ),
+					'font-size'                  => astra_responsive_font( $theme_btn_font_size, 'desktop' ),
 					'border-top-left-radius'     => astra_responsive_spacing( $btn_border_radius_fields, 'top', 'desktop' ),
 					'border-top-right-radius'    => astra_responsive_spacing( $btn_border_radius_fields, 'right', 'desktop' ),
 					'border-bottom-right-radius' => astra_responsive_spacing( $btn_border_radius_fields, 'bottom', 'desktop' ),
@@ -423,9 +448,9 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 					'padding-bottom'             => astra_responsive_spacing( $theme_btn_padding, 'bottom', 'desktop' ),
 					'padding-left'               => astra_responsive_spacing( $theme_btn_padding, 'left', 'desktop' ),
 				),
-				'a.llms-button-primary:hover, a.llms-button-primary:focus, .llms-button-secondary:hover, .llms-button-secondary:focus, .llms-button-action:hover, .llms-button-action:focus, button.llms-field-button:hover, button.llms-field-button:focus, a.llms-field-button:hover, a.llms-field-button:focus' => array(
+				'.lifterlms a.llms-button-primary:hover, .lifterlms a.llms-button-primary:focus, .lifterlms a.llms-button-secondary:hover, .lifterlms a.llms-button-secondary:focus, .lifterlms .llms-button-action:hover, .lifterlms .llms-button-action:focus, .lifterlms button.llms-field-button:hover, .lifterlms button.llms-field-button:focus, .lifterlms a.llms-field-button:hover, .lifterlms a.llms-field-button:focus' => array(
 					'color'            => $btn_h_color,
-					'border-color'     => $btn_bg_h_color,
+					'border-color'     => $btn_border_h_color,
 					'background-color' => $btn_bg_h_color,
 				),
 				'nav.llms-pagination ul li a:focus, nav.llms-pagination ul li a:hover, nav.llms-pagination ul li span.current' => array(
@@ -453,6 +478,9 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 				'body .progress-bar-complete:after' => array(
 					'color' => $theme_forground_color,
 				),
+				'.fa-heart-o.llms-heart-btn'        => array(
+					'color' => 'var(--ast-global-color-3)',
+				),
 			);
 
 			/* Parse CSS from array() */
@@ -465,7 +493,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 			 * Global button CSS - Tablet.
 			 */
 			$css_global_button_tablet = array(
-				'a.llms-button-primary, .llms-button-secondary, .llms-button-action, .llms-field-button, .llms-button-action.large' => array(
+				'.lifterlms a.llms-button-primary, .lifterlms a.llms-button-secondary, .lifterlms .llms-button-action, .lifterlms button.llms-field-button, .lifterlms a.llms-field-button' => array(
 					'border-top-left-radius'     => astra_responsive_spacing( $btn_border_radius_fields, 'top', 'tablet' ),
 					'border-top-right-radius'    => astra_responsive_spacing( $btn_border_radius_fields, 'right', 'tablet' ),
 					'border-bottom-right-radius' => astra_responsive_spacing( $btn_border_radius_fields, 'bottom', 'tablet' ),
@@ -483,7 +511,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 			 * Global button CSS - Mobile.
 			 */
 			$css_global_button_mobile = array(
-				'a.llms-button-primary, .llms-button-secondary, .llms-button-action, .llms-field-button, .llms-button-action.large' => array(
+				'.lifterlms a.llms-button-primary, .lifterlms a.llms-button-secondary, .lifterlms .llms-button-action, .lifterlms button.llms-field-button, .lifterlms a.llms-field-button' => array(
 					'border-top-left-radius'     => astra_responsive_spacing( $btn_border_radius_fields, 'top', 'mobile' ),
 					'border-top-right-radius'    => astra_responsive_spacing( $btn_border_radius_fields, 'right', 'mobile' ),
 					'border-bottom-right-radius' => astra_responsive_spacing( $btn_border_radius_fields, 'bottom', 'mobile' ),
@@ -498,7 +526,6 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 			$css_output .= astra_parse_css( $css_global_button_mobile, '', astra_get_mobile_breakpoint() );
 
 			wp_add_inline_style( 'lifterlms-styles', apply_filters( 'astra_theme_lifterlms_dynamic_css', $css_output ) );
-
 		}
 
 		/**
@@ -553,8 +580,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 		 * @return   string
 		 */
 		public function add_sidebar( $id ) {
-			$sidebar_id = 'sidebar-1'; // replace this with theme's sidebar ID.
-			return $sidebar_id;
+			return 'sidebar-1'; // replace this with theme's sidebar ID.
 		}
 
 		/**
@@ -577,7 +603,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 		 * @return array List of updated assets.
 		 */
 		public function add_styles( $assets ) {
-			$assets['css']['astra-lifterlms'] = ( ! Astra_Builder_Helper::apply_flex_based_css() ) ? 'compatibility/lifterlms' : 'compatibility/lifterlms-flex';
+			$assets['css']['astra-lifterlms'] = ! Astra_Builder_Helper::apply_flex_based_css() ? 'compatibility/lifterlms' : 'compatibility/lifterlms-flex';
 			return $assets;
 		}
 
@@ -590,7 +616,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 		 */
 		public function sidebar_layout( $layout ) {
 
-			if ( ( is_lifterlms() ) || is_llms_account_page() || is_llms_checkout() ) {
+			if ( is_lifterlms() || is_llms_account_page() || is_llms_checkout() ) {
 
 				$llms_sidebar = astra_get_option( 'lifterlms-sidebar-layout' );
 				if ( is_lesson() || is_course() ) {
@@ -598,7 +624,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 				}
 
 				$supported_post_types = Astra_Posts_Structure_Loader::get_supported_post_types();
-				$post_type            = strval( get_post_type() );
+				$post_type            = astra_get_post_type();
 
 				if ( in_array( $post_type, $supported_post_types ) ) {
 					$dynamic_sidebar_layout = '';
@@ -654,7 +680,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 				$llms_layout = astra_toggle_layout( 'lifterlms-ast-content-layout', 'global', false );
 
 				$supported_post_types = Astra_Posts_Structure_Loader::get_supported_post_types();
-				$post_type            = strval( get_post_type() );
+				$post_type            = astra_get_post_type();
 
 				if ( in_array( $post_type, $supported_post_types ) ) {
 					$dynamic_sidebar_layout = '';
@@ -902,7 +928,7 @@ if ( ! class_exists( 'Astra_LifterLMS' ) ) :
 		}
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method

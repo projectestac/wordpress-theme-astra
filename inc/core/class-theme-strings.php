@@ -3,8 +3,6 @@
  * Astra Theme Strings
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -22,13 +20,13 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 	 * Default Strings
 	 *
 	 * @since 1.0.0
-	 * @param  string  $key  String key.
-	 * @param  boolean $echo Print string.
+	 * @param  string $key  String key.
+	 * @param  bool   $echo Print string.
 	 * @return mixed        Return string or nothing.
 	 */
 	function astra_default_strings( $key, $echo = true ) {
 
-		$post_comment_dynamic_string = ( true === Astra_Dynamic_CSS::astra_core_form_btns_styling() ) ? __( 'Post Comment', 'astra' ) : __( 'Post Comment &raquo;', 'astra' );
+		$post_comment_dynamic_string = true === Astra_Dynamic_CSS::astra_core_form_btns_styling() ? __( 'Post Comment', 'astra' ) : __( 'Post Comment &raquo;', 'astra' );
 		$defaults                    = apply_filters(
 			'astra_default_strings',
 			array(
@@ -55,8 +53,8 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 				'string-comment-cancel-reply-link'       => __( 'Cancel Reply', 'astra' ),
 				'string-comment-label-submit'            => $post_comment_dynamic_string,
 				'string-comment-label-message'           => __( 'Type here..', 'astra' ),
-				'string-comment-label-name'              => __( 'Name*', 'astra' ),
-				'string-comment-label-email'             => __( 'Email*', 'astra' ),
+				'string-comment-label-name'              => __( 'Name', 'astra' ),
+				'string-comment-label-email'             => __( 'Email', 'astra' ),
 				'string-comment-label-website'           => __( 'Website', 'astra' ),
 				'string-comment-closed'                  => __( 'Comments are closed.', 'astra' ),
 				'string-comment-navigation-title'        => __( 'Comment navigation', 'astra' ),
@@ -69,17 +67,17 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 				'string-blog-meta-leave-a-comment'       => __( 'Leave a Comment', 'astra' ),
 				'string-blog-meta-one-comment'           => __( '1 Comment', 'astra' ),
 				'string-blog-meta-multiple-comment'      => __( '% Comments', 'astra' ),
-				'string-blog-navigation-next'            => __( 'Next', 'astra' ) . ' <span class="ast-right-arrow">&rarr;</span>',
-				'string-blog-navigation-previous'        => '<span class="ast-left-arrow">&larr;</span> ' . __( 'Previous', 'astra' ),
+				'string-blog-navigation-next'            => __( 'Next', 'astra' ) . ' <span class="ast-right-arrow" aria-hidden="true">&rarr;</span>',
+				'string-blog-navigation-previous'        => '<span class="ast-left-arrow" aria-hidden="true">&larr;</span> ' . __( 'Previous', 'astra' ),
 				'string-next-text'                       => __( 'Next', 'astra' ),
 				'string-previous-text'                   => __( 'Previous', 'astra' ),
 
 				// Single Post Default Strings.
 				'string-single-page-links-before'        => __( 'Pages:', 'astra' ),
 				/* translators: 1: Post type label */
-				'string-single-navigation-next'          => __( 'Next %s', 'astra' ) . ' <span class="ast-right-arrow">&rarr;</span>',
+				'string-single-navigation-next'          => __( 'Next %s', 'astra' ) . ' <span class="ast-right-arrow" aria-hidden="true">&rarr;</span>',
 				/* translators: 1: Post type label */
-				'string-single-navigation-previous'      => '<span class="ast-left-arrow">&larr;</span> ' . __( 'Previous %s', 'astra' ),
+				'string-single-navigation-previous'      => '<span class="ast-left-arrow" aria-hidden="true">&larr;</span> ' . __( 'Previous %s', 'astra' ),
 
 				// Content None.
 				'string-content-nothing-found-message'   => __( 'It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.', 'astra' ),
@@ -88,13 +86,13 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 		);
 
 		if ( is_rtl() ) {
-			$defaults['string-blog-navigation-next']     = __( 'Next', 'astra' ) . ' <span class="ast-left-arrow">&larr;</span>';
-			$defaults['string-blog-navigation-previous'] = '<span class="ast-right-arrow">&rarr;</span> ' . __( 'Previous', 'astra' );
+			$defaults['string-blog-navigation-next']     = __( 'Next', 'astra' ) . ' <span class="ast-left-arrow" aria-hidden="true">&larr;</span>';
+			$defaults['string-blog-navigation-previous'] = '<span class="ast-right-arrow" aria-hidden="true">&rarr;</span> ' . __( 'Previous', 'astra' );
 
 			/* translators: 1: Post type label */
-			$defaults['string-single-navigation-next'] = __( 'Next %s', 'astra' ) . ' <span class="ast-left-arrow">&larr;</span>';
+			$defaults['string-single-navigation-next'] = __( 'Next %s', 'astra' ) . ' <span class="ast-left-arrow" aria-hidden="true">&larr;</span>';
 			/* translators: 1: Post type label */
-			$defaults['string-single-navigation-previous'] = '<span class="ast-right-arrow">&rarr;</span> ' . __( 'Previous %s', 'astra' );
+			$defaults['string-single-navigation-previous'] = '<span class="ast-right-arrow" aria-hidden="true">&rarr;</span> ' . __( 'Previous %s', 'astra' );
 		}
 
 		$output = isset( $defaults[ $key ] ) ? $defaults[ $key ] : '';

@@ -3,8 +3,6 @@
  * Schema markup.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 2.1.3
  */
@@ -19,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.1.3
  */
 class Astra_Schema {
-
 	/**
 	 * Constructor
 	 */
@@ -34,7 +31,8 @@ class Astra_Schema {
 	 *
 	 * @since 2.1.3
 	 */
-	public function setup_schema() { }
+	public function setup_schema() {
+	}
 
 	/**
 	 * Include schema files.

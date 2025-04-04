@@ -5,8 +5,6 @@
  * Creates a jQuery color control.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       1.0.0
  */
@@ -26,7 +24,6 @@ if ( class_exists( 'WP_Customize_Section' ) ) {
 	 * @see WP_Customize_Section
 	 */
 	class Astra_WP_Customize_Section extends WP_Customize_Section {
-
 		/**
 		 * Section
 		 *

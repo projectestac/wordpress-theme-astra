@@ -3,8 +3,6 @@
  * Bottom Footer Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -19,7 +17,6 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 	 * Register Astra Customizerr Site identity Customizer Configurations.
 	 */
 	class Astra_Site_Identity_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Astra Customizerr Site identity Customizer Configurations.
 		 *
@@ -55,8 +52,8 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 				),
 
 				/**
-				* Option: Transparent Header Section - Link.
-				*/
+				 * Option: Transparent Header Section - Link.
+				 */
 				array(
 					'name'            => ASTRA_THEME_SETTINGS . '[ast-callback-notice-header-transparent-header-logo-link]',
 					'type'            => 'control',
@@ -76,7 +73,6 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 					'link_text'       => '<u>' . __( 'Customize Transparent Header.', 'astra' ) . '</u>',
 					'active_callback' => array( $this, 'is_transparent_header_enabled' ),
 				),
-
 
 				/**
 				 * Option: Different retina logo
@@ -121,6 +117,11 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 							'setting'  => ASTRA_THEME_SETTINGS . '[different-retina-logo]',
 							'operator' => '!=',
 							'value'    => 0,
+						),
+						array(
+							'setting'  => 'custom_logo',
+							'operator' => '!=',
+							'value'    => '',
 						),
 						Astra_Builder_Helper::$general_tab_config,
 					),
@@ -194,6 +195,106 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 							'operator' => 'in',
 							'value'    => array( 'tablet', 'mobile' ),
 						),
+					),
+				),
+
+				/**
+				 * Option: Use Logo SVG Icon.
+				 */
+				array(
+					'name'      => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+					'default'   => astra_get_option( 'use-logo-svg-icon' ),
+					'type'      => 'control',
+					'control'   => 'ast-toggle-control',
+					'divider'   => array( 'ast_class' => 'ast-top-section-divider' ),
+					'section'   => $_section,
+					'title'     => __( 'Use Logo SVG Icon', 'astra' ),
+					'priority'  => 6,
+					'transport' => 'postMessage',
+					'partial'   => array(
+						'selector'            => '.site-branding',
+						'container_inclusive' => true,
+						'render_callback'     => 'Astra_Builder_UI_Controller::render_site_identity',
+						'fallback_refresh'    => false,
+					),
+					'context'   => array(
+						array(
+							'setting'  => 'custom_logo',
+							'operator' => '==',
+							'value'    => false,
+						),
+						Astra_Builder_Helper::$general_tab_config,
+					),
+				),
+
+				/**
+				 * Option: Logo SVG Icon
+				 */
+				array(
+					'name'              => ASTRA_THEME_SETTINGS . '[logo-svg-icon]',
+					'type'              => 'control',
+					'control'           => 'ast-logo-svg-icon',
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_logo_svg_icon' ),
+					'section'           => $_section,
+					'default'           => astra_get_option( 'logo-svg-icon' ),
+					'description'       => __( 'When using Custom SVG code, do not include few attributes such as "width", "height", and "fill" in your custom svg code to utilize existing customizer controls.', 'astra' ),
+					'priority'          => 6,
+					'title'             => __( 'Logo SVG Icon', 'astra' ),
+					'divider'           => array( 'ast_class' => 'ast-top-dotted-divider' ),
+					'transport'         => 'postMessage',
+					'partial'           => array(
+						'selector'            => '.site-branding',
+						'container_inclusive' => true,
+						'render_callback'     => 'Astra_Builder_UI_Controller::render_site_identity',
+						'fallback_refresh'    => false,
+					),
+					'context'           => array(
+						array(
+							'setting'  => 'custom_logo',
+							'operator' => '==',
+							'value'    => false,
+						),
+						array(
+							'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+							'operator' => '==',
+							'value'    => true,
+						),
+						Astra_Builder_Helper::$general_tab_config,
+					),
+				),
+
+				/**
+				 * Option: Logo SVG Gap
+				 */
+				array(
+					'name'              => ASTRA_THEME_SETTINGS . '[logo-svg-site-title-gap]',
+					'type'              => 'control',
+					'control'           => 'ast-responsive-slider',
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+					'section'           => $_section,
+					'transport'         => 'postMessage',
+					'default'           => astra_get_option( 'logo-svg-site-title-gap' ),
+					'priority'          => 7,
+					'title'             => __( 'Logo SVG Gap', 'astra' ),
+					'suffix'            => 'px',
+					'input_attrs'       => array(
+						'min'  => 0,
+						'step' => 1,
+						'max'  => 600,
+					),
+					'divider'           => array( 'ast_class' => 'ast-top-section-divider' ),
+					'context'           => array(
+						array(
+							'setting'  => 'custom_logo',
+							'operator' => '==',
+							'value'    => false,
+						),
+						array(
+							'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+							'operator' => '==',
+							'value'    => true,
+						),
+						Astra_Builder_Helper::$general_tab_config,
 					),
 				),
 
@@ -294,7 +395,7 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 						'responsive' => false,
 						'transport'  => 'postMessage',
 						'priority'   => 8,
-						'context'    => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? array( Astra_Builder_Helper::$design_tab_config ) : '',
+						'context'    => true === Astra_Builder_Helper::$is_header_footer_builder_active ? array( Astra_Builder_Helper::$design_tab_config ) : '',
 					),
 
 					// Option: Site Title Color.
@@ -309,6 +410,84 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 						'transport' => 'postMessage',
 						'title'     => __( 'Normal', 'astra' ),
 						'context'   => Astra_Builder_Helper::$design_tab,
+					),
+
+					// Color Group control for Logo SVG Icon Colors.
+					array(
+						'name'       => ASTRA_THEME_SETTINGS . '[logo-svg-icon-color-group]',
+						'default'    => astra_get_option( 'logo-svg-icon-color-group' ),
+						'type'       => 'control',
+						'control'    => 'ast-color-group',
+						'title'      => __( 'Logo SVG Icon Color', 'astra' ),
+						'section'    => $_section,
+						'responsive' => false,
+						'transport'  => 'postMessage',
+						'priority'   => 8,
+						'context'    => array(
+							array(
+								'setting'  => 'custom_logo',
+								'operator' => '==',
+								'value'    => false,
+							),
+							array(
+								'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+								'operator' => '==',
+								'value'    => true,
+							),
+							Astra_Builder_Helper::$design_tab_config,
+						),
+					),
+
+					// Option: Logo SVG Icon Color.
+					array(
+						'name'      => 'logo-svg-icon-color',
+						'parent'    => ASTRA_THEME_SETTINGS . '[logo-svg-icon-color-group]',
+						'section'   => 'title_tagline',
+						'type'      => 'sub-control',
+						'control'   => 'ast-color',
+						'priority'  => 5,
+						'default'   => astra_get_option( 'logo-svg-icon-color' ),
+						'title'     => __( 'Normal', 'astra' ),
+						'transport' => 'postMessage',
+						'context'   => array(
+							array(
+								'setting'  => 'custom_logo',
+								'operator' => '==',
+								'value'    => false,
+							),
+							array(
+								'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+								'operator' => '==',
+								'value'    => true,
+							),
+							Astra_Builder_Helper::$design_tab_config,
+						),
+					),
+
+					// Option: Logo SVG Icon Hover Color.
+					array(
+						'name'      => 'logo-svg-icon-hover-color',
+						'parent'    => ASTRA_THEME_SETTINGS . '[logo-svg-icon-color-group]',
+						'section'   => 'title_tagline',
+						'type'      => 'sub-control',
+						'control'   => 'ast-color',
+						'priority'  => 10,
+						'default'   => astra_get_option( 'logo-svg-icon-hover-color' ),
+						'title'     => __( 'Hover', 'astra' ),
+						'transport' => 'postMessage',
+						'context'   => array(
+							array(
+								'setting'  => 'custom_logo',
+								'operator' => '==',
+								'value'    => false,
+							),
+							array(
+								'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+								'operator' => '==',
+								'value'    => true,
+							),
+							Astra_Builder_Helper::$design_tab_config,
+						),
 					),
 
 					// Option: Site Title Hover Color.
@@ -332,10 +511,10 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 						'control'   => 'ast-color',
 						'transport' => 'postMessage',
 						'default'   => astra_get_option( 'header-color-site-tagline' ),
-						'title'     => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? __( 'Tagline', 'astra' ) : __( 'Color', 'astra' ),
+						'title'     => true === Astra_Builder_Helper::$is_header_footer_builder_active ? __( 'Tagline', 'astra' ) : __( 'Color', 'astra' ),
 						'section'   => 'title_tagline',
-						'priority'  => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? 8 : 12,
-						'context'   => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? array( Astra_Builder_Helper::$design_tab_config ) : '',
+						'priority'  => true === Astra_Builder_Helper::$is_header_footer_builder_active ? 8 : 12,
+						'context'   => true === Astra_Builder_Helper::$is_header_footer_builder_active ? array( Astra_Builder_Helper::$design_tab_config ) : '',
 						'divider'   => array( 'ast_class' => 'ast-bottom-section-divider' ),
 					),
 				)
@@ -375,8 +554,8 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 						),
 
 						/**
-						* Link to the site icon.
-						*/
+						 * Link to the site icon.
+						 */
 						array(
 							'name'           => ASTRA_THEME_SETTINGS . '[site-icon-link]',
 							'type'           => 'control',
@@ -405,11 +584,11 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 						'default'   => astra_get_option( 'site-title-typography' ),
 						'type'      => 'control',
 						'control'   => 'ast-settings-group',
-						'title'     => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? __( 'Title Font', 'astra' ) : __( 'Typography', 'astra' ),
+						'title'     => true === Astra_Builder_Helper::$is_header_footer_builder_active ? __( 'Title Font', 'astra' ) : __( 'Typography', 'astra' ),
 						'section'   => $_section,
 						'transport' => 'postMessage',
-						'priority'  => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? 16 : 8,
-						'context'   => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? array( Astra_Builder_Helper::$design_tab_config ) : '',
+						'priority'  => true === Astra_Builder_Helper::$is_header_footer_builder_active ? 16 : 8,
+						'context'   => true === Astra_Builder_Helper::$is_header_footer_builder_active ? array( Astra_Builder_Helper::$design_tab_config ) : '',
 					),
 
 					/**
@@ -420,30 +599,29 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 						'default'   => astra_get_option( 'site-tagline-typography' ),
 						'type'      => 'control',
 						'control'   => 'ast-settings-group',
-						'title'     => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? __( 'Tagline Font', 'astra' ) : __( 'Typography', 'astra' ),
+						'title'     => true === Astra_Builder_Helper::$is_header_footer_builder_active ? __( 'Tagline Font', 'astra' ) : __( 'Typography', 'astra' ),
 						'section'   => $_section,
 						'transport' => 'postMessage',
-						'priority'  => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? 20 : 11,
-						'context'   => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? array( Astra_Builder_Helper::$design_tab_config ) : '',
+						'priority'  => true === Astra_Builder_Helper::$is_header_footer_builder_active ? 20 : 11,
+						'context'   => true === Astra_Builder_Helper::$is_header_footer_builder_active ? array( Astra_Builder_Helper::$design_tab_config ) : '',
 					),
 				);
 
 				$_configs = array_merge( $_configs, $new_configs );
 			}
 
-			$configurations = array_merge( $configurations, $_configs );
-			return $configurations;
+			return array_merge( $configurations, $_configs );
 		}
 
 		/**
 		 * Check if transparent header is enabled on the page being previewed.
 		 *
 		 * @since  2.4.5
-		 * @return boolean True - If Transparent Header is enabled, False if not.
+		 * @return bool True - If Transparent Header is enabled, False if not.
 		 */
 		public function is_transparent_header_enabled() {
 			$status = Astra_Ext_Transparent_Header_Markup::is_transparent_header();
-			return ( true === $status ? true : false );
+			return true === $status ? true : false;
 		}
 
 		/**
@@ -469,6 +647,5 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 		}
 	}
 }
-
 
 new Astra_Site_Identity_Configs();

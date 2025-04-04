@@ -3,8 +3,6 @@
  * Related Posts Loader for Astra theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2021, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 3.5.0
  */
@@ -19,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.5.0
  */
 class Astra_Related_Posts_Loader {
-
 	/**
 	 *  Constructor
 	 *
@@ -290,6 +287,6 @@ class Astra_Related_Posts_Loader {
 }
 
 /**
-*  Kicking this off by creating NEW instace.
-*/
+ *  Kicking this off by creating NEW instace.
+ */
 new Astra_Related_Posts_Loader();

@@ -3,8 +3,6 @@
  * Accessibility Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       Astra 4.1.0
  */
@@ -17,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Register Astra Accessibility Configurations.
  */
 class Astra_Accessibility_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Register Astra Accessibility Configurations.
 	 *

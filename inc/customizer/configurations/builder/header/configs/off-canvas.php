@@ -2,9 +2,7 @@
 /**
  * Off canvas Header Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -61,10 +59,50 @@ function astra_header_off_canvas_configuration() {
 				'full-width' => __( 'Full-Screen', 'astra' ),
 				'dropdown'   => __( 'Dropdown', 'astra' ),
 			),
-			'transport'  => 'postMessage',
+			'transport'  => 'refresh',
 			'context'    => Astra_Builder_Helper::$general_tab,
 			'renderAs'   => 'text',
 			'responsive' => false,
+		),
+
+		/**
+		 * Option: Off-Canvas Move Body.
+		 */
+		array(
+			'name'        => ASTRA_THEME_SETTINGS . '[off-canvas-move-body]',
+			'default'     => astra_get_option( 'off-canvas-move-body' ),
+			'type'        => 'control',
+			'control'     => 'ast-toggle-control',
+			'section'     => $_section,
+			'priority'    => 30,
+			'title'       => __( 'Move Body', 'astra' ),
+			'description' => __( 'Enable to shift the body content when the off-canvas menu opens.', 'astra' ),
+			'context'     => array(
+				Astra_Builder_Helper::$general_tab_config,
+				array(
+					'setting'  => ASTRA_THEME_SETTINGS . '[mobile-header-type]',
+					'operator' => '==',
+					'value'    => 'dropdown',
+				),
+			),
+			'divider'     => array( 'ast_class' => 'ast-top-dotted-divider ast-section-spacing' ),
+		),
+
+		array(
+			'name'     => ASTRA_THEME_SETTINGS . '[off-canvas-move-body-notice]',
+			'type'     => 'control',
+			'control'  => 'ast-description',
+			'section'  => $_section,
+			'priority' => 30,
+			'help'     => esc_html__( 'Note: This is not applicable on Transparent and Sticky Headers!', 'astra' ),
+			'context'  => array(
+				Astra_Builder_Helper::$general_tab_config,
+				array(
+					'setting'  => ASTRA_THEME_SETTINGS . '[mobile-header-type]',
+					'operator' => '==',
+					'value'    => 'dropdown',
+				),
+			),
 		),
 
 		/**
@@ -267,5 +305,5 @@ function astra_header_off_canvas_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_off_canvas_configuration();
+	add_action( 'init', 'astra_header_off_canvas_configuration' );
 }

@@ -21,12 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 <?php astra_head_top(); ?>
 <meta charset="<?php bloginfo( 'charset' ); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<?php 
+<?php
 if ( apply_filters( 'astra_header_profile_gmpg_link', true ) ) {
 	?>
-	 <link rel="profile" href="https://gmpg.org/xfn/11"> 
-	 <?php
-} 
+	<link rel="profile" href="https://gmpg.org/xfn/11"> 
+	<?php
+}
 ?>
 <?php wp_head(); ?>
 <?php astra_head_bottom(); ?>
@@ -39,18 +39,19 @@ if ( apply_filters( 'astra_header_profile_gmpg_link', true ) ) {
 <a
 	class="skip-link screen-reader-text"
 	href="#content"
-	role="link"
 	title="<?php echo esc_attr( astra_default_strings( 'string-header-skip-link', false ) ); ?>">
 		<?php echo esc_html( astra_default_strings( 'string-header-skip-link', false ) ); ?>
 </a>
 
 <div
 <?php
-	echo astra_attr(
-		'site',
-		array(
-			'id'    => 'page',
-			'class' => 'hfeed site',
+	echo wp_kses_post(
+		astra_attr(
+			'site',
+			array(
+				'id'    => 'page',
+				'class' => 'hfeed site',
+			)
 		)
 	);
 	?>

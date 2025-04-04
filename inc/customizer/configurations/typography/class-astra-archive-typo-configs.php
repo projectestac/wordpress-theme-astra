@@ -3,8 +3,6 @@
  * Styling Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.15
  */
@@ -19,7 +17,6 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Archive_Typo_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Archive Typography Customizer Configurations.
 		 *
@@ -44,6 +41,7 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 						'name'     => ASTRA_THEME_SETTINGS . '[ast-blog-pro-items]',
 						'type'     => 'control',
 						'control'  => 'ast-upgrade',
+						'campaign' => 'blog-archive',
 						'renderAs' => 'list',
 						'choices'  => array(
 							'one'    => array(
@@ -75,9 +73,6 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 							),
 							'nine'   => array(
 								'title' => __( 'Archive excerpt options', 'astra' ),
-							),
-							'ten'    => array(
-								'title' => __( 'Extended spacing options', 'astra' ),
 							),
 						),
 						'section'  => 'section-blog',
@@ -232,9 +227,7 @@ if ( ! class_exists( 'Astra_Archive_Typo_Configs' ) ) {
 				$_configs    = array_merge( $_configs, $new_configs );
 			}
 
-			$configurations = array_merge( $configurations, $_configs );
-
-			return $configurations;
+			return array_merge( $configurations, $_configs );
 		}
 	}
 }

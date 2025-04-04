@@ -14,7 +14,7 @@
  * @param  {String} selector Selector to match against [optional].
  * @return {Array}           The parent elements.
  */
- var astraGetParents = function ( elem, selector ) {
+var astraGetParents = function ( elem, selector ) {
 
 	// Element.matches() polyfill.
 	if ( ! Element.prototype.matches) {
@@ -211,17 +211,37 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 		}
 
 		if ( 'off-canvas' === mobileHeaderType ) {
-
-			for ( var item = 0;  item < popupTrigger.length; item++ ) {
-				if ( undefined !==  popupTrigger[item] && popupTrigger[item].classList.contains( 'toggled') ) {
-					popupTrigger[item].click();
+			popupTrigger.forEach(function (trigger) {
+				if (trigger && trigger.classList.contains('toggled')) {
+					trigger.click();
 				}
-			}
+			});
 		}
-
-		init( mobileHeaderType );
-
+	
+		init(mobileHeaderType);
 	}
+	
+	function syncToggledClass() {
+		const buttons = document.querySelectorAll('.menu-toggle');
+			const allToggled = Array.from(buttons).every(button => button.classList.contains('toggled'));
+	
+		buttons.forEach(button => {
+			if (allToggled) {
+				button.classList.remove('toggled');
+			} else {
+				button.classList.add('toggled');
+			}
+		});
+	}
+	
+	document.addEventListener('click', function (e) {
+		const button = e.target.closest('.menu-toggle');
+		if (button) {
+			button.classList.toggle('toggled');
+			syncToggledClass();
+		}
+	});
+	
 
 	/**
 	 * Opens the Popup when trigger is clicked.
@@ -285,17 +305,24 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 		}
 
-		for ( var j = 0; j < parent_li_sibling.length; j++ ) {
-
-			parent_li_sibling[j].classList.remove('ast-submenu-expanded');
-
-			var all_sub_menu = parent_li_sibling[j].querySelectorAll('.sub-menu');
-			for ( var k = 0; k < all_sub_menu.length; k++ ) {
-				all_sub_menu[k].style.display = 'none';
-			}
-		}
-
-		var popupTrigger = document.querySelectorAll( '.menu-toggle' );
+		parent_li_sibling.forEach((li_sibling) => {
+			li_sibling.classList.remove('ast-submenu-expanded');
+		
+			const all_sub_menu = Array.from(li_sibling.querySelectorAll('.sub-menu'));
+			all_sub_menu.forEach((sub_menu) => {
+				if (!sub_menu.hasAttribute('data-initial-display')) {
+					sub_menu.setAttribute('data-initial-display', window.getComputedStyle(sub_menu).display);
+				}
+		
+				if (sub_menu.getAttribute('data-initial-display') === 'block') {
+					sub_menu.style.display = 'block';
+				} else {
+					sub_menu.style.display = 'none';
+				}
+			});
+		});
+		
+        var popupTrigger = document.querySelectorAll( '.menu-toggle' );
 
 		document.body.classList.remove( 'ast-main-header-nav-open', 'ast-popup-nav-open' );
 		document.documentElement.classList.remove( 'ast-off-canvas-active' );
@@ -345,6 +372,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 				popupTriggerMobile[item].removeEventListener("click", astraNavMenuToggle, false);
 				// Open the Popup when click on trigger
+				popupTriggerMobile[item].removeEventListener("click", popupTriggerClick);
 				popupTriggerMobile[item].addEventListener("click", popupTriggerClick, false);
 				popupTriggerMobile[item].trigger_type = 'mobile';
 
@@ -353,6 +381,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 				popupTriggerDesktop[item].removeEventListener("click", astraNavMenuToggle, false);
 				// Open the Popup when click on trigger
+				popupTriggerDesktop[item].removeEventListener("click", popupTriggerClick);
 				popupTriggerDesktop[item].addEventListener("click", popupTriggerClick, false);
 				popupTriggerDesktop[item].trigger_type = 'desktop';
 
@@ -425,6 +454,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			for ( var item = 0;  item < popupTriggerMobile.length; item++ ) {
 
 				popupTriggerMobile[item].removeEventListener("click", popupTriggerClick, false);
+				popupTriggerMobile[item].removeEventListener('click', astraNavMenuToggle);
 				popupTriggerMobile[item].addEventListener('click', astraNavMenuToggle, false);
 				popupTriggerMobile[item].trigger_type = 'mobile';
 
@@ -432,6 +462,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			for ( var item = 0;  item < popupTriggerDesktop.length; item++ ) {
 
 				popupTriggerDesktop[item].removeEventListener("click", popupTriggerClick, false);
+				popupTriggerDesktop[item].removeEventListener('click', astraNavMenuToggle);
 				popupTriggerDesktop[item].addEventListener('click', astraNavMenuToggle, false);
 				popupTriggerDesktop[item].trigger_type = 'desktop';
 
@@ -717,6 +748,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 						if ( ! menu_click_listeners_nav[i] ) {
 							menu_click_listeners_nav[i] = menu_toggle_all[i];
+							menu_toggle_all[i].removeEventListener('click', astraNavMenuToggle);
 							menu_toggle_all[i].addEventListener('click', astraNavMenuToggle, false);
 						}
 					}
@@ -735,7 +767,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 							if (astra_menu_toggle.length > 0) {
 
 								for (var j = 0; j < astra_menu_toggle.length; j++) {
-
+									astra_menu_toggle[j].removeEventListener('click', AstraToggleSubMenu);
 									astra_menu_toggle[j].addEventListener('click', AstraToggleSubMenu, false);
 								}
 							}
@@ -903,30 +935,23 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 	/**
 	 * Navigation Keyboard Navigation.
 	 */
-	function navigation_accessibility( containerMenu, containerButton ) {
-		if ( ! containerMenu || ! containerButton ) {
+	function navigation_accessibility(containerMenu, containerButton) {
+		if (!containerMenu || !containerButton) {
 			return;
 		}
-		var button = containerButton.getElementsByTagName( 'button' )[0];
-		if ( 'undefined' === typeof button ) {
-			button = containerButton.getElementsByTagName( 'a' )[0];
-			var search_type = button.classList.contains('astra-search-icon');
-			if ( true === search_type ) {
-				return;
-			}
-			if ( 'undefined' === typeof button ) {
-				return;
-			}
+		var button = containerButton.getElementsByTagName('button')[0] || containerButton.getElementsByTagName('a')[0];
+		if (!button || (button.classList.contains('astra-search-icon'))) {
+			return;
 		}
-		var menu = containerMenu.getElementsByTagName( 'ul' )[0];
+		var menu = containerMenu.getElementsByTagName('ul')[0];
 
 		// Hide menu toggle button if menu is empty and return early.
-		if ( 'undefined' === typeof menu ) {
+		if (!menu) {
 			button.style.display = 'none';
 			return;
 		}
 
-		if ( -1 === menu.className.indexOf( 'nav-menu' ) ) {
+		if (!menu.className.includes('nav-menu')) {
 			menu.className += ' nav-menu';
 		}
 
@@ -935,58 +960,44 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 				var popupClose = document.getElementById('menu-toggle-close');
 				if (popupClose) {
 					popupClose.onclick = function () {
-						if (-1 !== containerMenu.className.indexOf('toggled')) {
-							containerMenu.className = containerMenu.className.replace(' toggled', '');
-							button.setAttribute('aria-expanded', 'false');
-							menu.setAttribute('aria-expanded', 'false');
-						} else {
-							containerMenu.className += ' toggled';
-							button.setAttribute('aria-expanded', 'true');
-							menu.setAttribute('aria-expanded', 'true');
-						}
+						var toggled = containerMenu.className.includes('toggled');
+						containerMenu.className = toggled ? containerMenu.className.replace(' toggled', '') : containerMenu.className + ' toggled';
+						button.setAttribute('aria-expanded', toggled ? 'false' : 'true');
+						menu.setAttribute('aria-expanded', toggled ? 'false' : 'true');
 					};
 				}
 			}
 		});
 
-		button.onclick = function() {
-			if ( -1 !== containerMenu.className.indexOf( 'toggled' ) ) {
-				containerMenu.className = containerMenu.className.replace( ' toggled', '' );
-				button.setAttribute( 'aria-expanded', 'false' );
-				menu.setAttribute( 'aria-expanded', 'false' );
-			} else {
-				containerMenu.className += ' toggled';
-				button.setAttribute( 'aria-expanded', 'true' );
-				menu.setAttribute( 'aria-expanded', 'true' );
-			}
+		button.onclick = function () {
+			var toggled = containerMenu.className.includes('toggled');
+			containerMenu.className = toggled ? containerMenu.className.replace(' toggled', '') : containerMenu.className + ' toggled';
+			button.setAttribute('aria-expanded', toggled ? 'false' : 'true');
+			menu.setAttribute('aria-expanded', toggled ? 'false' : 'true');
 		};
 
-		if( ! astra.is_header_footer_builder_active ) {
+		if (!astra.is_header_footer_builder_active) {
 
 			// Get all the link elements within the menu.
-			var links    = menu.getElementsByTagName( 'a' );
-			var subMenus = menu.getElementsByTagName( 'ul' );
-
+			var links = menu.getElementsByTagName('a');
+			var subMenus = menu.getElementsByTagName('ul');
 
 			// Set menu items with submenus to aria-haspopup="true".
-			for ( var i = 0, len = subMenus.length; i < len; i++ ) {
-				subMenus[i].parentNode.setAttribute( 'aria-haspopup', 'true' );
+			for (var i = 0, len = subMenus.length; i < len; i++) {
+				subMenus[i].parentNode.setAttribute('aria-haspopup', 'true');
 			}
 
 			// Each time a menu link is focused or blurred, toggle focus.
-			for ( i = 0, len = links.length; i < len; i++ ) {
-				links[i].addEventListener( 'focus', toggleFocus, true );
-				links[i].addEventListener( 'blur', toggleFocus, true );
-				links[i].addEventListener( 'click', toggleClose, true );
+			for (var i = 0, len = links.length; i < len; i++) {
+				links[i].addEventListener('focus', toggleFocus, true);
+				links[i].addEventListener('blur', toggleFocus, true);
+				links[i].addEventListener('click', toggleClose, true);
 			}
-
 		}
 
-		if( astra.is_header_footer_builder_active ) {
+		if (astra.is_header_footer_builder_active) {
 			tabNavigation();
 		}
-
-
 	}
 
 	// Tab navigation for accessibility.
@@ -997,63 +1008,48 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 		const megaMenuFullWidth = document.querySelectorAll('.astra-full-megamenu-wrapper');
 
 		if (dropdownToggleLinks) {
-
 			dropdownToggleLinks.forEach(element => {
 				element.addEventListener('keydown', function (e) {
-
 					if ('Enter' === e.key) {
-						if (!e.target.closest('li').querySelector('.sub-menu').classList.contains('astra-megamenu')) {
-							setTimeout(() => {
-								e.target.closest('li').querySelector('.sub-menu').classList.toggle('toggled-on');
-								e.target.closest('li').classList.toggle('ast-menu-hover');
-
-								if ('false' === e.target.getAttribute('aria-expanded') || !e.target.getAttribute('aria-expanded')) {
-									e.target.setAttribute('aria-expanded', 'true');
-								} else {
-									e.target.setAttribute('aria-expanded', 'false');
-								}
-							}, 10);
-						} else {
-							// This is to handle mega menu
-							setTimeout(() => {
-								const subMenuTarget = e.target.closest('li').querySelector('.sub-menu');
-								const fullMegaMenuWrapper = e.target.closest('li').querySelector('.astra-full-megamenu-wrapper');
-								if( subMenuTarget ) {
-									subMenuTarget.classList.toggle('astra-megamenu-focus');
-								}
-
-								if( fullMegaMenuWrapper ) {
-									fullMegaMenuWrapper.classList.toggle('astra-megamenu-wrapper-focus');
-								}
-								e.target.closest('li').classList.toggle('ast-menu-hover');
-
-								if ('false' === e.target.getAttribute('aria-expanded') || !e.target.getAttribute('aria-expanded')) {
-									e.target.setAttribute('aria-expanded', 'true');
-								} else {
-									e.target.setAttribute('aria-expanded', 'false');
-								}
-							}, 10);
+						// Check if the user is on a mobile device and prevent default and stop propagation if true.
+						if ( /Mobi|Android|iPad|iPhone/i.test( navigator.userAgent ) ) {
+							e.preventDefault();
+							e.stopPropagation();
 						}
+
+						const closestLi = e.target.closest('li');
+						const subMenu = closestLi.querySelector('.sub-menu');
+						const isMegaMenu = subMenu && subMenu.classList.contains('astra-megamenu');
+
+						setTimeout(() => {
+							if (!isMegaMenu) {
+								subMenu.classList.toggle('toggled-on');
+								closestLi.classList.toggle('ast-menu-hover');
+							} else {
+								const fullMegaMenuWrapper = closestLi.querySelector('.astra-full-megamenu-wrapper');
+								if (subMenu) subMenu.classList.toggle('astra-megamenu-focus');
+								if (fullMegaMenuWrapper) fullMegaMenuWrapper.classList.toggle('astra-megamenu-wrapper-focus');
+								closestLi.classList.toggle('ast-menu-hover');
+							}
+
+							const ariaExpanded = e.target.getAttribute('aria-expanded');
+							e.target.setAttribute('aria-expanded', ariaExpanded === 'false' || !ariaExpanded ? 'true' : 'false');
+						}, 10);
 					}
 				});
 			});
 
 			if (siteNavigationSubMenu || menuLi) {
-				// Close sub-menus when clicking elsewhere
 				document.addEventListener('click', function (e) {
 					closeNavigationMenu(siteNavigationSubMenu, dropdownToggleLinks, menuLi, megaMenuFullWidth);
 				}, false);
-			}
 
-			if (siteNavigationSubMenu || menuLi) {
-				// Close sub-menus on escape key
 				document.addEventListener('keydown', function (e) {
 					if ('Escape' === e.key) {
 						closeNavigationMenu(siteNavigationSubMenu, dropdownToggleLinks, menuLi, megaMenuFullWidth);
 					}
 				}, false);
 			}
-
 		}
 
 		const allParentMenu = document.querySelectorAll('nav.site-navigation .ast-nav-menu > .menu-item-has-children > a .ast-header-navigation-arrow');
@@ -1109,7 +1105,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			hash = '#';
 
 		if( self && ! self.classList.contains('astra-search-icon') && null === self.closest('.ast-builder-menu') ) {
-			var link = new String( self );
+			var link = String( self );
 			if( link.indexOf( hash ) !== -1 ) {
 				var link_parent = self.parentNode;
 				if ( body.classList.contains('ast-header-break-point') ) {
@@ -1176,46 +1172,75 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 	 * @since x.x.x
 	 */
 	if ( astra.is_scroll_to_id ) {
-		let hashLinks = [];
-		const links = document.querySelectorAll('a[href*="#"]:not([href="#"]):not([href="#0"]):not([href*="uagb-tab"]):not(.uagb-toc-link__trigger):not(.skip-link):not(.nav-links a):not([href*="tab-"])');
-		if (links) {
-
-			for (const link of links) {
-
-				if (link.href.split('#')[0] !== location.href.split('#')[0]) {
-					// Store the hash
-					hashLinks.push({hash: link.hash, url: link.href.split('#')[0]});
-				} else if (link.hash !== "") {
-					link.addEventListener("click", scrollToIDHandler);
-				}
+		// Calculate the offset top of an element, accounting for nested elements.
+		const getOffsetTop = (element) => {
+			let offsetTop = 0;
+			while (element) {
+				offsetTop += element.offsetTop;
+				element = element.offsetParent;
 			}
+			return offsetTop;
 		}
 
-		function scrollToIDHandler(e) {
+		const scrollToIDHandler = (e) => {
 
 			let offset = 0;
 			const siteHeader = document.querySelector('.site-header');
 
 			if (siteHeader) {
 
-				//Check and add offset to scroll top if header is sticky.
-				const headerHeight = siteHeader.querySelectorAll('div[data-stick-support]');
+				// Check and add offset to scroll top if header is sticky.
+				const stickyHeaders = siteHeader.querySelectorAll(
+					'div[data-stick-support]'
+				);
 
-				if (headerHeight) {
-					headerHeight.forEach(single => {
-						offset += single.clientHeight;
-					});
+				if ( stickyHeaders.length > 0 ) {
+					stickyHeaders.forEach( ( header ) => ( offset += header.clientHeight ) );
+				} else if ( typeof astraAddon !== 'undefined' && ! ( Number( astraAddon.sticky_hide_on_scroll ) && ! document?.querySelector( '.ast-header-sticked' ) ) ) {
+					const fixedHeader = document.querySelector( '#ast-fixed-header' );
+					if ( fixedHeader ) {
+						offset = fixedHeader?.clientHeight;
+						if ( Number( astraAddon?.header_main_shrink ) ) {
+							const headers = fixedHeader?.querySelectorAll(
+								'.ast-above-header-wrap, .ast-below-header-wrap'
+							);
+							headers?.forEach( () => ( offset -= 10 ) );
+						}
+					}
 				}
 
-				const href = this.hash;
+				const href = e.target.closest('a').hash;
 				if (href) {
 					const scrollId = document.querySelector(href);
 					if (scrollId) {
-						const scrollOffsetTop = scrollId.offsetTop - offset;
+						const elementOffsetTop = getOffsetTop( scrollId );
+						if ( typeof astraAddon !== 'undefined' && Number( astraAddon.sticky_hide_on_scroll ) && window?.scrollY  < elementOffsetTop ) {
+							offset = 0;
+						}
+
+						const scrollOffsetTop = elementOffsetTop - offset;
 						if( scrollOffsetTop ) {
 							astraSmoothScroll( e, scrollOffsetTop );
 						}
 					}
+				}
+			}
+		}
+
+		let hashLinks = [];
+		const links = document.querySelectorAll(
+			'a[href*="#"]:not([href="#"]):not([href="#0"]):not([href*="uagb-tab"]):not(.uagb-toc-link__trigger):not(.skip-link):not(.nav-links a):not([href*="tab-"])'
+		);
+		if (links) {
+			for (const link of links) {
+				if (link.href.split("#")[0] !== location.href.split("#")[0]) {
+					// Store the hash
+					hashLinks.push({
+						hash: link.hash,
+						url: link.href.split("#")[0],
+					});
+				} else if (link.hash !== "") {
+					link.addEventListener("click", scrollToIDHandler);
 				}
 			}
 		}
@@ -1236,7 +1261,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 					
 					const scrollId = document.querySelector(link.hash);
 					if (scrollId) {
-						const scrollOffsetTop = scrollId.offsetTop - offset;
+						const scrollOffsetTop = getOffsetTop(scrollId) - offset;
 						if (scrollOffsetTop) {
 							astraSmoothScroll(event, scrollOffsetTop);
 						}
@@ -1272,17 +1297,142 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 		});
 	}
 
+	if (astra.palette_key === "palette_4"){
+		document.documentElement.classList.add("astra-dark-mode-enable");
+	} else {
+		document.documentElement.classList.remove("astra-dark-mode-enable");
+	}
+
 	/**
 	 * To remove the blank space when the store notice gets dismissed.
+	 * To adjust the height of the store notice when hanged over top.
 	 *
 	 * @since x.x.x
 	 */
 	window.addEventListener('DOMContentLoaded', (event) => {
+		const isHangOverTopNotice = document.querySelector('.ast-woocommerce-store-notice-hanged');
+		const adjustBodyHeight = () => {
+			const storeNotice = document.querySelector('.woocommerce-store-notice[data-position="hang-over-top"]');
+			document.body.style.marginTop = `${storeNotice?.clientHeight || 0}px`;
+		}
+
+		if (isHangOverTopNotice) {	
+			window.addEventListener('resize', adjustBodyHeight);
+			setTimeout(() => adjustBodyHeight(), 0);
+		}
+
 		document
 			.querySelector('.woocommerce-store-notice__dismiss-link')
-			?.addEventListener('click', () =>
-				!wp?.customize && document.body.classList.remove('ast-woocommerce-store-notice-hanged')
-			);
+			?.addEventListener('click', () => {
+				if (!wp?.customize) {
+					document.body.classList.remove('ast-woocommerce-store-notice-hanged');
+					window.removeEventListener('resize', adjustBodyHeight);
+					document.body.style.marginTop = 0;
+				}
+			});
 	});
 
 })();
+
+// Accessibility improvement for menu items.
+document.addEventListener('DOMContentLoaded', function () {
+    const submenuToggles = document.querySelectorAll('.menu-link .dropdown-menu-toggle');
+
+	const menuItemsWithSubmenu = document.querySelectorAll('.menu-item-has-children > a');
+
+	// Ensuring the submenu toggle action is handled with appropriate CSS, with cross browser compatibility for Enter key press.
+    menuItemsWithSubmenu.forEach(item => {
+        item.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const submenu = item.nextElementSibling;
+                if (submenu && submenu.classList.contains('sub-menu')) {
+                    submenu.classList.toggle('ast-visible');
+                    const ariaExpanded = item.getAttribute('aria-expanded') === 'false' ? 'true' : 'false';
+                    item.setAttribute('aria-expanded', ariaExpanded);
+                }
+            }
+        });
+    });
+
+    // Add event listeners for focus, blur, and keydown events.
+    submenuToggles.forEach(toggle => {
+        toggle.addEventListener('focus', () => updateAriaExpanded(toggle));
+        toggle.addEventListener('blur', () => updateAriaExpanded(toggle));
+        toggle.addEventListener('keydown', event => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                toggleAriaExpanded(toggle);
+            }
+        });
+    });
+
+    // Add event listener for Escape key press to close all submenus.
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            closeAllSubmenus();
+        }
+    });
+
+    /**
+     * Updates the `aria-expanded` attribute based on submenu visibility.
+     * @param {HTMLElement} toggle - The toggle element.
+     */
+    function updateAriaExpanded(toggle) {
+        const menuItemLink = toggle.closest('.menu-link');
+        const submenu = menuItemLink.nextElementSibling;
+        const isSubmenuVisible = submenu.classList.contains('toggled-on');
+        menuItemLink.setAttribute('aria-expanded', isSubmenuVisible ? 'true' : 'false');
+    }
+
+    /**
+     * Toggles the `aria-expanded` attribute for a given toggle element.
+     * @param {HTMLElement} toggle - The toggle element.
+     */
+    function toggleAriaExpanded(toggle) {
+        const menuItemLink = toggle.closest('.menu-link');
+        const currentState = menuItemLink.getAttribute('aria-expanded');
+        menuItemLink.setAttribute('aria-expanded', currentState === 'true' ? 'false' : 'true');
+    }
+
+    /**
+     * Closes all submenus by updating the `aria-expanded` attribute.
+     */
+    function closeAllSubmenus() {
+        submenuToggles.forEach(toggle => updateAriaExpanded(toggle));
+    }
+
+	// This event listener is triggered when the device orientation changes, and it dispatches a 'resize' event to ensure layout adjustments are made.
+	window.addEventListener( 'orientationchange', () => {
+		setTimeout( () => window.dispatchEvent( new Event( 'resize' ) ), 50 );
+	} );
+});
+
+// Accessibility improvement for product card quick view and add to cart buttons.
+document.addEventListener('DOMContentLoaded', () => {
+    const thumbnailWraps = document.querySelectorAll('.astra-shop-thumbnail-wrap');
+
+    thumbnailWraps.forEach(wrap => {
+        const focusableElements = wrap.querySelectorAll('a, span');
+
+        focusableElements.forEach(el => {
+            el.addEventListener('focus', () => {
+                wrap.querySelectorAll('.ast-on-card-button, .ast-quick-view-trigger').forEach(btn => {
+                    btn.style.opacity = '1';
+                    btn.style.visibility = 'visible';
+                    btn.style.borderStyle = 'none';
+                });
+            });
+
+            el.addEventListener('blur', () => {
+                // Added Check to check if child elements are still focused.
+                const isAnyFocused = Array.from(focusableElements).some(child => child === document.activeElement);
+                if (!isAnyFocused) {
+                    wrap.querySelectorAll('.ast-on-card-button, .ast-quick-view-trigger').forEach(btn => {
+                        btn.style.opacity = '';
+                        btn.style.visibility = '';
+                    });
+                }
+            });
+        });
+    });
+});

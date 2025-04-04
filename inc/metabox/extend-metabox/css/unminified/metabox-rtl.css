@@ -177,7 +177,6 @@ div#astra_settings_meta_box {
 }
 .ast-header-settings-modal .components-modal__header {
     padding-right: 24px;
-    padding-left: 0;
     border-bottom: 0;
     padding-bottom: 20px;
     padding-top: 20px;
@@ -311,10 +310,14 @@ td.ast-advanced-hook-row-heading {
 .ast-pro-upgrade-cta-wrapper {
     padding: 20px;
     text-align: center;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 p.ast-upgrade-description {
-    margin-top: 15px;
-	margin-bottom: 15px;
+    margin: 0;
 }
 a.ast-pro-upgrade-link {
     color: #0284C7;
@@ -1827,6 +1830,7 @@ a.ast-pro-upgrade-link {
     box-shadow: 0 0 0 1px #334155;
 }
 .ast-palette-label-wrap{
+  display: inline-block;
     text-align: center;
 	color: #9CA3AF;
 	overflow: hidden;
@@ -1887,8 +1891,6 @@ a.ast-pro-upgrade-link {
 
 .ast-color-picker-custom-tooltip[data-title]::after {
 	content: attr(data-title);
-    min-width: 3em;
-    max-width: 10em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1911,6 +1913,10 @@ a.ast-pro-upgrade-link {
     opacity: 0;
     right: 50%;
     transform: translate(50%,-0.5em);
+}
+
+.ast-single-palette-wrap > :last-child .ast-color-picker-custom-tooltip[data-title]::after {
+    right: -16px;
 }
 
 .ast-color-picker-custom-tooltip-wrapper {
@@ -2070,7 +2076,7 @@ a.ast-pro-upgrade-link {
   font-weight: 400;
 }
 
-.components-base-control .components-base-control__field .components-input-control__backdrop {
+.ast-sidebar-container .components-base-control .components-base-control__field .components-input-control__backdrop {
   border-color: #D1D5DB !important;
 }
 

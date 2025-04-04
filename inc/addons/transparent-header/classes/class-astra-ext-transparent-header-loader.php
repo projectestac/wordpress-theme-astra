@@ -18,7 +18,6 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 	 * @since 1.0.0
 	 */
 	class Astra_Ext_Transparent_Header_Loader {
-
 		/**
 		 * Member Variable
 		 *
@@ -44,7 +43,6 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 			add_filter( 'astra_theme_defaults', array( $this, 'theme_defaults' ) );
 			add_action( 'customize_preview_init', array( $this, 'preview_scripts' ) );
 			add_action( 'customize_register', array( $this, 'customize_register' ), 2 );
-
 		}
 
 		/**
@@ -56,16 +54,21 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 		public function theme_defaults( $defaults ) {
 
 			// Header - Transparent.
-			$defaults['transparent-header-logo']                       = '';
-			$defaults['transparent-header-retina-logo']                = '';
-			$defaults['different-transparent-logo']                    = 0;
-			$defaults['different-transparent-retina-logo']             = 0;
-			$defaults['transparent-header-logo-width']                 = array(
+			$defaults['transparent-header-logo']           = '';
+			$defaults['transparent-header-retina-logo']    = '';
+			$defaults['different-transparent-logo']        = 0;
+			$defaults['different-transparent-retina-logo'] = 0;
+			$defaults['transparent-header-logo-width']     = array(
 				'desktop' => 150,
 				'tablet'  => 120,
 				'mobile'  => 100,
 			);
-			$defaults['transparent-header-enable']                     = 0;
+			$defaults['transparent-header-enable']         = 0;
+			/**
+			 * Old option for 404, search and archive pages.
+			 *
+			 * For default value on separate option this setting is in use.
+			 */
 			$defaults['transparent-header-disable-archive']            = 1;
 			$defaults['transparent-header-disable-latest-posts-index'] = 1;
 			$defaults['transparent-header-on-devices']                 = 'both';
@@ -73,8 +76,8 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 			$defaults['transparent-header-main-sep-color']             = '';
 
 			/**
-			* Transparent Header
-			*/
+			 * Transparent Header
+			 */
 			$defaults['transparent-header-bg-color']           = '';
 			$defaults['transparent-header-color-site-title']   = '';
 			$defaults['transparent-header-color-h-site-title'] = '';
@@ -87,9 +90,21 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 			$defaults['transparent-header-logo-color']         = '';
 
 			/**
-			* Transparent Header Responsive Colors
-			*/
+			 * Transparent Header Responsive Colors
+			 */
 			$defaults['transparent-header-bg-color-responsive'] = array(
+				'desktop' => '',
+				'tablet'  => '',
+				'mobile'  => '',
+			);
+
+			$defaults['hba-transparent-header-bg-color-responsive'] = array(
+				'desktop' => '',
+				'tablet'  => '',
+				'mobile'  => '',
+			);
+
+			$defaults['hbb-transparent-header-bg-color-responsive'] = array(
 				'desktop' => '',
 				'tablet'  => '',
 				'mobile'  => '',
@@ -192,8 +207,8 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 			 * Load unminified if SCRIPT_DEBUG is true.
 			 */
 			/* Directory and Extension */
-			$dir_name    = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
-			$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
+			$dir_name    = SCRIPT_DEBUG ? 'unminified' : 'minified';
+			$file_prefix = SCRIPT_DEBUG ? '' : '.min';
 			wp_enqueue_script( 'astra-transparent-header-customizer-preview-js', ASTRA_THEME_TRANSPARENT_HEADER_URI . 'assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
 
 			// Localize variables for further JS.
@@ -203,6 +218,7 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 				array(
 					'is_astra_hf_builder_active' => Astra_Builder_Helper::$is_header_footer_builder_active,
 					'is_flex_based_css'          => Astra_Builder_Helper::apply_flex_based_css(),
+					'transparent_header_devices' => astra_get_option( 'transparent-header-on-devices' ),
 				)
 			);
 		}
@@ -210,6 +226,6 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 }
 
 /**
-*  Kicking this off by calling 'get_instance()' method
-*/
+ *  Kicking this off by calling 'get_instance()' method
+ */
 Astra_Ext_Transparent_Header_Loader::get_instance();

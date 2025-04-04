@@ -3,8 +3,6 @@
  * Register customizer panels & sections for Easy Digital Downloads.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.5.5
  */
@@ -19,7 +17,6 @@ if ( ! class_exists( 'Astra_Customizer_Register_Edd_Section' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Customizer_Register_Edd_Section extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Panels and Sections for Customizer.
 		 *
@@ -70,6 +67,5 @@ if ( ! class_exists( 'Astra_Customizer_Register_Edd_Section' ) ) {
 		}
 	}
 }
-
 
 new Astra_Customizer_Register_Edd_Section();

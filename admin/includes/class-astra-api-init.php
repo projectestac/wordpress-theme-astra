@@ -20,11 +20,9 @@ if ( ! class_exists( 'WP_REST_Controller' ) ) {
  * @since 4.1.0
  */
 class Astra_API_Init extends WP_REST_Controller {
-
 	/**
 	 * Instance
 	 *
-	 * @access private
 	 * @var null $instance
 	 * @since 4.0.0
 	 */
@@ -60,7 +58,6 @@ class Astra_API_Init extends WP_REST_Controller {
 	/**
 	 * Option name
 	 *
-	 * @access private
 	 * @var string $option_name DB option name.
 	 * @since 4.0.0
 	 */
@@ -69,7 +66,6 @@ class Astra_API_Init extends WP_REST_Controller {
 	/**
 	 * Admin settings dataset
 	 *
-	 * @access private
 	 * @var array $astra_admin_settings Settings array.
 	 * @since 4.0.0
 	 */
@@ -129,21 +125,20 @@ class Astra_API_Init extends WP_REST_Controller {
 			)
 		);
 
-		$updated_option = wp_parse_args( $db_option, $defaults );
-		return $updated_option;
+		return wp_parse_args( $db_option, $defaults );
 	}
 
 	/**
 	 * Check whether a given request has permission to read notes.
 	 *
 	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
+	 * @return WP_Error|bool
 	 * @since 4.0.0
 	 */
 	public function get_permissions_check( $request ) {
 
 		if ( ! current_user_can( 'edit_theme_options' ) ) {
-			return new WP_Error( 'astra_rest_cannot_view', __( 'Sorry, you cannot list resources.', 'astra' ), array( 'status' => rest_authorization_required_code() ) );
+			return new WP_Error( 'astra_rest_cannot_view', esc_html__( 'Sorry, you cannot list resources.', 'astra' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 
 		return true;
@@ -159,8 +154,7 @@ class Astra_API_Init extends WP_REST_Controller {
 	 * @since 4.0.0
 	 */
 	public static function get_admin_settings_option( $key, $default = false ) {
-		$value = isset( self::$astra_admin_settings[ $key ] ) ? self::$astra_admin_settings[ $key ] : $default;
-		return $value;
+		return isset( self::$astra_admin_settings[ $key ] ) ? self::$astra_admin_settings[ $key ] : $default;
 	}
 
 	/**

@@ -3,8 +3,6 @@
  * Astra Theme Customizer Configuration Base.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.4.3
  */
@@ -25,11 +23,15 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Customizer_Config_Base {
-
 		/**
 		 * Constructor
 		 */
 		public function __construct() {
+			// Bail early if it is not astra customizer.
+			if ( ! Astra_Customizer::is_astra_customizer() ) {
+				return;
+			}
+
 			add_filter( 'astra_customizer_configurations', array( $this, 'register_configuration' ), 30, 2 );
 		}
 
@@ -67,7 +69,7 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
 			// Links.
 			if ( astra_get_prop( $args, 'links' ) ) {
 				$content .= '<ul>';
-				foreach ( $args['links'] as $index => $link ) {
+				foreach ( $args['links'] as $link ) {
 
 					if ( astra_get_prop( $link, 'attrs' ) ) {
 

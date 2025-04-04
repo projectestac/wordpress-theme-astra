@@ -3,8 +3,6 @@
  * Scroll To Top Options for our theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2022, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       4.0.0
  */
@@ -23,7 +21,6 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
  * Register Scroll To Top Customizer Configurations.
  */
 class Astra_Scroll_To_Top_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Register Scroll To Top Customizer Configurations.
 	 *
@@ -143,7 +140,7 @@ class Astra_Scroll_To_Top_Configs extends Astra_Customizer_Config_Base {
 				'section'  => 'section-scroll-to-top',
 				'context'  => array(
 					'relation' => 'AND',
-					( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[scroll-to-top-enable]',
 						'operator' => '==',
@@ -164,7 +161,7 @@ class Astra_Scroll_To_Top_Configs extends Astra_Customizer_Config_Base {
 				'transport' => 'postMessage',
 				'context'   => array(
 					'relation' => 'AND',
-					( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[scroll-to-top-enable]',
 						'operator' => '==',
@@ -190,7 +187,7 @@ class Astra_Scroll_To_Top_Configs extends Astra_Customizer_Config_Base {
 				'divider'        => array( 'ast_class' => 'ast-top-section-divider' ),
 				'context'        => array(
 					'relation' => 'AND',
-					( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
+					true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config,
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[scroll-to-top-enable]',
 						'operator' => '==',
@@ -302,9 +299,7 @@ class Astra_Scroll_To_Top_Configs extends Astra_Customizer_Config_Base {
 			);
 		}
 
-		$configurations = array_merge( $configurations, $_configs );
-
-		return $configurations;
+		return array_merge( $configurations, $_configs );
 	}
 }
 

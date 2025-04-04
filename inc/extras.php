@@ -6,8 +6,6 @@
  * 2. Third party plugins compatibility functions.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -28,7 +26,7 @@ if ( ! function_exists( 'astra_body_font_family' ) ) {
 		$font_family = astra_get_option( 'body-font-family' );
 
 		// Body Font Family.
-		if ( 'inherit' == $font_family ) {
+		if ( 'inherit' === $font_family ) {
 			$font_family = '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif';
 		}
 
@@ -113,6 +111,31 @@ if ( ! function_exists( 'astra_404_page_layout' ) ) {
 add_filter( 'astra_page_layout', 'astra_404_page_layout', 10, 1 );
 
 /**
+ * Function to check logo component present in which Header section.
+ */
+if ( ! function_exists( 'astra_is_logo_in_section' ) ) {
+
+	/**
+	 * Function filter comment form arguments
+	 *
+	 * @since 4.8.0
+	 * @param array $section     Logo header.
+	 * @return array
+	 */
+	// Function to check if logo is present in a given section
+	function astra_is_logo_in_section( $section ) {
+		foreach ( $section as $components ) {
+			if ( in_array( 'logo', $components ) ) {
+				/** @psalm-suppress InvalidReturnStatement */
+				return true;
+			}
+		}
+		/** @psalm-suppress FalsableReturnStatement */
+		return false;
+	}
+}
+
+/**
  * Return current content layout.
  */
 if ( ! function_exists( 'astra_get_content_layout' ) ) {
@@ -146,7 +169,7 @@ if ( ! function_exists( 'astra_get_content_layout' ) ) {
 				$post_type      = strval( get_post_type() );
 				$content_layout = astra_toggle_layout( 'single-' . $post_type . '-ast-content-layout', 'single', false );
 
-				if ( 'default' == $content_layout || empty( $content_layout ) ) {
+				if ( 'default' === $content_layout || empty( $content_layout ) ) {
 
 					// Get the GLOBAL content layout value.
 					// NOTE: Here not used `true` in the below function call.
@@ -156,7 +179,7 @@ if ( ! function_exists( 'astra_get_content_layout' ) ) {
 		} else {
 
 			$content_layout = '';
-			$post_type      = strval( get_post_type() );
+			$post_type      = astra_get_post_type();
 			$content_layout = astra_toggle_layout( 'archive-' . $post_type . '-ast-content-layout', 'archive', false );
 
 			if ( is_search() ) {
@@ -165,7 +188,7 @@ if ( ! function_exists( 'astra_get_content_layout' ) ) {
 				$content_layout        = astra_toggle_layout( $content_layout_key, 'archive', false );
 			}
 
-			if ( 'default' == $content_layout || empty( $content_layout ) ) {
+			if ( 'default' === $content_layout || empty( $content_layout ) ) {
 
 				// Get the GLOBAL content layout value.
 				// NOTE: Here not used `true` in the below function call.
@@ -200,7 +223,7 @@ function astra_toggle_layout( $new_content_option, $level, $post_id = false, $ol
 
 	// Meta layout migrations.
 	$meta_key              = astra_get_option_meta( 'astra-migrate-meta-layouts', '', true );
-	$migrated_user         = ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() );
+	$migrated_user         = ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support();
 	$third_party_meta_page = astra_third_party_archive_meta( 'site-content-layout' );
 	if ( 'meta' === $level && $migrated_user ) {
 		if ( false !== $third_party_meta_page ) {
@@ -273,7 +296,7 @@ function astra_migrate_meta_layout( $meta_layout ) {
 /**
  * Function to check if it is Internet Explorer
  */
-if ( ! function_exists( 'astra_check_is_ie' ) ) :
+if ( ! function_exists( 'astra_check_is_ie' ) ) {
 
 	/**
 	 * Function to check if it is Internet Explorer.
@@ -293,13 +316,12 @@ if ( ! function_exists( 'astra_check_is_ie' ) ) :
 
 		return apply_filters( 'astra_check_is_ie', $is_ie );
 	}
-
-endif;
+}
 
 /**
  * Replace header logo.
  */
-if ( ! function_exists( 'astra_replace_header_logo' ) ) :
+if ( ! function_exists( 'astra_replace_header_logo' ) ) {
 
 	/**
 	 * Replace header logo.
@@ -315,7 +337,7 @@ if ( ! function_exists( 'astra_replace_header_logo' ) ) :
 
 		$custom_logo_id = get_theme_mod( 'custom_logo' );
 
-		if ( ! is_customize_preview() && $custom_logo_id == $attachment_id && 'full' == $size ) {
+		if ( ! is_customize_preview() && $custom_logo_id == $attachment_id && 'full' === $size ) {
 
 			$data = wp_get_attachment_image_src( $attachment_id, 'ast-logo-size' );
 
@@ -326,18 +348,17 @@ if ( ! function_exists( 'astra_replace_header_logo' ) ) :
 
 		return apply_filters( 'astra_replace_header_logo', $image );
 	}
+}
 
-endif;
-
-if ( ! function_exists( 'astra_strposa' ) ) :
+if ( ! function_exists( 'astra_strposa' ) ) {
 
 	/**
 	 * Strpos over an array.
 	 *
 	 * @since  1.2.4
-	 * @param  String  $haystack The string to search in.
-	 * @param  Array   $needles  Array of needles to be passed to strpos().
-	 * @param  integer $offset   If specified, search will start this number of characters counted from the beginning of the string. If the offset is negative, the search will start this number of characters counted from the end of the string.
+	 * @param  String $haystack The string to search in.
+	 * @param  Array  $needles  Array of needles to be passed to strpos().
+	 * @param  int    $offset   If specified, search will start this number of characters counted from the beginning of the string. If the offset is negative, the search will start this number of characters counted from the end of the string.
 	 *
 	 * @return bool            True if haystack if part of any of the $needles.
 	 */
@@ -357,10 +378,9 @@ if ( ! function_exists( 'astra_strposa' ) ) :
 
 		return false;
 	}
+}
 
-endif;
-
-if ( ! function_exists( 'astra_get_prop' ) ) :
+if ( ! function_exists( 'astra_get_prop' ) ) {
 
 	/**
 	 * Get a specific property of an array without needing to check if that property exists.
@@ -368,8 +388,6 @@ if ( ! function_exists( 'astra_get_prop' ) ) :
 	 * Provide a default value if you want to return a specific value if the property is not set.
 	 *
 	 * @since  1.2.7
-	 * @access public
-	 * @author Gravity Forms - Easiest Tool to Create Advanced Forms for Your WordPress-Powered Website.
 	 * @link  https://www.gravityforms.com/
 	 *
 	 * @param array  $array   Array from which the property's value should be retrieved.
@@ -396,8 +414,7 @@ if ( ! function_exists( 'astra_get_prop' ) ) :
 
 		return empty( $value ) && null !== $default ? $default : $value;
 	}
-
-endif;
+}
 
 /**
  * Build list of attributes into a string and apply contextual filter on string.
@@ -423,16 +440,13 @@ function astra_attr( $context, $attributes = array(), $args = array() ) {
  * @return array            Return theme author URL and name.
  */
 function astra_get_theme_author_details() {
-
-	$theme_author = apply_filters(
+	return apply_filters(
 		'astra_theme_author',
 		array(
-			'theme_name'       => __( 'Astra WordPress Theme', 'astra' ),
-			'theme_author_url' => 'https://wpastra.com/',
+			'theme_name'       => esc_html__( 'Astra WordPress Theme', 'astra' ),
+			'theme_author_url' => ASTRA_WEBSITE_BASE_URL,
 		)
 	);
-
-	return $theme_author;
 }
 
 /**
@@ -480,12 +494,12 @@ function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 
 	if ( defined( 'ASTRA_EXT_VER' ) ) {
 		// Check whether Astra Pro is active + Nav menu addon is deactivate + menu registered by Astra only.
-		if ( ! Astra_Ext_Extension::is_active( 'nav-menu' ) && in_array( $args->menu_id, $astra_menu_locations ) ) {
+		if ( ! Astra_Ext_Extension::is_active( 'nav-menu' ) && isset( $args->menu_id ) && in_array( $args->menu_id, $astra_menu_locations ) ) {
 			$load_svg_menu_icons = true;
 		}
 	} else {
 		// Check menu registered by Astra only.
-		if ( in_array( $args->menu_id, $astra_menu_locations ) ) {
+		if ( isset( $args->menu_id ) && in_array( $args->menu_id, $astra_menu_locations ) ) {
 			$load_svg_menu_icons = true;
 		}
 	}
@@ -517,19 +531,23 @@ function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 		'ast-hf-menu-10-sticky',
 		'ast-hf-account-menu',
 	);
-	
-	$is_special_menu = in_array( $args->menu_id, $special_menu_ids );
-	
+
+	$is_special_menu = isset( $args->menu_id ) && in_array( $args->menu_id, $special_menu_ids );
+
 	if ( $is_nav_menu_extension_inactive || $is_special_menu ) {
 		$icon = Astra_Icons::get_icons( 'arrow' );
-	}   
+	}
 
-	$custom_tabindex  = true === Astra_Builder_Helper::$is_header_footer_builder_active ? 'tabindex="0"' : '';
-	$astra_arrow_icon = '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle ast-header-navigation-arrow" ' . $custom_tabindex . ' aria-expanded="false" aria-label="' . esc_attr__( 'Menu Toggle', 'astra' ) . '" >' . $icon . '</span>';
+	$astra_arrow_icon = '';
+	// Render arrow icon for special menu appearance or on pro deactivation or nav menu extension deactivation.
+	if ( $is_special_menu || $is_nav_menu_extension_inactive || ! defined( 'ASTRA_EXT_VER' ) ) {
+		$custom_tabindex  = true === Astra_Builder_Helper::$is_header_footer_builder_active ? 'tabindex="0"' : '';
+		$astra_arrow_icon = '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle ast-header-navigation-arrow" ' . $custom_tabindex . ' aria-expanded="false" aria-label="' . esc_attr__( 'Menu Toggle', 'astra' ) . '" >' . $icon . '</span>';
+	}
 
 	foreach ( $item->classes as $value ) {
 		if ( 'menu-item-has-children' === $value ) {
-			$title = $title . $astra_arrow_icon;
+			$title .= $astra_arrow_icon;
 		}
 	}
 	if ( 0 < $depth ) {
@@ -547,7 +565,7 @@ if ( Astra_Icons::is_svg_icons() ) {
  *
  * @since 3.0.0
  *
- * @return boolean true/false.
+ * @return bool true/false.
  */
 function astra_existing_header_footer_configs() {
 
@@ -748,10 +766,8 @@ function astra_load_preload_local_fonts( $url, $format = 'woff2' ) {
  * @since 3.6.0
  */
 function astra_get_transparent_header_default_value() {
-	$astra_settings                                      = get_option( ASTRA_THEME_SETTINGS, array() );
-	$astra_settings['transparent-header-default-border'] = isset( $astra_settings['transparent-header-default-border'] ) ? $astra_settings['transparent-header-default-border'] : true;
-
-	return apply_filters( 'astra_transparent_header_default_border', $astra_settings['transparent-header-default-border'] );
+	$astra_settings = astra_get_options();
+	return apply_filters( 'astra_transparent_header_default_border', isset( $astra_settings['transparent-header-default-border'] ) ? $astra_settings['transparent-header-default-border'] : true );
 }
 
 /**
@@ -773,9 +789,8 @@ function astra_has_gcp_typo_preset_compatibility() {
  * @return string
  */
 function astra_button_default_padding_updated() {
-	$astra_settings  = get_option( ASTRA_THEME_SETTINGS, array() );
-	$padding_updated = isset( $astra_settings['btn-default-padding-updated'] ) ? $astra_settings['btn-default-padding-updated'] : true;
-	return apply_filters( 'astra_update_button_padding_defaults', $padding_updated );
+	$astra_settings = astra_get_options();
+	return apply_filters( 'astra_update_button_padding_defaults', isset( $astra_settings['btn-default-padding-updated'] ) ? $astra_settings['btn-default-padding-updated'] : true );
 }
 
 /**
@@ -785,16 +800,15 @@ function astra_button_default_padding_updated() {
  * @return string
  */
 function astra_scndry_btn_default_padding() {
-	$astra_settings  = get_option( ASTRA_THEME_SETTINGS, array() );
-	$padding_updated = isset( $astra_settings['scndry-btn-default-padding'] ) ? $astra_settings['scndry-btn-default-padding'] : true;
-	return apply_filters( 'astra_update_secondary_button_padding_defaults', $padding_updated );
+	$astra_settings = astra_get_options();
+	return apply_filters( 'astra_update_secondary_button_padding_defaults', isset( $astra_settings['scndry-btn-default-padding'] ) ? $astra_settings['scndry-btn-default-padding'] : true );
 }
 
 /**
  * Check is WordPress version is greater than or equal to beta 5.8 version.
  *
  * @since 3.6.5
- * @return boolean
+ * @return bool
  */
 function astra_has_widgets_block_editor() {
 	if ( ( defined( 'GUTENBERG_VERSION' ) && version_compare( GUTENBERG_VERSION, '10.6.2', '>' ) )
@@ -808,35 +822,32 @@ function astra_has_widgets_block_editor() {
  * Check whether user is exising or new to override the default margin space added to Elementor-TOC widget.
  *
  * @since 3.6.7
- * @return boolean
+ * @return bool
  */
 function astra_can_remove_elementor_toc_margin_space() {
-	$astra_settings                                    = get_option( ASTRA_THEME_SETTINGS );
-	$astra_settings['remove-elementor-toc-margin-css'] = isset( $astra_settings['remove-elementor-toc-margin-css'] ) ? false : true;
-	return apply_filters( 'astra_remove_elementor_toc_margin', $astra_settings['remove-elementor-toc-margin-css'] );
+	$astra_settings = astra_get_options();
+	return apply_filters( 'astra_remove_elementor_toc_margin', isset( $astra_settings['remove-elementor-toc-margin-css'] ) ? false : true );
 }
 
 /**
  * Check whether user is exising or new to override the hr tag styling for elementor
  *
  * @since 4.3.0
- * @return boolean
+ * @return bool
  */
 function astra_can_add_styling_for_hr() {
-	$astra_settings                       = get_option( ASTRA_THEME_SETTINGS );
-	$astra_settings['add-styling-for-hr'] = isset( $astra_settings['add-styling-for-hr'] ) ? false : true;
-	return apply_filters( 'astra_highlight_elementor_hr_tag', $astra_settings['add-styling-for-hr'] );
+	$astra_settings = astra_get_options();
+	return apply_filters( 'astra_highlight_elementor_hr_tag', isset( $astra_settings['add-styling-for-hr'] ) ? false : true );
 }
 /**
  * This will check if user is new and apply global color format. This is to manage backward compatibility for colors.
  *
  * @since 3.7.0
- * @return boolean false if it is an existing user, true for new user.
+ * @return bool false if it is an existing user, true for new user.
  */
 function astra_has_global_color_format_support() {
-	$astra_settings                                = get_option( ASTRA_THEME_SETTINGS );
-	$astra_settings['support-global-color-format'] = isset( $astra_settings['support-global-color-format'] ) ? false : true;
-	return apply_filters( 'astra_apply_global_color_format_support', $astra_settings['support-global-color-format'] );
+	$astra_settings = astra_get_options();
+	return apply_filters( 'astra_apply_global_color_format_support', isset( $astra_settings['support-global-color-format'] ) ? false : true );
 }
 
 /**
@@ -846,7 +857,24 @@ function astra_has_global_color_format_support() {
  * @since 3.7.0
  */
 function astra_get_palette_colors() {
-	return get_option( 'astra-color-palettes', apply_filters( 'astra_global_color_palette', Astra_Global_Palette::get_default_color_palette() ) );
+	$color_palettes = get_option( 'astra-color-palettes', false );
+
+	if ( ! $color_palettes ) {
+		$color_palettes = \Astra_Global_Palette::get_default_color_palette();
+	}
+
+	if ( ! isset( $color_palettes['palettes']['palette_4'] ) ) {
+		$default_palette                         = \Astra_Global_Palette::get_default_color_palette();
+		$color_palettes['palettes']['palette_4'] = $default_palette['palettes']['palette_4'] ?? '';
+	}
+
+	$presets = astra_get_palette_presets();
+
+	$color_palettes['presets'] = $presets;
+
+	// Return the color palettes and presets together as a single array
+	return apply_filters( 'astra_global_color_palette', $color_palettes );
+
 }
 
 /**
@@ -885,7 +913,7 @@ function astra_maybe_disable_global_color_in_elementor() {
  * Check is Elementor Pro version is greater than or equal to beta 3.5 version.
  *
  * @since 3.7.5
- * @return boolean
+ * @return bool
  */
 function astra_check_elementor_pro_3_5_version() {
 	if ( defined( 'ELEMENTOR_PRO_VERSION' ) && version_compare( ELEMENTOR_PRO_VERSION, '3.5', '>=' ) ) {
@@ -903,13 +931,12 @@ function astra_check_elementor_pro_3_5_version() {
  * 3. When site layout is Padded.
  *
  * @since 3.7.8
- * @return boolean
+ * @return bool
  */
 function astra_apply_content_background_fullwidth_layouts() {
 	$astra_site_layout              = astra_get_option( 'site-layout' );
 	$astra_apply_content_background = astra_get_option( 'apply-content-background-fullwidth-layouts', true );
-
-	return ( $astra_apply_content_background && 'ast-box-layout' !== $astra_site_layout && 'ast-padded-layout' !== $astra_site_layout );
+	return $astra_apply_content_background && 'ast-box-layout' !== $astra_site_layout && 'ast-padded-layout' !== $astra_site_layout;
 }
 
 /**
@@ -941,7 +968,7 @@ function astra_search_static_css() {
 		opacity: 1;
 	}
 	.ast-search-menu-icon .search-form {
-		border: 1px solid #e7e7e7;
+		border: 1px solid var(--ast-search-border-color);
 		line-height: normal;
 		padding: 0 3em 0 0;
 		border-radius: 2px;
@@ -1061,7 +1088,7 @@ function astra_search_static_css() {
  * @return bool
  */
 function astra_showcase_upgrade_notices() {
-	return ( ! defined( 'ASTRA_EXT_VER' ) && astra_get_option( 'ast-disable-upgrade-notices', true ) ) ? true : false;
+	return ! defined( 'ASTRA_EXT_VER' ) && astra_get_option( 'ast-disable-upgrade-notices', true ) ? true : false;
 }
 
 /**
@@ -1095,7 +1122,7 @@ function astra_get_font_extras( $config, $setting, $unit = false ) {
  * @param array  $font_size Font size.
  * @param string $font_extras contains all font controls.
  * @param string $color In most of cases color is also added, so included optional param here.
-
+ *
  * @return array  array of build CSS font settings.
  *
  * @since 4.0.0
@@ -1127,25 +1154,24 @@ function astra_get_font_array_css( $font_family, $font_weight, $font_size, $font
 /**
  * Return the array of site's available image size.
  *
- * @param boolean $add_custom Add custom image size.
+ * @param bool $add_custom Add custom image size.
  * @since 4.4.0
  * @return array
  */
 function astra_get_site_image_sizes( $add_custom = false ) {
 	$image_sizes = array(
-		'thumbnail'    => __( 'Thumbnail', 'astra' ),
-		'medium'       => __( 'Medium', 'astra' ),
-		'medium_large' => __( 'Medium Large', 'astra' ),
-		'large'        => __( 'Large', 'astra' ),
-		'full'         => __( 'Full Size', 'astra' ),
+		'thumbnail'    => esc_html__( 'Thumbnail', 'astra' ),
+		'medium'       => esc_html__( 'Medium', 'astra' ),
+		'medium_large' => esc_html__( 'Medium Large', 'astra' ),
+		'large'        => esc_html__( 'Large', 'astra' ),
+		'full'         => esc_html__( 'Full Size', 'astra' ),
 	);
 
 	// Gets the available intermediate image size names on site.
 	$all_sizes = get_intermediate_image_sizes();  // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.get_intermediate_image_sizes_get_intermediate_image_sizes -- Required for image sizes to work.
 
-
 	$refactored_sizes = array(
-		'full' => __( 'Full Size', 'astra' ),
+		'full' => esc_html__( 'Full Size', 'astra' ),
 	);
 
 	foreach ( $all_sizes as $size ) {
@@ -1159,7 +1185,7 @@ function astra_get_site_image_sizes( $add_custom = false ) {
 	/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 	if ( $add_custom && defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'blog-pro' ) ) {
 		/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$refactored_sizes['custom'] = __( 'Custom', 'astra' );
+		$refactored_sizes['custom'] = esc_html__( 'Custom', 'astra' );
 	}
 
 	return $refactored_sizes;
@@ -1177,15 +1203,13 @@ function astra_get_site_image_sizes( $add_custom = false ) {
  * @return string
  */
 function astra_get_dynamic_image_aspect_ratio( $aspect_ratio_type, $predefined_scale, $custom_scale_width, $custom_scale_height ) {
-	$aspect_ratio_css = '';
-	if ( 'default' !== $aspect_ratio_type ) {
-		if ( 'custom' === $aspect_ratio_type ) {
-			$aspect_ratio_css = absint( $custom_scale_width ) . '/' . absint( $custom_scale_height );
-		} else {
-			$aspect_ratio_css = $predefined_scale;
-		}
+	switch ( $aspect_ratio_type ) {
+		case 'predefined':
+			return $predefined_scale;
+		case 'custom':
+			return absint( $custom_scale_width ) . '/' . absint( $custom_scale_height );
 	}
-	return $aspect_ratio_css;
+	return '';
 }
 
 /**
@@ -1232,7 +1256,6 @@ function astra_get_queried_post_types() {
 			'astra_adv_header',
 			'elementor_library',
 			'brizy_template',
-			'sc_collection',
 
 			'course',
 			'lesson',
@@ -1267,115 +1290,127 @@ function astra_get_queried_post_types() {
  * @since 4.5.0
  */
 function astra_get_palette_presets() {
+	$color_palette_reorganize = Astra_Dynamic_CSS::astra_4_8_0_compatibility();
 	return array(
-		'preset_1'  => array(
+		'Oak'       => array(
 			'#0067FF',
 			'#005EE9',
 			'#0F172A',
 			'#364151',
-			'#E7F6FF',
-			'#FFFFFF',
-			'#D1DAE5',
-			'#070614',
+			$color_palette_reorganize ? '#FFFFFF' : '#E7F6FF',
+			$color_palette_reorganize ? '#E7F6FF' : '#FFFFFF',
+			$color_palette_reorganize ? '#070614' : '#D1DAE5',
+			$color_palette_reorganize ? '#D1DAE5' : '#070614',
 			'#222222',
 		),
-		'preset_2'  => array(
+		'Lavender'  => array(
 			'#6528F7',
 			'#5511F8',
 			'#0F172A',
 			'#454F5E',
-			'#F2F0FE',
-			'#FFFFFF',
-			'#D8D8F5',
-			'#0D0614',
+			$color_palette_reorganize ? '#FFFFFF' : '#F2F0FE',
+			$color_palette_reorganize ? '#F2F0FE' : '#FFFFFF',
+			$color_palette_reorganize ? '#0D0614' : '#D8D8F5',
+			$color_palette_reorganize ? '#D8D8F5' : '#0D0614',
 			'#222222',
 		),
-		'preset_3'  => array(
+		'Cedar'     => array(
 			'#DD183B',
 			'#CC1939',
 			'#0F172A',
 			'#3A3A3A',
-			'#FFEDE6',
-			'#FFFFFF',
-			'#FFD1BF',
-			'#140609',
+			$color_palette_reorganize ? '#FFFFFF' : '#FFEDE6',
+			$color_palette_reorganize ? '#FFEDE6' : '#FFFFFF',
+			$color_palette_reorganize ? '#140609' : '#FFD1BF',
+			$color_palette_reorganize ? '#FFD1BF' : '#140609',
 			'#222222',
 		),
-		'preset_4'  => array(
+		'Willow'    => array(
 			'#54B435',
 			'#379237',
 			'#0F172A',
 			'#2F3B40',
-			'#EDFBE2',
-			'#FFFFFF',
-			'#D5EAD8',
-			'#0C1406',
+			$color_palette_reorganize ? '#FFFFFF' : '#EDFBE2',
+			$color_palette_reorganize ? '#EDFBE2' : '#FFFFFF',
+			$color_palette_reorganize ? '#0C1406' : '#D5EAD8',
+			$color_palette_reorganize ? '#D5EAD8' : '#0C1406',
 			'#222222',
 		),
-		'preset_5'  => array(
+		'Lily'      => array(
 			'#DCA54A',
 			'#D09A40',
 			'#0F172A',
 			'#4A4A4A',
-			'#FAF5E5',
-			'#FFFFFF',
-			'#F0E6C5',
-			'#141004',
+			$color_palette_reorganize ? '#FFFFFF' : '#FAF5E5',
+			$color_palette_reorganize ? '#FAF5E5' : '#FFFFFF',
+			$color_palette_reorganize ? '#141004' : '#F0E6C5',
+			$color_palette_reorganize ? '#F0E6C5' : '#141004',
 			'#222222',
 		),
-		'preset_6'  => array(
+		'Rose'      => array(
 			'#FB5FAB',
 			'#EA559D',
 			'#0F172A',
 			'#454F5E',
-			'#FCEEF5',
-			'#FFFFFF',
-			'#FAD8E9',
-			'#140610',
+			$color_palette_reorganize ? '#FFFFFF' : '#FCEEF5',
+			$color_palette_reorganize ? '#FCEEF5' : '#FFFFFF',
+			$color_palette_reorganize ? '#140610' : '#FAD8E9',
+			$color_palette_reorganize ? '#FAD8E9' : '#140610',
 			'#222222',
 		),
-		'preset_7'  => array(
+		'Sage'      => array(
 			'#1B9C85',
 			'#178E79',
 			'#0F172A',
 			'#454F5E',
-			'#EDF6EE',
-			'#FFFFFF',
-			'#D4F3D7',
-			'#06140C',
+			$color_palette_reorganize ? '#FFFFFF' : '#EDF6EE',
+			$color_palette_reorganize ? '#EDF6EE' : '#FFFFFF',
+			$color_palette_reorganize ? '#06140C' : '#D4F3D7',
+			$color_palette_reorganize ? '#D4F3D7' : '#06140C',
 			'#222222',
 		),
-		'preset_8'  => array(
+		'Sunflower' => array(
 			'#FD9800',
 			'#E98C00',
 			'#0F172A',
 			'#454F5E',
-			'#FEF9E1',
-			'#FFFFFF',
-			'#F9F0C8',
-			'#141006',
+			$color_palette_reorganize ? '#FFFFFF' : '#FEF9E1',
+			$color_palette_reorganize ? '#FEF9E1' : '#FFFFFF',
+			$color_palette_reorganize ? '#141006' : '#F9F0C8',
+			$color_palette_reorganize ? '#F9F0C8' : '#141006',
 			'#222222',
 		),
-		'preset_9'  => array(
+		'Maple'     => array(
 			'#FF6210',
 			'#F15808',
 			'#1C0D0A',
 			'#353535',
-			'#FEF1E4',
-			'#FFFFFF',
-			'#E5D7D1',
-			'#140B06',
+			$color_palette_reorganize ? '#FFFFFF' : '#FEF1E4',
+			$color_palette_reorganize ? '#FEF1E4' : '#FFFFFF',
+			$color_palette_reorganize ? '#140B06' : '#E5D7D1',
+			$color_palette_reorganize ? '#E5D7D1' : '#140B06',
 			'#222222',
 		),
-		'preset_10' => array(
+		'Birch'     => array(
 			'#737880',
 			'#65696F',
 			'#151616',
 			'#393C40',
-			'#F6F6F6',
+			$color_palette_reorganize ? '#FFFFFF' : '#F6F6F6',
+			$color_palette_reorganize ? '#F6F6F6' : '#FFFFFF',
+			$color_palette_reorganize ? '#232529' : '#F1F0F0',
+			$color_palette_reorganize ? '#F1F0F0' : '#232529',
+			'#222222',
+		),
+		'Dark'      => array(
+			'#0085FF',
+			'#0177E3',
 			'#FFFFFF',
-			'#F1F0F0',
-			'#232529',
+			'#E7F6FF',
+			'#212A37',
+			'#0F172A',
+			'#4F5B62',
+			'#070614',
 			'#222222',
 		),
 	);
@@ -1389,7 +1424,7 @@ function astra_get_palette_presets() {
  * @since 4.6.0
  */
 function astra_get_blog_layout() {
-	return ( is_search() && '' !== astra_get_option( 'ast-search-results-style' ) ) ? astra_get_option( 'ast-search-results-style' ) : astra_get_option( 'blog-layout' );
+	return is_search() && '' !== astra_get_option( 'ast-search-results-style' ) ? astra_get_option( 'ast-search-results-style' ) : astra_get_option( 'blog-layout' );
 }
 
 /**
@@ -1400,7 +1435,11 @@ function astra_get_blog_layout() {
  * @since 4.6.0
  */
 function astra_get_blog_posts_per_page() {
-	return ( is_search() && astra_get_option( 'ast-search-results-per-page' ) ) ? astra_get_option( 'ast-search-results-per-page' ) : astra_get_option( 'blog-post-per-page' );
+	$posts_per_page = is_search() && astra_get_option( 'ast-search-results-per-page' )
+		? astra_get_option( 'ast-search-results-per-page' )
+		: astra_get_option( 'blog-post-per-page' );
+
+	return is_numeric( $posts_per_page ) && $posts_per_page > 0 ? intval( $posts_per_page ) : 10;
 }
 
 /**
@@ -1409,7 +1448,7 @@ function astra_get_blog_posts_per_page() {
  * @since 4.6.0
  */
 function astra_remote_docs_data() {
-	$astra_docs_instance = astra_docs_loader_instance( 'https://wpastra.com/wp-json/powerful-docs/v1/get-docs', 'astra-docs' );
+	$astra_docs_instance = astra_docs_loader_instance( ASTRA_WEBSITE_BASE_URL . '/wp-json/powerful-docs/v1/get-docs', 'astra-docs' );
 	return json_decode( $astra_docs_instance->get_remote_data() );
 }
 
@@ -1442,4 +1481,15 @@ function astra_customizer_search_post_types_choices() {
 		/** @psalm-suppress PossiblyNullPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 	}
 	return $post_type_choices;
+}
+
+/**
+ * Adding backward compatibility fag to manage EDD featured image by default state.
+ *
+ * @since 4.7.0
+ * @return bool
+ */
+function astra_enable_edd_featured_image_defaults() {
+	$astra_settings = astra_get_options();
+	return apply_filters( 'astra_enable_edd_featured_image_defaults', isset( $astra_settings['can-update-edd-featured-image-default'] ) ? false : true );
 }

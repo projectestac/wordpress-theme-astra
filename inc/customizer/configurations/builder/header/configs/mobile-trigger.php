@@ -2,9 +2,7 @@
 /**
  * Mobile Trigger Header Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -171,8 +169,6 @@ function astra_header_mobile_trigger_configuration() {
 			'divider'     => array( 'ast_class' => 'ast-top-section-divider' ),
 		),
 
-
-
 		/**
 		 * Option: Toggle Button Bg Color
 		 */
@@ -250,8 +246,8 @@ function astra_header_mobile_trigger_configuration() {
 		),
 
 		/**
-		* Option: Button Radius Fields
-		*/
+		 * Option: Button Radius Fields
+		 */
 		array(
 			'name'              => ASTRA_THEME_SETTINGS . '[mobile-header-toggle-border-radius-fields]',
 			'default'           => astra_get_option( 'mobile-header-toggle-border-radius-fields' ),
@@ -281,7 +277,6 @@ function astra_header_mobile_trigger_configuration() {
 				),
 			),
 		),
-
 
 		/**
 		 * Option: Divider
@@ -416,5 +411,5 @@ function astra_header_mobile_trigger_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_mobile_trigger_configuration();
+	add_action( 'init', 'astra_header_mobile_trigger_configuration' );
 }

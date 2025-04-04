@@ -2,9 +2,7 @@
 /**
  * Primary footer Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -116,6 +114,25 @@ function astra_primary_footer_configuration() {
 			'divider'    => array( 'ast_class' => 'ast-bottom-section-divider' ),
 		),
 
+		// Section: Primary Footer Height.
+		array(
+			'name'        => ASTRA_THEME_SETTINGS . '[hb-primary-footer-height]',
+			'section'     => $_section,
+			'transport'   => 'refresh',
+			'default'     => astra_get_option( 'hb-primary-footer-height' ),
+			'priority'    => 30,
+			'title'       => __( 'Height', 'astra' ),
+			'suffix'      => 'px',
+			'type'        => 'control',
+			'control'     => 'ast-slider',
+			'input_attrs' => array(
+				'min'  => 30,
+				'step' => 1,
+				'max'  => 600,
+			),
+			'divider'     => array( 'ast_class' => 'ast-bottom-section-divider' ),
+			'context'     => Astra_Builder_Helper::$general_tab,
+		),
 
 		/**
 		 * Option: Vertical Alignment
@@ -251,5 +268,5 @@ function astra_primary_footer_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_primary_footer_configuration();
+	add_action( 'init', 'astra_primary_footer_configuration' );
 }

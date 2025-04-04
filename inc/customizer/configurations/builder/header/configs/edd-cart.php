@@ -2,9 +2,7 @@
 /**
  * EDD Cart Header Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -21,16 +19,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array Astra Customizer Configurations with updated configurations.
  */
 function astra_edd_cart_header_configuration( $configurations = array() ) {
-	$_section = ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? 'section-header-edd-cart' : 'section-edd-general';
+	$_section = true === Astra_Builder_Helper::$is_header_footer_builder_active ? 'section-header-edd-cart' : 'section-edd-general';
 
 	/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-	$_cart_total_divider = array( 'ast_class' => ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'edd' ) ) ? 'ast-top-section-divider' : 'ast-section-spacing' );
+	$_cart_total_divider = array( 'ast_class' => defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'edd' ) ? 'ast-top-section-divider' : 'ast-section-spacing' );
 
 	$_configs = array(
 
 		/**
-		* EDD Cart section
-		*/
+		 * EDD Cart section
+		 */
 		array(
 			'name'     => $_section,
 			'type'     => 'section',
@@ -42,7 +40,6 @@ function astra_edd_cart_header_configuration( $configurations = array() ) {
 		/**
 		 * Option: Header cart total
 		 */
-
 
 		array(
 			'name'      => ASTRA_THEME_SETTINGS . '[edd-header-cart-total-display]',
@@ -156,8 +153,8 @@ function astra_edd_cart_header_configuration( $configurations = array() ) {
 		),
 
 		/**
-		* Option: Icon color
-		*/
+		 * Option: Icon color
+		 */
 		array(
 			'name'              => ASTRA_THEME_SETTINGS . '[transparent-header-edd-cart-icon-color]',
 			'default'           => astra_get_option( 'transparent-header-edd-cart-icon-color' ),
@@ -377,5 +374,5 @@ function astra_edd_cart_header_configuration( $configurations = array() ) {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_edd_cart_header_configuration();
+	add_action( 'init', 'astra_edd_cart_header_configuration', 10, 0 );
 }

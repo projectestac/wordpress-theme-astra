@@ -3,8 +3,6 @@
  * Customizer Control: description
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       1.0.0
  */
@@ -18,11 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * A text control with validation for CSS units.
  */
 class Astra_Control_Description extends WP_Customize_Control {
-
 	/**
 	 * The control type.
 	 *
-	 * @access public
 	 * @var string
 	 */
 	public $type = 'ast-description';
@@ -30,7 +26,6 @@ class Astra_Control_Description extends WP_Customize_Control {
 	/**
 	 * The control type.
 	 *
-	 * @access public
 	 * @var string
 	 */
 	public $help = '';
@@ -53,5 +48,6 @@ class Astra_Control_Description extends WP_Customize_Control {
 	 *
 	 * @see WP_Customize_Control::render_content()
 	 */
-	protected function render_content() {}
+	protected function render_content() {
+	}
 }

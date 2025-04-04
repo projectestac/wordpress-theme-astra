@@ -14,11 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Astra_Builder_Helper.
  */
 final class Astra_Builder_Helper {
-
 	/**
 	 * Config context general tab.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $general_tab = array(
 		array(
@@ -30,7 +29,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config context general tab config.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $general_tab_config = array(
 		'setting' => 'ast_selected_tab',
@@ -40,7 +39,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config context design tab.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $design_tab = array(
 		array(
@@ -52,7 +51,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config context design tab.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $design_tab_config = array(
 		'setting' => 'ast_selected_tab',
@@ -62,7 +61,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config Tablet device context.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $tablet_device = array(
 		array(
@@ -75,7 +74,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config Mobile device context.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $mobile_device = array(
 		array(
@@ -88,7 +87,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config Mobile device context.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $responsive_devices = array(
 		array(
@@ -101,7 +100,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config Mobile device context.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $responsive_general_tab = array(
 		array(
@@ -118,7 +117,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config Desktop device context.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $desktop_general_tab = array(
 		array(
@@ -135,7 +134,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Default responsive spacing control value.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $default_responsive_spacing = array(
 		'desktop'      => array(
@@ -164,7 +163,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Default button responsive spacing control value.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $default_button_responsive_spacing = array(
 		'desktop'      => array(
@@ -193,7 +192,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config Tablet device context.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $tablet_general_tab = array(
 		array(
@@ -210,7 +209,7 @@ final class Astra_Builder_Helper {
 	/**
 	 * Config Mobile device context.
 	 *
-	 * @var string[][]
+	 * @var array<array<string>>
 	 */
 	public static $mobile_general_tab = array(
 		array(
@@ -414,7 +413,6 @@ final class Astra_Builder_Helper {
 	 * Constructor
 	 */
 	public function __construct() {
-
 		self::$component_count_array = self::get_component_count();
 
 		self::$num_of_header_button = defined( 'ASTRA_EXT_VER' ) ? self::$component_count_array['header-button'] : 1;
@@ -436,6 +434,16 @@ final class Astra_Builder_Helper {
 		self::$num_of_footer_divider = defined( 'ASTRA_EXT_VER' ) ? self::$component_count_array['footer-divider'] : 0;
 
 		self::$num_of_footer_columns = defined( 'ASTRA_EXT_VER' ) ? apply_filters( 'astra_footer_column_count', 6 ) : 6;
+
+		add_action( 'init', array( $this, 'initialize' ) );
+
+		self::$is_header_footer_builder_active = self::is_header_footer_builder_active();
+	}
+
+	/**
+	 * Initialize function.
+	 */
+	public function initialize() {
 
 		self::$footer_row_layouts = apply_filters(
 			'astra_footer_row_layout',
@@ -696,6 +704,75 @@ final class Astra_Builder_Helper {
 			)
 		);
 
+		// Add an additional item conditionally.
+		if ( ! defined( 'ASTRA_EXT_VER' ) ) {
+			$pro_header_desktop_items = array(
+				'divider-2'         => array(
+					'name'    => __( 'Divider 2', 'astra' ),
+					'icon'    => 'minus',
+					'section' => 'section-hb-divider-2',
+					'pro'     => true,
+				),
+				'divider-3'         => array(
+					'name'    => __( 'Divider 3', 'astra' ),
+					'icon'    => 'minus',
+					'section' => 'section-hb-divider-3',
+					'pro'     => true,
+				),
+				'language-switcher' => array(
+					'name'    => __( 'Language Switcher', 'astra' ),
+					'icon'    => 'translation',
+					'section' => 'section-hb-language-switcher',
+					'pro'     => true,
+				),
+				'mobile-trigger'    => array(
+					'name'    => __( 'Toggle Button', 'astra' ),
+					'icon'    => 'menu-alt',
+					'section' => 'section-header-mobile-trigger',
+					'pro'     => true,
+				),
+				'mobile-menu'       => array(
+					'name'    => __( 'Off-Canvas Menu', 'astra' ),
+					'icon'    => 'menu-alt',
+					'section' => 'section-header-mobile-menu',
+					'pro'     => true,
+				),
+				'button-2'          => array(
+					'name'    => __( 'Button 2', 'astra' ),
+					'icon'    => 'button',
+					'section' => 'section-hb-button-2',
+					'pro'     => true,
+				),
+				'html-3'            => array(
+					'name'    => __( 'HTML 3', 'astra' ),
+					'icon'    => 'editor-code',
+					'section' => 'section-hb-html-3',
+					'pro'     => true,
+				),
+				'widget-3'          => array(
+					'name'    => __( 'Widget 3', 'astra' ),
+					'icon'    => 'screenoptions',
+					'section' => 'sidebar-widgets-header-widget-3',
+					'pro'     => true,
+				),
+				'widget-4'          => array(
+					'name'    => __( 'Widget 4', 'astra' ),
+					'icon'    => 'screenoptions',
+					'section' => 'sidebar-widgets-header-widget-4',
+					'pro'     => true,
+				),
+				'menu-3'            => array(
+					'name'    => __( 'Menu 3', 'astra' ),
+					'icon'    => 'menu',
+					'section' => 'section-hb-menu-3',
+					'pro'     => true,
+				),
+			);
+
+			// Merge the additional items into the existing header desktop items.
+			self::$header_desktop_items = array_merge( self::$header_desktop_items, $pro_header_desktop_items );
+		}
+
 		self::$footer_desktop_items = apply_filters(
 			'astra_footer_desktop_items',
 			array(
@@ -713,6 +790,45 @@ final class Astra_Builder_Helper {
 				),
 			)
 		);
+
+		// Add an additional item conditionally.
+		if ( ! defined( 'ASTRA_EXT_VER' ) ) {
+			$pro_footer_desktop_items = array(
+				'divider-2' => array(
+					'name' => __( 'Divider 2', 'astra' ),
+					'icon' => 'minus',
+					'pro'  => true,
+				),
+				'divider-3' => array(
+					'name' => __( 'Divider 3', 'astra' ),
+					'icon' => 'minus',
+					'pro'  => true,
+				),
+				'widget-5'  => array(
+					'name' => __( 'Widget 5', 'astra' ),
+					'icon' => 'screenoptions',
+					'pro'  => true,
+				),
+				'widget-6'  => array(
+					'name' => __( 'Widget 6', 'astra' ),
+					'icon' => 'screenoptions',
+					'pro'  => true,
+				),
+				'button-1'  => array(
+					'name' => __( 'Button 1', 'astra' ),
+					'icon' => 'button',
+					'pro'  => true,
+				),
+				'button-2'  => array(
+					'name' => __( 'Button 2', 'astra' ),
+					'icon' => 'button',
+					'pro'  => true,
+				),
+			);
+
+			// Merge the additional items into the existing header desktop items.
+			self::$footer_desktop_items = array_merge( self::$footer_desktop_items, $pro_footer_desktop_items );
+		}
 
 		if ( class_exists( 'Astra_Woocommerce' ) ) {
 
@@ -766,6 +882,60 @@ final class Astra_Builder_Helper {
 			)
 		);
 
+				// Add an additional item conditionally.
+		if ( ! defined( 'ASTRA_EXT_VER' ) ) {
+			$pro_header_mobile_items = array(
+				'divider-1'         => array(
+					'name' => __( 'Divider 1', 'astra' ),
+					'icon' => 'minus',
+					'pro'  => true,
+				),
+				'divider-2'         => array(
+					'name' => __( 'Divider 2', 'astra' ),
+					'icon' => 'minus',
+					'pro'  => true,
+				),
+				'divider-3'         => array(
+					'name' => __( 'Divider 3', 'astra' ),
+					'icon' => 'minus',
+					'pro'  => true,
+				),
+				'language-switcher' => array(
+					'name' => __( 'Language Switcher', 'astra' ),
+					'icon' => 'translation',
+					'pro'  => true,
+				),
+				'button-2'          => array(
+					'name' => __( 'Button 2', 'astra' ),
+					'icon' => 'button',
+					'pro'  => true,
+				),
+				'html-3'            => array(
+					'name' => __( 'HTML 3', 'astra' ),
+					'icon' => 'text',
+					'pro'  => true,
+				),
+				'widget-3'          => array(
+					'name' => __( 'Widget 3', 'astra' ),
+					'icon' => 'wordpress',
+					'pro'  => true,
+				),
+				'widget-4'          => array(
+					'name' => __( 'Widget 4', 'astra' ),
+					'icon' => 'wordpress',
+					'pro'  => true,
+				),
+				'menu-3'            => array(
+					'name' => __( 'Menu 3', 'astra' ),
+					'icon' => 'menu',
+					'pro'  => true,
+				),
+			);
+
+			// Merge the additional items into the existing header desktop items.
+			self::$header_mobile_items = array_merge( self::$header_mobile_items, $pro_header_mobile_items );
+		}
+
 		if ( class_exists( 'Astra_Woocommerce' ) ) {
 			self::$header_mobile_items['woo-cart'] = array(
 				'name'    => $woo_cart_name,
@@ -780,8 +950,6 @@ final class Astra_Builder_Helper {
 				'section' => 'section-header-edd-cart',
 			);
 		}
-
-		self::$is_header_footer_builder_active = self::is_header_footer_builder_active();
 
 		add_filter( 'astra_addon_list', array( $this, 'deprecate_old_header_and_footer' ) );
 	}
@@ -850,13 +1018,11 @@ final class Astra_Builder_Helper {
 	 * For existing users, do not load the wide/full width image CSS by default.
 	 *
 	 * @since 3.0.0
-	 * @return boolean false if it is an existing user , true if not.
+	 * @return bool false if it is an existing user , true if not.
 	 */
 	public static function is_header_footer_builder_active() {
-
-		$astra_settings           = get_option( ASTRA_THEME_SETTINGS );
-		$is_header_footer_builder = isset( $astra_settings['is-header-footer-builder'] ) ? (bool) $astra_settings['is-header-footer-builder'] : true;
-		return apply_filters( 'astra_is_header_footer_builder_active', $is_header_footer_builder );
+		$astra_settings = astra_get_options();
+		return apply_filters( 'astra_is_header_footer_builder_active', isset( $astra_settings['is-header-footer-builder'] ) ? (bool) $astra_settings['is-header-footer-builder'] : true );
 	}
 
 	/**
@@ -890,7 +1056,6 @@ final class Astra_Builder_Helper {
 		return $mobile_sides;
 	}
 
-
 	/**
 	 * Adds a check to see if the center column should run.
 	 *
@@ -919,8 +1084,7 @@ final class Astra_Builder_Helper {
 	public static function render_builder_markup( $row = 'primary', $column = 'left', $header = 'desktop', $builder = 'header' ) {
 		$elements = astra_get_option( $builder . '-' . $header . '-items' );
 		if ( isset( $elements ) && isset( $elements[ $row ] ) && isset( $elements[ $row ][ $row . '_' . $column ] ) && is_array( $elements[ $row ][ $row . '_' . $column ] ) && ! empty( $elements[ $row ][ $row . '_' . $column ] ) ) {
-			foreach ( $elements[ $row ][ $row . '_' . $column ] as $key => $item ) {
-
+			foreach ( $elements[ $row ][ $row . '_' . $column ] as $item ) {
 
 				if ( astra_wp_version_compare( '5.4.99', '>=' ) ) {
 
@@ -980,7 +1144,7 @@ final class Astra_Builder_Helper {
 					<div class="ast-mobile-popup-header">
 						<button type="button" id="menu-toggle-close" class="menu-toggle-close" aria-label="Close menu" tabindex="0">
 							<span class="ast-svg-iconset">
-								<?php echo Astra_Builder_UI_Controller::fetch_svg_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<?php echo do_shortcode( Astra_Builder_UI_Controller::fetch_svg_icon( 'close' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							</span>
 						</button>
 					</div>
@@ -1109,8 +1273,9 @@ final class Astra_Builder_Helper {
 
 		/** @psalm-suppress RedundantConditionGivenDocblockType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		if ( is_null( self::$loaded_grid ) ) {
-				/** @psalm-suppress RedundantConditionGivenDocblockType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+			/** @psalm-suppress RedundantConditionGivenDocblockType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
+			$grids                   = array();
 			$grids['header_desktop'] = astra_get_option( 'header-desktop-items', array() );
 			$grids['header_mobile']  = astra_get_option( 'header-mobile-items', array() );
 			$grids['footer_both']    = astra_get_option( 'footer-desktop-items', array() );
@@ -1172,13 +1337,96 @@ final class Astra_Builder_Helper {
 	 * For existing users, do not apply dynamic CSS chages.
 	 *
 	 * @since 3.3.0
-	 * @return boolean true if it is an existing user , false if not.
+	 * @return bool true if it is an existing user , false if not.
 	 */
 	public static function apply_flex_based_css() {
-		$astra_settings = get_option( ASTRA_THEME_SETTINGS, array() );
+		$astra_settings = astra_get_options();
+		return apply_filters( 'astra_apply_flex_based_css', isset( $astra_settings['is-flex-based-css'] ) ? $astra_settings['is-flex-based-css'] : true );
+	}
 
-		$astra_settings['is-flex-based-css'] = isset( $astra_settings['is-flex-based-css'] ) ? $astra_settings['is-flex-based-css'] : true;
-		return apply_filters( 'astra_apply_flex_based_css', $astra_settings['is-flex-based-css'] );
+	/**
+	 * Member Variable
+	 *
+	 * @var array Translatable dynamic strings.
+	 */
+	public static $translatable_strings = array();
+
+	/**
+	 * Method to return translatable strings for builder components.
+	 *
+	 * @since 4.8.4
+	 */
+	public static function get_translatable_strings() {
+		if ( empty( self::$translatable_strings ) ) {
+			// Count is 10 because component limit is set to 10 in $component_limit.
+			self::$translatable_strings = array(
+				// Header button components.
+				'header-button1-text'  => _x( '%astra%', 'Builder: Header Button 1 Text', 'astra' ),
+				'header-button2-text'  => _x( '%astra%', 'Builder: Header Button 2 Text', 'astra' ),
+				'header-button3-text'  => _x( '%astra%', 'Builder: Header Button 3 Text', 'astra' ),
+				'header-button4-text'  => _x( '%astra%', 'Builder: Header Button 4 Text', 'astra' ),
+				'header-button5-text'  => _x( '%astra%', 'Builder: Header Button 5 Text', 'astra' ),
+				'header-button6-text'  => _x( '%astra%', 'Builder: Header Button 6 Text', 'astra' ),
+				'header-button7-text'  => _x( '%astra%', 'Builder: Header Button 7 Text', 'astra' ),
+				'header-button8-text'  => _x( '%astra%', 'Builder: Header Button 8 Text', 'astra' ),
+				'header-button9-text'  => _x( '%astra%', 'Builder: Header Button 9 Text', 'astra' ),
+				'header-button10-text' => _x( '%astra%', 'Builder: Header Button 10 Text', 'astra' ),
+				// Footer button components.
+				'footer-button1-text'  => _x( '%astra%', 'Builder: Footer Button 1 Text', 'astra' ),
+				'footer-button2-text'  => _x( '%astra%', 'Builder: Footer Button 2 Text', 'astra' ),
+				'footer-button3-text'  => _x( '%astra%', 'Builder: Footer Button 3 Text', 'astra' ),
+				'footer-button4-text'  => _x( '%astra%', 'Builder: Footer Button 4 Text', 'astra' ),
+				'footer-button5-text'  => _x( '%astra%', 'Builder: Footer Button 5 Text', 'astra' ),
+				'footer-button6-text'  => _x( '%astra%', 'Builder: Footer Button 6 Text', 'astra' ),
+				'footer-button7-text'  => _x( '%astra%', 'Builder: Footer Button 7 Text', 'astra' ),
+				'footer-button8-text'  => _x( '%astra%', 'Builder: Footer Button 8 Text', 'astra' ),
+				'footer-button9-text'  => _x( '%astra%', 'Builder: Footer Button 9 Text', 'astra' ),
+				'footer-button10-text' => _x( '%astra%', 'Builder: Footer Button 10 Text', 'astra' ),
+				// Header HTML components.
+				'header-html-1'        => _x( '%astra%', 'Builder: Header HTML 1', 'astra' ),
+				'header-html-2'        => _x( '%astra%', 'Builder: Header HTML 2', 'astra' ),
+				'header-html-3'        => _x( '%astra%', 'Builder: Header HTML 3', 'astra' ),
+				'header-html-4'        => _x( '%astra%', 'Builder: Header HTML 4', 'astra' ),
+				'header-html-5'        => _x( '%astra%', 'Builder: Header HTML 5', 'astra' ),
+				'header-html-6'        => _x( '%astra%', 'Builder: Header HTML 6', 'astra' ),
+				'header-html-7'        => _x( '%astra%', 'Builder: Header HTML 7', 'astra' ),
+				'header-html-8'        => _x( '%astra%', 'Builder: Header HTML 8', 'astra' ),
+				'header-html-9'        => _x( '%astra%', 'Builder: Header HTML 9', 'astra' ),
+				'header-html-10'       => _x( '%astra%', 'Builder: Header HTML 10', 'astra' ),
+				// Footer HTML components.
+				'footer-html-1'        => _x( '%astra%', 'Builder: Footer HTML 1', 'astra' ),
+				'footer-html-2'        => _x( '%astra%', 'Builder: Footer HTML 2', 'astra' ),
+				'footer-html-3'        => _x( '%astra%', 'Builder: Footer HTML 3', 'astra' ),
+				'footer-html-4'        => _x( '%astra%', 'Builder: Footer HTML 4', 'astra' ),
+				'footer-html-5'        => _x( '%astra%', 'Builder: Footer HTML 5', 'astra' ),
+				'footer-html-6'        => _x( '%astra%', 'Builder: Footer HTML 6', 'astra' ),
+				'footer-html-7'        => _x( '%astra%', 'Builder: Footer HTML 7', 'astra' ),
+				'footer-html-8'        => _x( '%astra%', 'Builder: Footer HTML 8', 'astra' ),
+				'footer-html-9'        => _x( '%astra%', 'Builder: Footer HTML 9', 'astra' ),
+				'footer-html-10'       => _x( '%astra%', 'Builder: Footer HTML 10', 'astra' ),
+			);
+
+			// Old header button.
+			self::$translatable_strings['header-main-rt-section-button-text'] = _x( '%astra%', 'Button text for last item in Primary Menu', 'astra' );
+		}
+
+		return self::$translatable_strings;
+	}
+
+	/**
+	 * Method to return single translatable string for builder components.
+	 *
+	 * @param string $option_key Option key for the translated dynamic string.
+	 *
+	 * @since 4.8.4
+	 */
+	public static function get_translatable_string( $option_key ) {
+		$strings = self::get_translatable_strings();
+		if ( isset( $strings[ $option_key ] ) ) {
+			return $strings[ $option_key ];
+		}
+
+		return '%astra%'; // Indicates to use original string saved in the database.
 	}
 }
 

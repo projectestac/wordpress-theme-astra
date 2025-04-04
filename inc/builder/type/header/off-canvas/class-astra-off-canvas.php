@@ -3,8 +3,6 @@
  * Off Canvas.
  *
  * @package     astra-builder
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       3.0.0
  */
@@ -22,7 +20,6 @@ define( 'ASTRA_OFF_CANVAS_URI', ASTRA_THEME_URI . 'inc/builder/type/header/off-c
  * @since 3.0.0
  */
 class Astra_Off_Canvas {
-
 	/**
 	 * Constructor function that initializes required actions and hooks.
 	 */

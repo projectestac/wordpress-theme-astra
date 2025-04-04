@@ -3,8 +3,6 @@
  * Astra HTML Component Dynamic CSS.
  *
  * @package     astra-builder
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       3.0.0
  */
@@ -20,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.0.0
  */
 class Astra_Html_Component_Dynamic_CSS {
-
 	/**
 	 * Dynamic CSS
 	 *
@@ -33,7 +30,7 @@ class Astra_Html_Component_Dynamic_CSS {
 
 		$generated_css  = '';
 		$html_css_flag  = false;
-		$number_of_html = ( 'header' === $builder_type ) ? Astra_Builder_Helper::$num_of_header_html : Astra_Builder_Helper::$num_of_footer_html;
+		$number_of_html = 'header' === $builder_type ? Astra_Builder_Helper::$num_of_header_html : Astra_Builder_Helper::$num_of_footer_html;
 
 		for ( $index = 1; $index <= $number_of_html; $index++ ) {
 
@@ -43,7 +40,7 @@ class Astra_Html_Component_Dynamic_CSS {
 
 			$html_css_flag = true;
 
-			$_section = ( 'header' === $builder_type ) ? 'section-hb-html-' . $index : 'section-fb-html-' . $index;
+			$_section = 'header' === $builder_type ? 'section-hb-html-' . $index : 'section-fb-html-' . $index;
 
 			$margin    = astra_get_option( $_section . '-margin' );
 			$font_size = astra_get_option( 'font-size-' . $_section );
@@ -60,9 +57,9 @@ class Astra_Html_Component_Dynamic_CSS {
 			$link_h_color_tablet  = astra_get_prop( astra_get_option( $builder_type . '-html-' . $index . 'link-h-color' ), 'tablet' );
 			$link_h_color_mobile  = astra_get_prop( astra_get_option( $builder_type . '-html-' . $index . 'link-h-color' ), 'mobile' );
 
-			$selector = ( 'header' === $builder_type ) ? '.ast-header-html-' . $index : '.footer-widget-area[data-section="section-fb-html-' . $index . '"]';
+			$selector = 'header' === $builder_type ? '.ast-header-html-' . $index : '.footer-widget-area[data-section="section-fb-html-' . $index . '"]';
 
-			$display_prop = ( 'header' === $builder_type ) ? 'flex' : 'block';
+			$display_prop = 'header' === $builder_type ? 'flex' : 'block';
 
 			$css_output_desktop = array(
 

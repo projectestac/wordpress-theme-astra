@@ -3,8 +3,6 @@
  * WooCommerce Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 3.9.2
  */
@@ -15,12 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'Astra_Woo_Shop_Misc_Layout_Configs' ) ) {
 
-
 	/**
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Woo_Shop_Misc_Layout_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Astra-WooCommerce Misc Customizer Configurations.
 		 *
@@ -30,7 +26,6 @@ if ( ! class_exists( 'Astra_Woo_Shop_Misc_Layout_Configs' ) ) {
 		 * @return Array Astra Customizer Configurations with updated configurations.
 		 */
 		public function register_configuration( $configurations, $wp_customize ) {
-
 
 			$_configs = array(
 
@@ -71,6 +66,7 @@ if ( ! class_exists( 'Astra_Woo_Shop_Misc_Layout_Configs' ) ) {
 					'name'     => ASTRA_THEME_SETTINGS . '[ast-woo-misc-pro-items]',
 					'type'     => 'control',
 					'control'  => 'ast-upgrade',
+					'campaign' => 'woocommerce',
 					'renderAs' => 'list',
 					'choices'  => array(
 						'two'   => array(

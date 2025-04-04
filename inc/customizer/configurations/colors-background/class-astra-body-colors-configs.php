@@ -3,8 +3,6 @@
  * Styling Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       1.4.3
  */
@@ -19,7 +17,6 @@ if ( ! class_exists( 'Astra_Body_Colors_Configs' ) ) {
 	 * Register Body Color Customizer Configurations.
 	 */
 	class Astra_Body_Colors_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Body Color Customizer Configurations.
 		 *
@@ -45,7 +42,7 @@ if ( ! class_exists( 'Astra_Body_Colors_Configs' ) ) {
 					'priority'  => 5,
 					'title'     => __( 'Global Palette', 'astra' ),
 					'default'   => astra_get_option( 'global-color-palette' ),
-					'transport' => 'postMessage',
+					'transport' => 'refresh',
 				),
 
 				array(
@@ -165,9 +162,7 @@ if ( ! class_exists( 'Astra_Body_Colors_Configs' ) ) {
 
 			);
 
-			$configurations = array_merge( $configurations, $_configs );
-
-			return $configurations;
+			return array_merge( $configurations, $_configs );
 		}
 	}
 }

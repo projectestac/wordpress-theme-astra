@@ -2,9 +2,7 @@
 /**
  * Menu footer Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -47,8 +45,8 @@ function astra_menu_footer_configuration() {
 		),
 
 		/**
-		* Option: Theme Menu create link
-		*/
+		 * Option: Theme Menu create link
+		 */
 		array(
 			'name'      => ASTRA_THEME_SETTINGS . '[footer-create-menu-link]',
 			'default'   => astra_get_option( 'footer-create-menu-link' ),
@@ -62,7 +60,6 @@ function astra_menu_footer_configuration() {
 			'context'   => Astra_Builder_Helper::$general_tab,
 
 		),
-
 
 		// Option: Footer Menu Layout.
 		array(
@@ -268,7 +265,6 @@ function astra_menu_footer_configuration() {
 			'divider'           => array( 'ast_class' => 'ast-bottom-section-divider ast-section-spacing' ),
 		),
 
-
 		/**
 		 * Option: Margin Space
 		 */
@@ -407,5 +403,5 @@ function astra_menu_footer_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_menu_footer_configuration();
+	add_action( 'init', 'astra_menu_footer_configuration' );
 }

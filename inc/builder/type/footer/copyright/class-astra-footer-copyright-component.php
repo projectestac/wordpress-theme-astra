@@ -3,8 +3,6 @@
  * Copyright component.
  *
  * @package     Astra Builder
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 3.0.0
  */
@@ -24,7 +22,6 @@ if ( ! class_exists( 'Astra_Footer_Copyright_Component' ) ) {
 	 * @since 3.0.0
 	 */
 	class Astra_Footer_Copyright_Component {
-
 		/**
 		 * Constructor function that initializes required actions and hooks
 		 */

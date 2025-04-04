@@ -3,8 +3,6 @@
  * Customizer Control: Customizer Link
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       1.0.0
  */
@@ -18,11 +16,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * A text control with validation for CSS units.
  */
 class Astra_Control_Customizer_Link extends WP_Customize_Control {
-
 	/**
 	 * The control type.
 	 *
-	 * @access public
 	 * @var string
 	 */
 	public $type = 'ast-customizer-link';
@@ -51,7 +47,7 @@ class Astra_Control_Customizer_Link extends WP_Customize_Control {
 	/**
 	 * True if the link is button.
 	 *
-	 * @var boolean
+	 * @var bool
 	 */
 	public $is_button_link = '';
 
@@ -73,5 +69,6 @@ class Astra_Control_Customizer_Link extends WP_Customize_Control {
 	 *
 	 * @see WP_Customize_Control::render_content()
 	 */
-	protected function render_content() {}
+	protected function render_content() {
+	}
 }

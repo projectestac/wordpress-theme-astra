@@ -3,8 +3,6 @@
  * Astra Theme Customizer Configuration Builder.
  *
  * @package     astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       3.0.0
  */
@@ -25,7 +23,6 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
  * @since 3.0.0
  */
 class Astra_Customizer_Footer_Builder_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Register Builder Customizer Configurations.
 	 *

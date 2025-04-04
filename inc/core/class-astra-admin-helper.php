@@ -5,8 +5,6 @@
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0
  */
@@ -15,19 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'Astra_Admin_Helper' ) ) :
+if ( ! class_exists( 'Astra_Admin_Helper' ) ) {
 
 	/**
 	 * Admin Helper
 	 */
 	final class Astra_Admin_Helper {
-
 		/**
 		 * Returns an option from the database for
 		 * the admin settings page.
 		 *
-		 * @param  string  $key     The option key.
-		 * @param  boolean $network Whether to allow the network admin setting to be overridden on subsites.
+		 * @param  string $key     The option key.
+		 * @param  bool   $network Whether to allow the network admin setting to be overridden on subsites.
 		 * @return string           Return the option value
 		 */
 		public static function get_admin_settings_option( $key, $network = false ) {
@@ -58,7 +55,6 @@ if ( ! class_exists( 'Astra_Admin_Helper' ) ) :
 			} else {
 				update_option( $key, $value );
 			}
-
 		}
 
 		/**
@@ -83,5 +79,4 @@ if ( ! class_exists( 'Astra_Admin_Helper' ) ) :
 
 	}
 
-
-endif;
+}

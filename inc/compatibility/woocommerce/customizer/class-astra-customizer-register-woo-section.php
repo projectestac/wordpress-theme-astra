@@ -3,8 +3,6 @@
  * Register customizer panels & sections fro Woocommerce.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.1.0
  * @since       1.4.6 Chnaged to using Astra_Customizer API
@@ -20,7 +18,6 @@ if ( ! class_exists( 'Astra_Customizer_Register_Woo_Section' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Customizer_Register_Woo_Section extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Panels and Sections for Customizer.
 		 *
@@ -78,6 +75,5 @@ if ( ! class_exists( 'Astra_Customizer_Register_Woo_Section' ) ) {
 		}
 	}
 }
-
 
 new Astra_Customizer_Register_Woo_Section();

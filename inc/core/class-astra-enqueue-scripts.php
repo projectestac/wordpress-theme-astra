@@ -3,8 +3,6 @@
  * Loader Functions
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -22,20 +20,17 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 	 * Theme Enqueue Scripts
 	 */
 	class Astra_Enqueue_Scripts {
-
 		/**
 		 * Class styles.
 		 *
-		 * @access public
-		 * @var $styles Enqueued styles.
+		 * @var Enqueued $styles styles.
 		 */
 		public static $styles;
 
 		/**
 		 * Class scripts.
 		 *
-		 * @access public
-		 * @var $scripts Enqueued scripts.
+		 * @var Enqueued $scripts scripts.
 		 */
 		public static $scripts;
 
@@ -93,7 +88,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				$classes .= ' ast-highlight-wpblock-onhover';
 			}
 
-			if ( ( ( 'post-new.php' == $pagenow || 'post.php' == $pagenow ) && ( defined( 'ASTRA_ADVANCED_HOOKS_POST_TYPE' ) && ASTRA_ADVANCED_HOOKS_POST_TYPE == $screen->post_type ) ) || 'widgets.php' == $pagenow ) {
+			if ( ( 'post-new.php' === $pagenow || 'post.php' === $pagenow ) && ( defined( 'ASTRA_ADVANCED_HOOKS_POST_TYPE' ) && ASTRA_ADVANCED_HOOKS_POST_TYPE === $screen->post_type ) || 'widgets.php' === $pagenow ) {
 				return $classes;
 			}
 
@@ -128,15 +123,15 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 
 			$content_layout = astra_apply_boxed_layouts( $content_layout, $is_boxed, $is_sidebar_boxed, $post_id );
 
-			if ( 'content-boxed-container' == $content_layout ) {
+			if ( 'content-boxed-container' === $content_layout ) {
 				$classes .= ' ast-separate-container';
-			} elseif ( 'boxed-container' == $content_layout ) {
+			} elseif ( 'boxed-container' === $content_layout ) {
 				$classes .= ' ast-separate-container ast-two-container';
-			} elseif ( 'page-builder' == $content_layout ) {
+			} elseif ( 'page-builder' === $content_layout ) {
 				$classes .= ' ast-page-builder-template';
-			} elseif ( 'plain-container' == $content_layout ) {
+			} elseif ( 'plain-container' === $content_layout ) {
 				$classes .= ' ast-plain-container';
-			} elseif ( 'narrow-container' == $content_layout ) {
+			} elseif ( 'narrow-container' === $content_layout ) {
 				$classes .= ' ast-narrow-container';
 			}
 
@@ -262,8 +257,8 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 			}
 
 			/* Directory and Extension */
-			$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
-			$dir_name    = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
+			$file_prefix = SCRIPT_DEBUG ? '' : '.min';
+			$dir_name    = SCRIPT_DEBUG ? 'unminified' : 'minified';
 
 			$js_uri  = ASTRA_THEME_URI . 'assets/js/' . $dir_name . '/';
 			$css_uri = ASTRA_THEME_URI . 'assets/css/minified/';
@@ -337,7 +332,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				}
 			}
 
-			$rtl = ( is_rtl() ) ? '-rtl' : '';
+			$rtl = is_rtl() ? '-rtl' : '';
 
 			if ( ! empty( $menu_animation ) || is_customize_preview() ) {
 				if ( class_exists( 'Astra_Cache' ) ) {
@@ -376,7 +371,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 			}
 
 			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-			$quantity_type = ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'woocommerce' ) ) ? astra_get_option( 'cart-plus-minus-button-type' ) : 'normal';
+			$quantity_type = defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'woocommerce' ) ? astra_get_option( 'cart-plus-minus-button-type' ) : 'normal';
 			/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 			$astra_localize = array(
@@ -385,6 +380,8 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				'is_scroll_to_id'                 => astra_get_option( 'enable-scroll-to-id' ),
 				'is_scroll_to_top'                => astra_get_option( 'scroll-to-top-enable' ),
 				'is_header_footer_builder_active' => Astra_Builder_Helper::$is_header_footer_builder_active,
+				'responsive_cart_click'           => astra_get_option( 'responsive-cart-click-action' ),
+				'palette_key'                     => Astra_Global_Palette::astra_get_active_global_palette(),
 			);
 
 			wp_localize_script( 'astra-theme-js', 'astra', apply_filters( 'astra_theme_js_localize', $astra_localize ) );
@@ -398,7 +395,8 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 			wp_localize_script( 'astra-add-to-cart-quantity-btn', 'astra_qty_btn', apply_filters( 'astra_qty_btn_js_localize', $astra_qty_btn_localize ) );
 
 			$astra_cart_localize_data = array(
-				'desktop_layout' => astra_get_option( 'woo-header-cart-click-action' ),    // WooCommerce sidebar flyout desktop.
+				'desktop_layout'        => astra_get_option( 'woo-header-cart-click-action' ),    // WooCommerce sidebar flyout desktop.
+				'responsive_cart_click' => astra_get_option( 'responsive-cart-click-action' ),    // WooCommerce responsive devices flyout.
 			);
 
 			wp_localize_script( 'astra-mobile-cart', 'astra_cart', apply_filters( 'astra_cart_js_localize', $astra_cart_localize_data ) );
@@ -436,7 +434,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 
 				$astra_live_search_localize_data = array(
 					'rest_api_url'                 => get_rest_url(),
-					'search_posts_per_page'        => 5,
+					'search_posts_per_page'        => astra_get_option( 'live-search-result-count' ),
 					'search_post_types'            => $search_post_types,
 					'search_post_types_labels'     => $search_post_type_label,
 					'search_language'              => astra_get_current_language_slug(),
@@ -543,11 +541,14 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				'var(--ast-global-color-8)'     => $astra_global_palette_instance->get_color_by_palette_variable( 'var(--ast-global-color-8)' ),
 				'ast_wp_version_higher_6_3'     => astra_wp_version_compare( '6.2.99', '>' ),
 				'ast_wp_version_higher_6_4'     => astra_wp_version_compare( '6.4.99', '>' ),
+				'dark_palette'                  => Astra_Global_Palette::astra_get_active_global_palette(),
 				'apply_content_bg_fullwidth'    => astra_apply_content_background_fullwidth_layouts(),
 				'customizer_content_bg_obj'     => $content_bg_obj,
 				'customizer_site_bg_obj'        => $site_bg_obj,
 				'is_astra_pro_colors_activated' => $is_astra_pro_colors_activated,
 				'site_builder_url'              => $site_builder_url,
+				'mobile_logo'                   => astra_get_option( 'mobile-header-logo' ),
+				'mobile_logo_state'             => astra_get_option( 'different-mobile-logo' ),
 			);
 
 			wp_localize_script( 'astra-block-editor-script', 'astraColors', apply_filters( 'astra_theme_root_colors', $astra_colors ) );
@@ -574,7 +575,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 		 * Function to check if enqueuing of Astra assets are disabled.
 		 *
 		 * @since 2.1.0
-		 * @return boolean
+		 * @return bool
 		 */
 		public static function enqueue_theme_assets() {
 			return apply_filters( 'astra_enqueue_theme_assets', true );

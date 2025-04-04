@@ -2,9 +2,7 @@
 /**
  * Mobile Menu Header Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -46,8 +44,8 @@ function astra_header_mobile_menu_configuration() {
 		),
 
 		/**
-		* Option: Theme Menu create link
-		*/
+		 * Option: Theme Menu create link
+		 */
 		array(
 			'name'      => ASTRA_THEME_SETTINGS . '[header-mobile-menu-create-menu-link]',
 			'default'   => astra_get_option( 'header-mobile-menu-create-menu-link' ),
@@ -61,7 +59,6 @@ function astra_header_mobile_menu_configuration() {
 			'context'   => Astra_Builder_Helper::$general_tab,
 			'divider'   => array( 'ast_class' => 'ast-section-spacing ast-bottom-section-divider' ),
 		),
-
 
 		// Option: Submenu Divider Checkbox.
 		array(
@@ -144,7 +141,6 @@ function astra_header_mobile_menu_configuration() {
 				),
 			),
 		),
-
 
 		// Option Group: Menu Color.
 		array(
@@ -384,7 +380,6 @@ function astra_header_mobile_menu_configuration() {
 			),
 		),
 
-
 		/**
 		 * Option: Font Extras
 		 */
@@ -413,7 +408,6 @@ function astra_header_mobile_menu_configuration() {
 			'context'  => Astra_Builder_Helper::$design_tab,
 			'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
 		),
-
 
 		// Option - Menu Space.
 		array(
@@ -473,5 +467,5 @@ function astra_header_mobile_menu_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_mobile_menu_configuration();
+	add_action( 'init', 'astra_header_mobile_menu_configuration' );
 }

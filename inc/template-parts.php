@@ -3,8 +3,6 @@
  * Template parts
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -28,7 +26,7 @@ add_action( 'astra_masthead_content', 'astra_header_custom_item_outside_menu', 1
 /**
  * Header Custom Menu Item
  */
-if ( ! function_exists( 'astra_masthead_get_menu_items' ) ) :
+if ( ! function_exists( 'astra_masthead_get_menu_items' ) ) {
 
 	/**
 	 * Custom Menu Item Markup
@@ -37,7 +35,7 @@ if ( ! function_exists( 'astra_masthead_get_menu_items' ) ) :
 	 *
 	 * @see astra_masthead_get_menu_items
 	 * @see astra_masthead_custom_nav_menu_items
-	 * @param boolean $display_outside_markup Outside / Inside markup.
+	 * @param bool $display_outside_markup Outside / Inside markup.
 	 *
 	 * @since 1.0.0
 	 */
@@ -74,13 +72,12 @@ if ( ! function_exists( 'astra_masthead_get_menu_items' ) ) :
 
 		return apply_filters( 'astra_masthead_get_menu_items', $markup );
 	}
-
-endif;
+}
 
 /**
  * Header Custom Menu Item
  */
-if ( ! function_exists( 'astra_masthead_custom_page_menu_items' ) ) :
+if ( ! function_exists( 'astra_masthead_custom_page_menu_items' ) ) {
 
 	/**
 	 * Header Custom Menu Item
@@ -109,13 +106,12 @@ if ( ! function_exists( 'astra_masthead_custom_page_menu_items' ) ) :
 
 		return $args;
 	}
-
-endif;
+}
 
 /**
  * Header Custom Menu Item
  */
-if ( ! function_exists( 'astra_masthead_custom_nav_menu_items' ) ) :
+if ( ! function_exists( 'astra_masthead_custom_nav_menu_items' ) ) {
 
 	/**
 	 * Header Custom Menu Item
@@ -144,8 +140,7 @@ if ( ! function_exists( 'astra_masthead_custom_nav_menu_items' ) ) :
 
 		return $items;
 	}
-
-endif;
+}
 
 /**
  * Header toggle buttons
@@ -167,10 +162,10 @@ if ( ! function_exists( 'astra_masthead_toggle_buttons_primary' ) ) {
 		$custom_header_section      = astra_get_option( 'header-main-rt-section' );
 		$display_outside_menu       = astra_get_option( 'header-display-outside-menu' );
 
-		if ( ! $disable_primary_navigation || ( 'none' != $custom_header_section && ! $display_outside_menu ) ) {
-			$menu_title          = trim( apply_filters( 'astra_main_menu_toggle_label', astra_get_option( 'header-main-menu-label' ) ) );
+		if ( ! $disable_primary_navigation || ( 'none' !== $custom_header_section && ! $display_outside_menu ) ) {
+			$menu_title          = trim( apply_filters( 'astra_main_menu_toggle_label', astra_get_i18n_option( 'header-main-menu-label', _x( '%astra%', 'Primary Menu: Menu Label for Toggle Button', 'astra' ) ) ) );
 			$menu_label_class    = '';
-			$screen_reader_title = __( 'Main Menu', 'astra' );
+			$screen_reader_title = esc_html__( 'Main Menu', 'astra' );
 			if ( '' !== $menu_title ) {
 				$menu_label_class    = 'ast-menu-label';
 				$screen_reader_title = $menu_title;
@@ -215,7 +210,7 @@ if ( ! function_exists( 'astra_footer_small_footer_template' ) ) {
 		$small_footer_layout = astra_get_option_meta( 'footer-sml-layout', 'footer-sml-layout-2' );
 		$small_footer_layout = apply_filters( 'astra_footer_sml_layout', $small_footer_layout );
 
-		if ( 'disabled' != $small_footer_layout ) {
+		if ( 'disabled' !== $small_footer_layout ) {
 
 			$small_footer_layout = str_replace( 'footer-sml-layout-', '', $small_footer_layout );
 
@@ -331,7 +326,7 @@ if ( ! function_exists( 'astra_advanced_footer_markup' ) ) {
 		$advanced_footer_layout = astra_get_option( 'footer-adv' );
 		$advanced_footer_meta   = astra_get_option_meta( 'footer-adv-display' );
 
-		if ( apply_filters( 'astra_advanced_footer_disable', false ) || 'layout-4' !== $advanced_footer_layout || 'disabled' == $advanced_footer_meta ) {
+		if ( apply_filters( 'astra_advanced_footer_disable', false ) || 'layout-4' !== $advanced_footer_layout || 'disabled' === $advanced_footer_meta ) {
 			return;
 		}
 
@@ -339,7 +334,6 @@ if ( ! function_exists( 'astra_advanced_footer_markup' ) ) {
 		get_template_part( 'template-parts/advanced-footer/layout-4' );
 	}
 }
-
 
 /**
  * Header menu item outside custom menu

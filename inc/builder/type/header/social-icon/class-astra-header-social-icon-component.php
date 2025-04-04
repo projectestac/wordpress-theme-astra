@@ -3,8 +3,6 @@
  * Heading Colors for Astra theme.
  *
  * @package     astra-builder
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       3.0.0
  */
@@ -22,7 +20,6 @@ define( 'ASTRA_HEADER_SOCIAL_ICON_URI', ASTRA_THEME_URI . 'inc/builder/type/head
  * @since 3.0.0
  */
 class Astra_Header_Social_Icon_Component {
-
 	/**
 	 * Constructor function that initializes required actions and hooks
 	 */

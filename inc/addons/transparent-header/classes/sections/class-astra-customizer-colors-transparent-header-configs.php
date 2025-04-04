@@ -3,8 +3,6 @@
  * Colors and Background - Header Options for our theme.
  *
  * @package     Astra Addon
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 1.4.3
  */
@@ -30,7 +28,6 @@ if ( ! class_exists( 'Astra_Customizer_Colors_Transparent_Header_Configs' ) ) {
 	 * Register Colors and Background - Header Options Customizer Configurations.
 	 */
 	class Astra_Customizer_Colors_Transparent_Header_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Colors and Background - Header Options Customizer Configurations.
 		 *
@@ -43,11 +40,9 @@ if ( ! class_exists( 'Astra_Customizer_Colors_Transparent_Header_Configs' ) ) {
 
 			$_configs = array(
 
-
-
 				/**
-				* Option: Transparent Header logo color
-				*/
+				 * Option: Transparent Header logo color
+				 */
 				array(
 					'name'        => ASTRA_THEME_SETTINGS . '[transparent-header-logo-color]',
 					'default'     => astra_get_option( 'transparent-header-logo-color' ),
@@ -56,11 +51,32 @@ if ( ! class_exists( 'Astra_Customizer_Colors_Transparent_Header_Configs' ) ) {
 					'priority'    => 34,
 					'control'     => 'ast-color',
 					'title'       => __( 'Logo Color', 'astra' ),
-					'context'     => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+					'context'     => true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
 					'responsive'  => false,
 					'rgba'        => true,
 					'description' => __( 'Use it with transparent images for optimal results.', 'astra' ),
 					'divider'     => array( 'ast_class' => 'ast-section-spacing' ),
+				),
+
+				/**
+				 * Option: Above header background overlay color
+				 */
+				array(
+					'name'       => ASTRA_THEME_SETTINGS . '[hba-transparent-header-bg-color-responsive]',
+					'default'    => astra_get_option( 'hba-transparent-header-bg-color-responsive' ),
+					'section'    => 'section-transparent-header',
+					'type'       => 'control',
+					'priority'   => 34,
+					'transport'  => 'postMessage',
+					'control'    => 'ast-responsive-color',
+					'title'      => __( 'Above Header', 'astra' ),
+					'context'    => true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+					'responsive' => true,
+					'rgba'       => true,
+					'divider'    => array(
+						'ast_class' => 'ast-top-divider ast-top-dotted-divider',
+						'ast_title' => __( 'Background Overlay', 'astra' ),
+					),
 				),
 
 				/**
@@ -74,8 +90,25 @@ if ( ! class_exists( 'Astra_Customizer_Colors_Transparent_Header_Configs' ) ) {
 					'priority'   => 34,
 					'transport'  => 'postMessage',
 					'control'    => 'ast-responsive-color',
-					'title'      => __( 'Background Overlay', 'astra' ),
-					'context'    => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+					'title'      => __( 'Primary Header', 'astra' ),
+					'context'    => true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+					'responsive' => true,
+					'rgba'       => true,
+				),
+
+				/**
+				 * Option: Below header background overlay color
+				 */
+				array(
+					'name'       => ASTRA_THEME_SETTINGS . '[hbb-transparent-header-bg-color-responsive]',
+					'default'    => astra_get_option( 'hbb-transparent-header-bg-color-responsive' ),
+					'section'    => 'section-transparent-header',
+					'type'       => 'control',
+					'priority'   => 34,
+					'transport'  => 'postMessage',
+					'control'    => 'ast-responsive-color',
+					'title'      => __( 'Below Header', 'astra' ),
+					'context'    => true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
 					'responsive' => true,
 					'rgba'       => true,
 				),
@@ -149,7 +182,7 @@ if ( ! class_exists( 'Astra_Customizer_Colors_Transparent_Header_Configs' ) ) {
 					'title'      => __( 'Background', 'astra' ),
 					'responsive' => true,
 					'rgba'       => true,
-					'context'    => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+					'context'    => true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
 				),
 
 				/**
@@ -203,7 +236,7 @@ if ( ! class_exists( 'Astra_Customizer_Colors_Transparent_Header_Configs' ) ) {
 					'title'      => __( 'Background', 'astra' ),
 					'responsive' => true,
 					'rgba'       => true,
-					'context'    => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
+					'context'    => true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab : Astra_Builder_Helper::$general_tab,
 				),
 
 				/**

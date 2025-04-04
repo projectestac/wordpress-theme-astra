@@ -3,8 +3,6 @@
  * Comments options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       Astra 4.6.0
  */
@@ -15,7 +13,6 @@ if ( ! class_exists( 'Astra_Comments_Configs' ) ) {
 	 * Register Comments Customizer Configurations.
 	 */
 	class Astra_Comments_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Comments Customizer Configurations.
 		 *

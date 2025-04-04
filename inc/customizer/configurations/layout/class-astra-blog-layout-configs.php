@@ -3,8 +3,6 @@
  * Bottom Footer Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -19,7 +17,6 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 	 * Register Blog Layout Customizer Configurations.
 	 */
 	class Astra_Blog_Layout_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Blog Layout Customizer Configurations.
 		 *
@@ -43,22 +40,22 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 				$old_blog_layouts = array(
 					'blog-layout-1' => array(
 						'label' => __( 'Layout 1', 'astra' ),
-						'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-1', false ) : '',
+						'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-1', false ) : '',
 					),
 					'blog-layout-2' => array(
 						'label' => __( 'Layout 2', 'astra' ),
-						'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-2', false ) : '',
+						'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-2', false ) : '',
 					),
 					'blog-layout-3' => array(
 						'label' => __( 'Layout 3', 'astra' ),
-						'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-3', false ) : '',
+						'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-3', false ) : '',
 					),
 				);
 
 				$old_blog_layouts_free = array(
 					'blog-layout-classic' => array(
 						'label' => __( 'Classic Layout', 'astra' ),
-						'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-classic', false ) : '',
+						'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-classic', false ) : '',
 					),
 				);
 			}
@@ -66,18 +63,17 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 			$new_blog_layouts = array(
 				'blog-layout-4' => array(
 					'label' => __( 'Grid', 'astra' ),
-					'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-4', false ) : '',
+					'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-4', false ) : '',
 				),
 				'blog-layout-5' => array(
 					'label' => __( 'List', 'astra' ),
-					'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-5', false ) : '',
+					'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-5', false ) : '',
 				),
 				'blog-layout-6' => array(
 					'label' => __( 'Cover', 'astra' ),
-					'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-6', false ) : '',
+					'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'blog-layout-6', false ) : '',
 				),
 			);
-
 
 			if ( $if_astra_addon ) {
 				$blog_layout = array_merge(
@@ -216,7 +212,7 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 						'step' => 1,
 						'max'  => 500,
 					),
-					'divider'      => array( 'ast_class' => ( $if_astra_addon ) ? 'ast-top-dotted-divider' : 'ast-top-section-divider' ),
+					'divider'      => array( 'ast_class' => $if_astra_addon ? 'ast-top-dotted-divider' : 'ast-top-section-divider' ),
 				),
 
 				/**
@@ -282,7 +278,7 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 						),
 						'read-more'  => array(
 							'clone'       => false,
-							'is_parent'   => defined( 'ASTRA_EXT_VER' ) ? true : false,
+							'is_parent'   => $if_astra_addon ? true : false,
 							'main_index'  => 'read-more',
 							'clone_limit' => 1,
 							'title'       => __( 'Read More', 'astra' ),
@@ -436,7 +432,7 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 					'section'  => 'section-blog',
 					'priority' => 14,
 					'label'    => '',
-					'help'     => sprintf( /* translators: 1: link open markup, 2: link close markup */ __( 'Calculate a personalized image ratio using this %1$s online tool %2$s for your image dimensions.', 'astra' ), '<a href="https://www.digitalrebellion.com/webapps/aspectcalc" target="_blank">', '</a>' ),
+					'help'     => sprintf( /* translators: 1: link open markup, 2: link close markup */ __( 'Calculate a personalized image ratio using this %1$s online tool %2$s for your image dimensions.', 'astra' ), '<a href="' . esc_url( 'https://www.digitalrebellion.com/webapps/aspectcalc' ) . '" target="_blank">', '</a>' ),
 				),
 
 				/**
@@ -593,7 +589,6 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 					'renderAs'   => 'text',
 				),
 
-
 				/**
 				 * Option: Blog Meta Category Divider Type
 				 */
@@ -710,9 +705,7 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 				);
 			}
 
-			$configurations = array_merge( $configurations, $_configs );
-
-			return $configurations;
+			return array_merge( $configurations, $_configs );
 		}
 	}
 }

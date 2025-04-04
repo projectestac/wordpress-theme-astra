@@ -3,8 +3,6 @@
  * Footer Navigation Menu component.
  *
  * @package     Astra Builder
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 3.0.0
  */
@@ -22,7 +20,6 @@ define( 'ASTRA_BUILDER_FOOTER_MENU_URI', ASTRA_THEME_URI . 'inc/builder/type/foo
  * @since 3.0.0
  */
 class Astra_Footer_Menu_Component {
-
 	/**
 	 * Constructor function that initializes required actions and hooks
 	 */
@@ -51,9 +48,9 @@ class Astra_Footer_Menu_Component {
 		$mobile_menu_layout_class  = '';
 		$menu_layout               = astra_get_option( 'footer-menu-layout' );
 
-		$desktop_menu_layout = ( isset( $menu_layout['desktop'] ) ) ? $menu_layout['desktop'] : '';
-		$tablet_menu_layout  = ( isset( $menu_layout['tablet'] ) ) ? $menu_layout['tablet'] : '';
-		$mobile_menu_layout  = ( isset( $menu_layout['mobile'] ) ) ? $menu_layout['mobile'] : '';
+		$desktop_menu_layout = isset( $menu_layout['desktop'] ) ? $menu_layout['desktop'] : '';
+		$tablet_menu_layout  = isset( $menu_layout['tablet'] ) ? $menu_layout['tablet'] : '';
+		$mobile_menu_layout  = isset( $menu_layout['mobile'] ) ? $menu_layout['mobile'] : '';
 
 		if ( ! empty( $desktop_menu_layout ) ) {
 			$desktop_menu_layout_class = 'astra-footer-' . esc_attr( $desktop_menu_layout ) . '-menu';
@@ -75,13 +72,14 @@ class Astra_Footer_Menu_Component {
 		 */
 		$menu_classes = apply_filters( 'astra_menu_classes', array( 'ast-nav-menu', 'ast-flex', $desktop_menu_layout_class, $tablet_menu_layout_class, $mobile_menu_layout_class ) );
 
+		$menu_name   = wp_get_nav_menu_name( 'footer_menu' );
 		$items_wrap  = '<nav ';
 		$items_wrap .= astra_attr(
 			'site-navigation',
 			array(
 				'id'         => 'footer-site-navigation',
 				'class'      => 'site-navigation ast-flex-grow-1 navigation-accessibility footer-navigation',
-				'aria-label' => esc_attr__( 'Site Navigation', 'astra' ),
+				'aria-label' => esc_attr__( 'Site Navigation: ', 'astra' ) . $menu_name,
 			)
 		);
 		$items_wrap .= '>';

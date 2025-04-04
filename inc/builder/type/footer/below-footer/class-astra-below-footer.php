@@ -3,8 +3,6 @@
  * Below Footer component.
  *
  * @package     Astra Builder
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 3.0.0
  */
@@ -24,7 +22,6 @@ if ( ! class_exists( 'Astra_Below_Footer' ) ) {
 	 * @since 3.0.0
 	 */
 	class Astra_Below_Footer {
-
 		/**
 		 * Constructor function that initializes required actions and hooks
 		 */

@@ -3,8 +3,6 @@
  * LifterLMS General Options for our theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       1.3.0
  */
@@ -19,7 +17,6 @@ if ( ! class_exists( 'Astra_Learndash_General_Configs' ) ) {
 	 * Customizer Sanitizes Initial setup
 	 */
 	class Astra_Learndash_General_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register LearnDash General Layout settings.
 		 *
@@ -64,7 +61,6 @@ if ( ! class_exists( 'Astra_Learndash_General_Configs' ) ) {
 			);
 
 			return array_merge( $configurations, $_configs );
-
 		}
 	}
 }

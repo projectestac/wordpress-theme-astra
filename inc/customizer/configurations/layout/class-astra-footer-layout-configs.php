@@ -3,8 +3,6 @@
  * Bottom Footer Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -19,7 +17,6 @@ if ( ! class_exists( 'Astra_Footer_Layout_Configs' ) ) {
 	 * Register Footer Layout Configurations.
 	 */
 	class Astra_Footer_Layout_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Footer Layout Configurations.
 		 *
@@ -463,7 +460,7 @@ if ( ! class_exists( 'Astra_Footer_Layout_Configs' ) ) {
 						'section'  => 'section-footer-adv',
 						'priority' => 999,
 						'label'    => '',
-						'help'     => '<p>' . __( 'More Options Available in Astra Pro!', 'astra' ) . '</p><a href="' . ASTRA_PRO_CUSTOMIZER_UPGRADE_URL . '" class="button button-secondary"  target="_blank" rel="noopener">' . __( 'Learn More', 'astra' ) . '</a>',
+						'help'     => '<p>' . __( 'More Options Available in Astra Pro!', 'astra' ) . '</p><a href="' . astra_get_upgrade_url( 'customizer' ) . '" class="button button-secondary"  target="_blank" rel="noopener">' . __( 'Learn More', 'astra' ) . '</a>',
 						'settings' => array(),
 					),
 
@@ -473,10 +470,8 @@ if ( ! class_exists( 'Astra_Footer_Layout_Configs' ) ) {
 			}
 
 			return $configurations;
-
 		}
 	}
 }
-
 
 new Astra_Footer_Layout_Configs();

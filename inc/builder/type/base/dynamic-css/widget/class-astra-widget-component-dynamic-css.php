@@ -3,8 +3,6 @@
  * Astra Widget Component Dynamic CSS.
  *
  * @package     astra-builder
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       3.0.0
  */
@@ -20,7 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.0.0
  */
 class Astra_Widget_Component_Dynamic_CSS {
-
 	/**
 	 * Dynamic CSS
 	 *
@@ -41,7 +38,7 @@ class Astra_Widget_Component_Dynamic_CSS {
 				continue;
 			}
 
-			$_section = ( ! astra_has_widgets_block_editor() ) ? 'sidebar-widgets-' . $builder_type . '-widget-' . $index : 'astra-sidebar-widgets-' . $builder_type . '-widget-' . $index;
+			$_section = ! astra_has_widgets_block_editor() ? 'sidebar-widgets-' . $builder_type . '-widget-' . $index : 'astra-sidebar-widgets-' . $builder_type . '-widget-' . $index;
 
 			$selector = '.' . $builder_type . '-widget-area[data-section="sidebar-widgets-' . $builder_type . '-widget-' . $index . '"]';
 
@@ -55,7 +52,6 @@ class Astra_Widget_Component_Dynamic_CSS {
 			} else {
 				$builder_widget_selector = $selector . ' .' . $builder_type . '-widget-area-inner';
 			}
-
 
 				$title_font_size   = astra_get_option( $builder_type . '-widget-' . $index . '-font-size' );
 				$content_font_size = astra_get_option( $builder_type . '-widget-' . $index . '-content-font-size' );
@@ -88,7 +84,7 @@ class Astra_Widget_Component_Dynamic_CSS {
 					$builder_widget_selector . ' a:hover' => array(
 						'color' => $link_h_color_desktop,
 					),
-					$selector . ' .widget-title, ' . $selector . ' h1, ' . $selector . ' .widget-area h1, ' . $selector . ' h2, ' . $selector . ' .widget-area h2, ' . $selector . ' h3, ' . $selector . ' .widget-area h3, ' . $selector . ' h4, ' . $selector . ' .widget-area h4, ' . $selector . ' h5, ' . $selector . ' .widget-area h5, ' . $selector . ' h6, ' . $selector . ' .widget-area h6' => array( 
+					$selector . ' .widget-title, ' . $selector . ' h1, ' . $selector . ' .widget-area h1, ' . $selector . ' h2, ' . $selector . ' .widget-area h2, ' . $selector . ' h3, ' . $selector . ' .widget-area h3, ' . $selector . ' h4, ' . $selector . ' .widget-area h4, ' . $selector . ' h5, ' . $selector . ' .widget-area h5, ' . $selector . ' h6, ' . $selector . ' .widget-area h6' => array(
 						'color'     => $title_color_desktop,
 						'font-size' => astra_responsive_font( $title_font_size, 'desktop' ),
 					),
@@ -107,7 +103,7 @@ class Astra_Widget_Component_Dynamic_CSS {
 						// Typography.
 						'font-size' => astra_responsive_font( $content_font_size, 'tablet' ),
 					),
-					$selector . ' .widget-title, ' . $selector . ' h1, ' . $selector . ' .widget-area h1, ' . $selector . ' h2, ' . $selector . ' .widget-area h2, ' . $selector . ' h3, ' . $selector . ' .widget-area h3, ' . $selector . ' h4, ' . $selector . ' .widget-area h4, ' . $selector . ' h5, ' . $selector . ' .widget-area h5, ' . $selector . ' h6, ' . $selector . ' .widget-area h6' => array( 
+					$selector . ' .widget-title, ' . $selector . ' h1, ' . $selector . ' .widget-area h1, ' . $selector . ' h2, ' . $selector . ' .widget-area h2, ' . $selector . ' h3, ' . $selector . ' .widget-area h3, ' . $selector . ' h4, ' . $selector . ' .widget-area h4, ' . $selector . ' h5, ' . $selector . ' .widget-area h5, ' . $selector . ' h6, ' . $selector . ' .widget-area h6' => array(
 						'color'     => $title_color_tablet,
 						'font-size' => astra_responsive_font( $title_font_size, 'tablet' ),
 					),
@@ -132,7 +128,7 @@ class Astra_Widget_Component_Dynamic_CSS {
 						// Typography.
 						'font-size' => astra_responsive_font( $content_font_size, 'mobile' ),
 					),
-					$selector . ' .widget-title, ' . $selector . ' h1, ' . $selector . ' .widget-area h1, ' . $selector . ' h2, ' . $selector . ' .widget-area h2, ' . $selector . ' h3, ' . $selector . ' .widget-area h3, ' . $selector . ' h4, ' . $selector . ' .widget-area h4, ' . $selector . ' h5, ' . $selector . ' .widget-area h5, ' . $selector . ' h6, ' . $selector . ' .widget-area h6' => array( 
+					$selector . ' .widget-title, ' . $selector . ' h1, ' . $selector . ' .widget-area h1, ' . $selector . ' h2, ' . $selector . ' .widget-area h2, ' . $selector . ' h3, ' . $selector . ' .widget-area h3, ' . $selector . ' h4, ' . $selector . ' .widget-area h4, ' . $selector . ' h5, ' . $selector . ' .widget-area h5, ' . $selector . ' h6, ' . $selector . ' .widget-area h6' => array(
 						'color'     => $title_color_mobile,
 						'font-size' => astra_responsive_font( $title_font_size, 'mobile' ),
 					),

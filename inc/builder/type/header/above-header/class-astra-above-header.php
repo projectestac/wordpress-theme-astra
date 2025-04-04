@@ -3,8 +3,6 @@
  * Above Header.
  *
  * @package     astra-builder
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       3.0.0
  */
@@ -22,7 +20,6 @@ define( 'ASTRA_ABOVE_HEADER_URI', ASTRA_THEME_URI . 'inc/builder/type/header/abo
  * @since 3.0.0
  */
 class Astra_Above_Header {
-
 	/**
 	 * Constructor function that initializes required actions and hooks.
 	 */

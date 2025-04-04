@@ -3,8 +3,6 @@
  * Astra Meta Box Operations
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -22,7 +20,6 @@ if ( ! class_exists( 'Astra_Meta_Box_Operations' ) ) {
 	 * Meta Box
 	 */
 	class Astra_Meta_Box_Operations {
-
 		/**
 		 * Instance
 		 *
@@ -77,8 +74,8 @@ if ( ! class_exists( 'Astra_Meta_Box_Operations' ) ) {
 		/**
 		 * Disable Post / Page Title
 		 *
-		 * @param  boolean $defaults Show default post title.
-		 * @return boolean           Status of default post title.
+		 * @param  bool $defaults Show default post title.
+		 * @return bool           Status of default post title.
 		 */
 		public function post_title( $defaults ) {
 

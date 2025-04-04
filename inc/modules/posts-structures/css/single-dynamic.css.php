@@ -119,12 +119,12 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 
 	$dynamic_css .= $css_output;
 
-	if ( false === astra_get_option( 'ast-single-' . $current_post_type . '-title', ( class_exists( 'WooCommerce' ) && 'product' === $current_post_type ) ? false : true ) ) {
+	if ( false === astra_get_option( 'ast-single-' . $current_post_type . '-title', class_exists( 'WooCommerce' ) && 'product' === $current_post_type ? false : true ) ) {
 		return $dynamic_css;
 	}
 
 	$layout_type     = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-layout', 'layout-1' );
-	$layout_2_active = ( 'layout-2' === $layout_type ) ? true : false;
+	$layout_2_active = 'layout-2' === $layout_type ? true : false;
 	$exclude_attr    = astra_get_option( 'enable-related-posts', false ) ? ':not(.related-entry-header)' : '';
 
 	if ( $layout_2_active ) {
@@ -135,9 +135,9 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 
 	$site_content_width = astra_get_option( 'site-content-width', 1200 );
 	$horz_alignment     = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-horizontal-alignment' );
-	$desk_h_alignment   = ( isset( $horz_alignment['desktop'] ) ) ? $horz_alignment['desktop'] : '';
-	$tab_h_alignment    = ( isset( $horz_alignment['tablet'] ) ) ? $horz_alignment['tablet'] : '';
-	$mob_h_alignment    = ( isset( $horz_alignment['mobile'] ) ) ? $horz_alignment['mobile'] : '';
+	$desk_h_alignment   = isset( $horz_alignment['desktop'] ) ? $horz_alignment['desktop'] : '';
+	$tab_h_alignment    = isset( $horz_alignment['tablet'] ) ? $horz_alignment['tablet'] : '';
+	$mob_h_alignment    = isset( $horz_alignment['mobile'] ) ? $horz_alignment['mobile'] : '';
 
 	$banner_padding = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-banner-padding', Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-padding' ) );
 	$banner_margin  = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-banner-margin' );
@@ -149,11 +149,11 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 
 	$elements_gap       = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-elements-gap', 10 );
 	$banner_height      = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-banner-height' );
-	$desk_banner_height = ( $layout_2_active && isset( $banner_height['desktop'] ) ) ? astra_get_css_value( $banner_height['desktop'], 'px' ) : '';
-	$tab_banner_height  = ( $layout_2_active && isset( $banner_height['tablet'] ) ) ? astra_get_css_value( $banner_height['tablet'], 'px' ) : '';
-	$mob_banner_height  = ( $layout_2_active && isset( $banner_height['mobile'] ) ) ? astra_get_css_value( $banner_height['mobile'], 'px' ) : '';
+	$desk_banner_height = $layout_2_active && isset( $banner_height['desktop'] ) ? astra_get_css_value( $banner_height['desktop'], 'px' ) : '';
+	$tab_banner_height  = $layout_2_active && isset( $banner_height['tablet'] ) ? astra_get_css_value( $banner_height['tablet'], 'px' ) : '';
+	$mob_banner_height  = $layout_2_active && isset( $banner_height['mobile'] ) ? astra_get_css_value( $banner_height['mobile'], 'px' ) : '';
 
-	$vert_alignment = ( $layout_2_active ) ? astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-vertical-alignment', 'center' ) : 'center';
+	$vert_alignment = $layout_2_active ? astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-vertical-alignment', 'center' ) : 'center';
 	$width_type     = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-banner-width-type', 'fullwidth' );
 	$custom_width   = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-banner-custom-width', 1200 );
 
@@ -178,6 +178,7 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 	$custom_scale_width  = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-article-featured-image-custom-scale-width', 16 );
 	$custom_scale_height = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-article-featured-image-custom-scale-height', 9 );
 	$aspect_ratio        = astra_get_dynamic_image_aspect_ratio( $aspect_ratio_type, $predefined_scale, $custom_scale_width, $custom_scale_height );
+	$object_fit_style    = 'custom' === $aspect_ratio_type ? 'cover' : '';
 
 	// Remove featured image padding.
 	$remove_featured_image_padding = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-remove-featured-padding', false ) && 'layout-1' === $layout_type && 'none' === astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-article-featured-image-position-layout-1' ) ? true : false;
@@ -211,6 +212,7 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 				'aspect-ratio' => $aspect_ratio,
 				'width'        => Astra_Dynamic_CSS::astra_4_6_0_compatibility() && 'default' !== $aspect_ratio_type ? '100%' : '',
 				'height'       => Astra_Dynamic_CSS::astra_4_6_0_compatibility() && 'default' !== $aspect_ratio_type ? '100%' : '',
+				'object-fit'   => $object_fit_style,
 			),
 		);
 
@@ -255,8 +257,8 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 			$single_post_container_spacing = astra_get_option( 'single-post-inside-spacing' );
 			$container_padding_defaults    = Astra_Dynamic_CSS::astra_4_6_0_compatibility() && is_single() ? '2.5em' : '3em';
 
-			$container_lg_horz_spacing = ( true === astra_check_is_structural_setup() ) ? $container_padding_defaults : '6.67';
-			$container_lg_vert_spacing = ( true === astra_check_is_structural_setup() ) ? $container_padding_defaults : '5.34';
+			$container_lg_horz_spacing = true === astra_check_is_structural_setup() ? $container_padding_defaults : '6.67';
+			$container_lg_vert_spacing = true === astra_check_is_structural_setup() ? $container_padding_defaults : '5.34';
 
 			$astra_desktop_container_left_spacing  = defined( 'ASTRA_EXT_VER' ) && astra_responsive_spacing( $single_post_container_spacing, 'left', 'desktop' ) ? astra_responsive_spacing( $single_post_container_spacing, 'left', 'desktop', $container_lg_horz_spacing ) : 'var(--ast-container-default-xlg-padding)';
 			$astra_desktop_container_right_spacing = defined( 'ASTRA_EXT_VER' ) && astra_responsive_spacing( $single_post_container_spacing, 'right', 'desktop' ) ? astra_responsive_spacing( $single_post_container_spacing, 'right', 'desktop', $container_lg_horz_spacing ) : 'var(--ast-container-default-xlg-padding)';
@@ -336,6 +338,7 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 				'aspect-ratio' => $aspect_ratio,
 				'width'        => Astra_Dynamic_CSS::astra_4_6_0_compatibility() && 'default' !== $aspect_ratio_type ? '100%' : '',
 				'height'       => Astra_Dynamic_CSS::astra_4_6_0_compatibility() && 'default' !== $aspect_ratio_type ? '100%' : '',
+				'object-fit'   => $object_fit_style,
 			),
 			$selector . ' .ast-container > *:last-child'  => array(
 				'margin-bottom' => '0',
@@ -452,7 +455,7 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 			justify-content: center;
 			text-align: center;
 			position: relative;
-			background: #eeeeee;
+			background: var(--ast-title-layout-bg);
 		}
 		.ast-single-entry-banner[data-banner-layout="layout-1"] {
 			max-width: ' . astra_get_css_value( $site_content_width, 'px' ) . ';
@@ -488,6 +491,17 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 			.site-header-focus-item .ast-container div.customize-partial-edit-shortcut,
 			.site-header-focus-item .ast-container button.item-customizer-focus {
 				font-size: inherit;
+			}
+		';
+	}
+
+	$margin_top = astra_responsive_spacing( $margin, 'top', 'desktop' );
+
+	// To add top spacing for SureCart shop page default title.
+	if ( class_exists( 'SureCart' ) && $margin_top && 0 === intval( $margin_top ) && get_the_ID() === intval( get_option( 'surecart_shop_page_id' ) ) ) {
+		$dynamic_css .= '
+			.page .entry-header {
+				margin-top: 3em;
 			}
 		';
 	}

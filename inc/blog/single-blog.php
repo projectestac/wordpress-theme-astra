@@ -27,7 +27,7 @@ if ( ! function_exists( 'astra_single_body_class' ) ) {
 		if ( is_single() ) {
 			$classes[] = 'ast-blog-single-style-1';
 
-			if ( 'post' != get_post_type() ) {
+			if ( 'post' !== get_post_type() ) {
 				$classes[] = 'ast-custom-post-type';
 			}
 		}
@@ -64,7 +64,7 @@ if ( ! function_exists( 'astra_single_post_class' ) ) {
 			}
 
 			// Remove hentry from page.
-			if ( 'page' == get_post_type() ) {
+			if ( 'page' === get_post_type() ) {
 				$classes = array_diff( $classes, array( 'hentry' ) );
 			}
 		}
@@ -121,25 +121,29 @@ if ( ! function_exists( 'astra_theme_comment' ) ) {
 								astra_markup_open( 'ast-comment-data-wrap' );
 								astra_markup_open( 'ast-comment-meta-wrap' );
 								echo '<header ';
-								echo astra_attr(
-									'commen-meta-author',
-									array(
-										'class' => 'ast-comment-meta ast-row ast-comment-author vcard capitalize',
+								echo wp_kses_post(
+									astra_attr(
+										'commen-meta-author',
+										array(
+											'class' => 'ast-comment-meta ast-row ast-comment-author capitalize',
+										)
 									)
 								);
 								echo '>';
 
 									printf(
-										astra_markup_open(
-											'ast-comment-cite-wrap',
-											array(
-												'open'  => '<div %s>',
-												'class' => 'ast-comment-cite-wrap',
+										esc_attr(
+											astra_markup_open(
+												'ast-comment-cite-wrap',
+												array(
+													'open' => '<div %s>',
+													'class' => 'ast-comment-cite-wrap',
+												)
 											)
 										) . '<cite><b class="fn">%1$s</b> %2$s</cite></div>',
 										get_comment_author_link(),
 										// If current post author is also comment author, make it known visually.
-										( $comment->user_id === $post->post_author ) ? '<span class="ast-highlight-text ast-cmt-post-author"></span>' : ''
+										$comment->user_id === $post->post_author ? '<span class="ast-highlight-text ast-cmt-post-author"></span>' : ''
 									);
 
 								if ( apply_filters( 'astra_single_post_comment_time_enabled', true ) ) {
@@ -201,9 +205,9 @@ if ( ! function_exists( 'astra_theme_comment' ) ) {
 									}
 									?>
 								</div>
-								<?php if ( '0' == $comment->comment_approved ) : ?>
+								<?php if ( '0' == $comment->comment_approved ) { ?>
 									<p class="ast-highlight-text comment-awaiting-moderation"><?php echo esc_html( astra_default_strings( 'string-comment-awaiting-moderation', false ) ); ?></p>
-								<?php endif; ?>
+								<?php } ?>
 							</section> <!-- .ast-comment-content -->
 							<?php astra_markup_close( 'ast-comment-data-wrap' ); ?>
 					</article><!-- #comment-## -->
@@ -230,7 +234,7 @@ function astra_adjacent_post_links_title( $output, $format, $link, $post, $adjac
 	/** @psalm-suppress PossiblyInvalidPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 	if ( ! empty( $post->post_title ) ) {
 		/** @psalm-suppress PossiblyInvalidPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$output = str_replace( 'href="', 'title="' . esc_attr( $post->post_title ) . '"' . 'href="', $output );
+		$output = str_replace( 'href="', 'title="' . esc_attr( $post->post_title ) . '" href="', $output );
 	}
 	return $output;
 }

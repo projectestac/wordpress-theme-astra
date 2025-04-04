@@ -3,8 +3,6 @@
  * Astra Generate Markup Class.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2021, Astra
  * @link        https://wpastra.com/
  * @since       Astra 3.3.0
  */
@@ -17,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Astra_Attr
  */
 class Astra_Markup {
-
 	/**
 	 * Initialuze the Class.
 	 *
@@ -198,7 +195,7 @@ class Astra_Markup {
 	 * @return string.
 	 */
 	public function comment_form_grid_class() {
-		return ( Astra_Builder_Helper::apply_flex_based_css() ) ? 'ast-grid-common-col ast-width-lg-33 ast-width-md-4 ast-float' : 'ast-col-xs-12 ast-col-sm-12 ast-col-md-4 ast-col-lg-4';
+		return Astra_Builder_Helper::apply_flex_based_css() ? 'ast-grid-common-col ast-width-lg-33 ast-width-md-4 ast-float' : 'ast-col-xs-12 ast-col-sm-12 ast-col-md-4 ast-col-lg-4';
 	}
 
 	/**

@@ -27,7 +27,7 @@ if ( ! function_exists( 'astra_register_menu_locations' ) ) {
 		 */
 		register_nav_menus(
 			array(
-				'primary' => __( 'Primary Menu', 'astra' ),
+				'primary' => esc_html__( 'Primary Menu', 'astra' ),
 			)
 		);
 
@@ -38,11 +38,10 @@ if ( ! function_exists( 'astra_register_menu_locations' ) ) {
 			 */
 			register_nav_menus(
 				array(
-					'secondary_menu' => __( 'Secondary Menu', 'astra' ),
-					'mobile_menu'    => __( 'Off-Canvas Menu', 'astra' ),
+					'secondary_menu' => esc_html__( 'Secondary Menu', 'astra' ),
+					'mobile_menu'    => esc_html__( 'Off-Canvas Menu', 'astra' ),
 				)
 			);
-
 
 			$component_limit = defined( 'ASTRA_EXT_VER' ) ? Astra_Builder_Helper::$component_limit : Astra_Builder_Helper::$num_of_header_menu;
 
@@ -54,7 +53,7 @@ if ( ! function_exists( 'astra_register_menu_locations' ) ) {
 
 				register_nav_menus(
 					array(
-						'menu_' . $index => __( 'Menu ', 'astra' ) . $index,
+						'menu_' . $index => esc_html__( 'Menu ', 'astra' ) . $index,
 					)
 				);
 			}
@@ -64,7 +63,7 @@ if ( ! function_exists( 'astra_register_menu_locations' ) ) {
 			 */
 			register_nav_menus(
 				array(
-					'loggedin_account_menu' => __( 'Logged In Account Menu', 'astra' ),
+					'loggedin_account_menu' => esc_html__( 'Logged In Account Menu', 'astra' ),
 				)
 			);
 
@@ -75,10 +74,9 @@ if ( ! function_exists( 'astra_register_menu_locations' ) ) {
 		 */
 		register_nav_menus(
 			array(
-				'footer_menu' => __( 'Footer Menu', 'astra' ),
+				'footer_menu' => esc_html__( 'Footer Menu', 'astra' ),
 			)
 		);
-
 	}
 }
 
