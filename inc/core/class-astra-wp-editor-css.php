@@ -342,7 +342,7 @@ class Astra_WP_Editor_CSS {
 		$font_weight_prop                    = $is_widget_title_support_font_weight ? 'inherit' : 'normal';
 		$btn_preset_style                    = astra_get_option( 'button-preset-style' );
 		$border_color                        = astra_get_option( 'border-color' );
-		$palette_key                         = Astra_Global_Palette::astra_get_active_global_palette();
+		$is_dark_palette                     = Astra_Global_Palette::is_dark_palette();
 
 		// Fallback for Site title (Page Title).
 		if ( 'inherit' === $site_title_font_family ) {
@@ -462,7 +462,7 @@ class Astra_WP_Editor_CSS {
 			'.editor-styles-wrapper a'         => array(
 				'color' => esc_attr( $link_color ),
 			),
-			'.block-editor-block-list__block'  => array(
+			'.wp-block-post-content'  => array(
 				'color' => esc_attr( $text_color ),
 			),
 			'.has-text-color .block-editor-block-list__block:not(.wp-block-heading)' => array(
@@ -621,7 +621,7 @@ class Astra_WP_Editor_CSS {
 		/** Pro Individual heading colors sync with editor */
 		if ( defined( 'ASTRA_EXT_VER' ) ) {
 			/** Getting all individual heading colors */
-			$h1_color = astra_get_option( 'h1-color' );             
+			$h1_color = astra_get_option( 'h1-color' );
 			$h2_color = astra_get_option( 'h2-color' );
 			$h3_color = astra_get_option( 'h3-color' );
 			$h4_color = astra_get_option( 'h4-color' );
@@ -654,7 +654,7 @@ class Astra_WP_Editor_CSS {
 			);
 		}
 
-		if ( $palette_key === 'palette_4' ) {
+		if ( $is_dark_palette ) {
 			$desktop_css['.astra-dark-mode-enable #learndash_lessons, .astra-dark-mode-enable #learndash_quizzes, .astra-dark-mode-enable #learndash_profile, .astra-dark-mode-enable #learndash_lesson_topics_list > div, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-item .ld-table-list-title a, .astra-dark-mode-enable .learndash-wrapper .ld-item-list .ld-item-list-item .ld-item-name, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-header a, .astra-dark-mode-enable .learndash-wrapper .ld-table-list .ld-table-list-item-preview a'] = array(
 				'background' => 'var( --ast-global-color-primary, --ast-global-color-4 )',
 				'color'      => 'var(--ast-global-color-2)',

@@ -560,24 +560,23 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				$h6_properties = array_merge( $h6_properties, $h6_font_properties );
 			}
 
-			$link_selector                   = ( true === $update_customizer_strctural_defaults ) ? 'a' : 'a, .page-title';
-			$transparent_search_box_bg_color = astra_get_option( 'transparent-header-search-box-background-color', '#fff' );
-			$article_space                   = self::astra_4_6_0_compatibility() ? '2.5em' : '3em';
-			$color_palette_reorganize        = self::astra_4_8_9_compatibility();
-			$palette_key                     = Astra_Global_Palette::astra_get_active_global_palette();
-			$css_output                      = array(
+			$link_selector            = true === $update_customizer_strctural_defaults ? 'a' : 'a, .page-title';
+			$article_space            = self::astra_4_6_0_compatibility() ? '2.5em' : '3em';
+			$color_palette_reorganize = self::astra_4_8_9_compatibility();
+			$is_dark_palette          = Astra_Global_Palette::is_dark_palette();
 
+			$css_output = array(
 				':root'                                  => array(
 					'--ast-post-nav-space'                 => 0, // Moved from inc/dynamic-css/single-post.php for the fix of post-navigation issue for the old users. @since 4.6.13
-					'--ast-container-default-xlg-padding'  => ( true === $update_customizer_strctural_defaults ) ? $article_space : '6.67em',
-					'--ast-container-default-lg-padding'   => ( true === $update_customizer_strctural_defaults ) ? $article_space : '5.67em',
-					'--ast-container-default-slg-padding'  => ( true === $update_customizer_strctural_defaults ) ? '2em' : '4.34em',
-					'--ast-container-default-md-padding'   => ( true === $update_customizer_strctural_defaults ) ? $article_space : '3.34em',
-					'--ast-container-default-sm-padding'   => ( true === $update_customizer_strctural_defaults ) ? $article_space : '6.67em',
-					'--ast-container-default-xs-padding'   => ( true === $update_customizer_strctural_defaults ) ? '2.4em' : '2.4em',
-					'--ast-container-default-xxs-padding'  => ( true === $update_customizer_strctural_defaults ) ? '1.8em' : '1.4em',
-					'--ast-code-block-background'          => ( true === self::astra_check_default_color_typo() ) ? ( $palette_key === 'palette_4' ) ? 'var(--ast-global-color-5)' : '#ECEFF3' : '#EEEEEE',
-					'--ast-comment-inputs-background'      => ( true === self::astra_check_default_color_typo() ) ? '#F9FAFB' : '#FAFAFA',
+					'--ast-container-default-xlg-padding'  => true === $update_customizer_strctural_defaults ? $article_space : '6.67em',
+					'--ast-container-default-lg-padding'   => true === $update_customizer_strctural_defaults ? $article_space : '5.67em',
+					'--ast-container-default-slg-padding'  => true === $update_customizer_strctural_defaults ? '2em' : '4.34em',
+					'--ast-container-default-md-padding'   => true === $update_customizer_strctural_defaults ? $article_space : '3.34em',
+					'--ast-container-default-sm-padding'   => true === $update_customizer_strctural_defaults ? $article_space : '6.67em',
+					'--ast-container-default-xs-padding'   => true === $update_customizer_strctural_defaults ? '2.4em' : '2.4em',
+					'--ast-container-default-xxs-padding'  => true === $update_customizer_strctural_defaults ? '1.8em' : '1.4em',
+					'--ast-code-block-background'          => true === self::astra_check_default_color_typo() ? $is_dark_palette ? 'var(--ast-global-color-5)' : '#ECEFF3' : '#EEEEEE',
+					'--ast-comment-inputs-background'      => true === self::astra_check_default_color_typo() ? '#F9FAFB' : '#FAFAFA',
 					'--ast-normal-container-width'         => $site_content_width . 'px',
 					'--ast-narrow-container-width'         => $narrow_container_max_width . 'px',
 					'--ast-blog-title-font-weight'         => self::astra_4_6_0_compatibility() ? '600' : 'normal',
@@ -586,17 +585,17 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'--ast-global-color-secondary'         => $color_palette_reorganize ? 'var(--ast-global-color-5)' : 'var(--ast-global-color-4)',
 					'--ast-global-color-alternate-background' => $color_palette_reorganize ? 'var(--ast-global-color-6)' : 'var(--ast-global-color-7)',
 					'--ast-global-color-subtle-background' => $color_palette_reorganize ? 'var(--ast-global-color-7)' : 'var(--ast-global-color-6)',
-					'--ast-bg-style-guide'                 => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#F8FAFC',
-					'--ast-shadow-style-guide'             => ( $palette_key === 'palette_4' ) ? '0px 0px 4px 0 #ffffff57' : '0px 0px 4px 0 #00000057',
-					'--ast-global-dark-bg-style'           => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fff',
-					'--ast-global-dark-lfs'                => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fbfbfb',
-					'--ast-widget-bg-color'                => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fafafa',
-					'--ast-wc-container-head-bg-color'     => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fbfbfb',
-					'--ast-title-layout-bg'                => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#eeeeee',
-					'--ast-search-border-color'            => ( $palette_key === 'palette_4' ) ? 'var(--ast-border-color)' : '#e7e7e7',
-					'--ast-lifter-hover-bg'                => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-primary, --ast-global-color-4 )' : '#e6e6e6',
-					'--ast-lifter-hover-bg'                => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-primary, --ast-global-color-4 )' : '#e6e6e6',
-					'--ast-gallery-block-color'            => ( $palette_key === 'palette_4' ) ? 'var(--ast-global-color-2)' : '#000',
+					'--ast-bg-style-guide'                 => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#F8FAFC',
+					'--ast-shadow-style-guide'             => $is_dark_palette ? '0px 0px 4px 0 #ffffff57' : '0px 0px 4px 0 #00000057',
+					'--ast-global-dark-bg-style'           => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fff',
+					'--ast-global-dark-lfs'                => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fbfbfb',
+					'--ast-widget-bg-color'                => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fafafa',
+					'--ast-wc-container-head-bg-color'     => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#fbfbfb',
+					'--ast-title-layout-bg'                => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#eeeeee',
+					'--ast-search-border-color'            => $is_dark_palette ? 'var(--ast-border-color)' : '#e7e7e7',
+					'--ast-lifter-hover-bg'                => $is_dark_palette ? 'var( --ast-global-color-primary, --ast-global-color-4 )' : '#e6e6e6',
+					'--ast-lifter-hover-bg'                => $is_dark_palette ? 'var( --ast-global-color-primary, --ast-global-color-4 )' : '#e6e6e6',
+					'--ast-gallery-block-color'            => $is_dark_palette ? 'var(--ast-global-color-2)' : '#000',
 					'--srfm-color-input-label'             => 'var(--ast-global-color-2)',
 				),
 
@@ -936,9 +935,9 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				);
 
 				$reset_underline_from_anchors = self::unset_builder_elements_underline();
-				$buttons_exclusion_selectors  = $button_styling_improved ? '.ast-single-post .elementor-widget-button .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link' : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-widget-button .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .wp-block-uagb-buttons a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, li.ast-post-filter-single, .ast-single-post .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
+				$buttons_exclusion_selectors  = $button_styling_improved ? '.ast-single-post .elementor-widget-button .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, a.ast-post-filter-single, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link' : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-widget-button .elementor-button, .ast-single-post .entry-content .uagb-tab a, .ast-single-post .entry-content .uagb-ifb-cta a, .ast-single-post .entry-content .wp-block-uagb-buttons a, .ast-single-post .entry-content .uabb-module-content a, .ast-single-post .entry-content .uagb-post-grid a, .ast-single-post .entry-content .uagb-timeline a, .ast-single-post .entry-content .uagb-toc__wrap a, .ast-single-post .entry-content .uagb-taxomony-box a, .ast-single-post .entry-content .woocommerce a, .entry-content .wp-block-latest-posts > li > a, .ast-single-post .entry-content .wp-block-file__button, a.ast-post-filter-single, .ast-single-post .wp-block-buttons .wp-block-button.is-style-outline .wp-block-button__link, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
 
-				$excluding_anchor_selectors = $reset_underline_from_anchors ? $buttons_exclusion_selectors : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-widget-button .elementor-button, li.ast-post-filter-single, .ast-single-post .wp-block-button.is-style-outline .wp-block-button__link, div.ast-custom-button, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
+				$excluding_anchor_selectors = $reset_underline_from_anchors ? $buttons_exclusion_selectors : '.ast-single-post .wp-block-button .wp-block-button__link, .ast-single-post .elementor-widget-button .elementor-button, a.ast-post-filter-single, .ast-single-post .wp-block-button.is-style-outline .wp-block-button__link, div.ast-custom-button, .ast-single-post .ast-comment-content .comment-reply-link, .ast-single-post .ast-comment-content .comment-edit-link';
 
 				if ( class_exists( 'WooCommerce' ) ) {
 					$excluding_anchor_selectors .= ', .entry-content [CLASS*="wc-block"] .wc-block-components-button, .entry-content [CLASS*="wc-block"] .wc-block-components-totals-coupon-link, .entry-content [CLASS*="wc-block"] .wc-block-components-product-name';
@@ -2283,7 +2282,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			// Handle backward compatibility for Elementor Pro heading's margin.
 			if ( defined( 'ELEMENTOR_PRO_VERSION' ) && $elementor_heading_margin_style_comp ) {
-				$elementor_base_css = [];
+				$elementor_base_css = array();
 				$elementor_base_css[' .content-area .elementor-widget-theme-post-content h1, .content-area .elementor-widget-theme-post-content h2, .content-area .elementor-widget-theme-post-content h3, .content-area .elementor-widget-theme-post-content h4, .content-area .elementor-widget-theme-post-content h5, .content-area .elementor-widget-theme-post-content h6'] = array(
 					'margin-top'    => '1.5em',
 					'margin-bottom' => 'calc(0.3em + 10px)',
@@ -2296,7 +2295,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			// Added Check if the tablet alignment is 'align-center'
 			if ( ( isset( $shop_product_alignment['desktop'] ) && 'align-center' === $shop_product_alignment['desktop'] ) && 'shop-page-list-style' !== astra_get_option( 'shop-style' ) ) {
-				$desktop_review_wrapper = [];
+				$desktop_review_wrapper                                = array();
 				$desktop_review_wrapper[' .ast-desktop .review-count'] = array(
 					'margin-left'  => '-40px',
 					'margin-right' => 'auto',
@@ -2307,7 +2306,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			}
 
 			if ( class_exists( 'WooCommerce' ) && ! is_product() ) {
-				$review_rating_style = [];
+				$review_rating_style                   = array();
 				$review_rating_style['.review-rating'] = array(
 					'display'     => 'flex',
 					'align-items' => 'center',
@@ -2320,7 +2319,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 			// Added cover block paragraph tag text color compatibility.
 			if ( has_block( 'core/cover' ) ) {
-				$cover_block_style = [];
+				$cover_block_style = array();
 				$cover_block_style['body .wp-block-cover:not(.has-text-color.has-link-color) p'] = array(
 					'color' => esc_attr( $text_color ),
 				);
@@ -6098,7 +6097,8 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 		public static function astra_default_forms_styling_dynamic_css() {
 			$css                       = '';
 			$enable_site_accessibility = astra_get_option( 'site-accessibility-toggle', false );
-			$palette_key               = Astra_Global_Palette::astra_get_active_global_palette();
+			$is_dark_palette           = Astra_Global_Palette::is_dark_palette();
+
 			$forms_default_styling_css = array(
 				'input[type="text"], input[type="number"], input[type="email"], input[type="url"], input[type="password"], input[type="search"], input[type=reset], input[type=tel], input[type=date], select, textarea' => array(
 					'font-size'     => '16px',
@@ -6118,7 +6118,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'border-width' => '1px',
 					'border-style' => 'solid',
 					'border-color' => 'var(--ast-border-color)',
-					'background'   => 'var( --ast-global-color-secondary, --ast-global-color-5 )', 
+					'background'   => 'var( --ast-global-color-secondary, --ast-global-color-5 )',
 				),
 				'input[type="text"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="password"]:focus, input[type="search"]:focus, input[type=reset]:focus, input[type="tel"]:focus, input[type="date"]:focus, select:focus, textarea:focus' => array(
 					'border-color' => 'var(--ast-global-color-0, #046BD2)',
@@ -6145,7 +6145,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'box-shadow'    => '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
 				),
 				':root'                   => array(
-					'--ast-comment-inputs-background' => ( $palette_key === 'palette_4' ) ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#FFF',
+					'--ast-comment-inputs-background' => $is_dark_palette ? 'var( --ast-global-color-secondary, --ast-global-color-5 )' : '#FFF',
 				),
 				'::placeholder'           => array(
 					'color' => 'var(--ast-form-field-color, #9CA3AF)',
@@ -6312,7 +6312,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 		 * Check version 4.9.0 backward compatibility.
 		 *
 		 * @since 4.9.0
-		 * @return boolean false if it is an existing user, true if not.
+		 * @return bool false if it is an existing user, true if not.
 		 */
 		public static function astra_4_9_0_compatibility() {
 			$astra_settings = astra_get_options();

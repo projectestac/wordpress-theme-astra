@@ -355,6 +355,7 @@ class Astra_Menu {
 			'astra_cta_btn_url'       => ASTRA_THEME_ORG_VERSION ? astra_get_pro_url( '/pricing/', 'free-theme', 'dashboard', 'unlock-pro-features-CTA' ) : 'https://woocommerce.com/products/astra-pro/',
 			/** @psalm-suppress TypeDoesNotContainType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			'plugin_configuring_text' => esc_html__( 'Configuring', 'astra' ),
+			'bsfUsageTrackingUrl'     => 'https://store.brainstormforce.com/usage-tracking/?utm_source=astra&utm_medium=dashboard&utm_campaign=usage_tracking',
 		);
 
 		$this->settings_app_scripts( apply_filters( 'astra_react_admin_localize', $localize ) );
@@ -845,7 +846,7 @@ class Astra_Menu {
 			'activations' => '10,00,000+',
 			'logoPath'    => array(
 				'internal_icon' => false,
-				'icon_path'     => 'https://ps.w.org/ultimate-addons-for-gutenberg/assets/icon.svg',
+				'icon_path'     => 'https://ps.w.org/ultimate-addons-for-gutenberg/assets/icon-256x256.gif',
 			),
 		);
 
@@ -965,7 +966,7 @@ class Astra_Menu {
 					'redirection' => admin_url( 'options-general.php?page=spectra' ),
 					'logoPath'    => array(
 						'internal_icon' => false,
-						'icon_path'     => 'https://ps.w.org/ultimate-addons-for-gutenberg/assets/icon.svg',
+						'icon_path'     => 'https://ps.w.org/ultimate-addons-for-gutenberg/assets/icon-256x256.gif',
 					),
 				),
 				array(
@@ -1048,7 +1049,7 @@ class Astra_Menu {
 					'redirection' => admin_url( 'options-general.php?page=spectra' ),
 					'logoPath'    => array(
 						'internal_icon' => false,
-						'icon_path'     => 'https://ps.w.org/ultimate-addons-for-gutenberg/assets/icon.svg',
+						'icon_path'     => 'https://ps.w.org/ultimate-addons-for-gutenberg/assets/icon-256x256.gif',
 					),
 				),
 				array(

@@ -437,7 +437,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 	                    			return \'&#\'+i.charCodeAt(0)+\';\';
 								});
 	                    	desc.remove();
-	                    	li_wrapper.append(" <i class=\'ast-control-tooltip dashicons dashicons-editor-help\'data-title=\'" + tooltip +"\'></i><span class=\'ast-dashicons-custom-tooltip\'data-title=\'" + tooltip + "\'><span>");
+	                    	li_wrapper.append(" <i class=\'ast-control-tooltip dashicons dashicons-editor-help\'data-title=\'" + tooltip +"\'></i><span class=\'ast-tooltip\'data-title=\'" + tooltip + "\'><span>");
 	                	}
 	            	});
 	        	});';
@@ -582,6 +582,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 
 					break;
 				case 'ast-settings-group':
+				case 'ast-multiselect-checkbox-group':
 					$config = array();
 
 					if ( isset( self::$group_configs[ $configuration['name'] ]['tabs'] ) ) {
@@ -741,7 +742,15 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			$parent           = astra_get_prop( $config, 'parent' );
 			$sub_control_name = ASTRA_THEME_SETTINGS . '[' . $name . ']';
 
-			$ignore_controls = array( 'ast-settings-group', 'ast-sortable', 'ast-radio-image', 'ast-slider', 'ast-responsive-slider', 'ast-section-toggle' );
+			$ignore_controls = array(
+				'ast-settings-group',
+				'ast-multiselect-checkbox-group',
+				'ast-sortable',
+				'ast-radio-image',
+				'ast-slider',
+				'ast-responsive-slider',
+				'ast-section-toggle',
+			);
 
 			$sanitize_callback = in_array( $config['control'], $ignore_controls, true ) ? false : astra_get_prop( $config, 'sanitize_callback', Astra_Customizer_Control_Base::get_sanitize_call( astra_get_prop( $config, 'control' ) ) );
 
@@ -813,7 +822,15 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 			unset( $config['type'] );
 			$name = astra_get_prop( $config, 'name' );
 
-			$ignore_controls = array( 'ast-settings-group', 'ast-sortable', 'ast-radio-image', 'ast-slider', 'ast-responsive-slider', 'ast-section-toggle' );
+			$ignore_controls = array(
+				'ast-settings-group',
+				'ast-multiselect-checkbox-group',
+				'ast-sortable',
+				'ast-radio-image',
+				'ast-slider',
+				'ast-responsive-slider',
+				'ast-section-toggle',
+			);
 
 			if ( ! isset( $config['control'] ) ) {
 				return;
@@ -1846,7 +1863,7 @@ if ( ! class_exists( 'Astra_Customizer' ) ) {
 				'improved_button_selector'             => Astra_Dynamic_CSS::astra_4_6_4_compatibility() ? ', .ast-single-post .entry-content .wp-block-button .wp-block-button__link, .ast-single-post .entry-content .wp-block-search .wp-block-search__button, body .entry-content .wp-block-file .wp-block-file__button' : '',
 				'tablet_breakpoint'                    => astra_get_tablet_breakpoint(),
 				'mobile_breakpoint'                    => astra_get_mobile_breakpoint(),
-				'palette_key'                          => Astra_Global_Palette::astra_get_active_global_palette(),
+				'is_dark_palette'                      => Astra_Global_Palette::is_dark_palette(),
 			);
 
 			wp_localize_script( 'astra-customizer-preview-js', 'astraCustomizer', $localize_array );
