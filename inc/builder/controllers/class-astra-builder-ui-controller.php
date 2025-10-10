@@ -290,11 +290,13 @@ if ( ! class_exists( 'Astra_Builder_UI_Controller' ) ) {
                     // XTEC ************ MODIFICAT - Show logo in mobile view.
                     // 2025.09.22 @corentin.robin
 
-                    $custom_logo_id = get_theme_mod('custom_logo');
-                    if ($custom_logo_id) {
-                        $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
-                        if ($logo) {
-                            echo '<img src="' . esc_url($logo[0]) . '" alt="' . esc_attr(get_bloginfo('name')) . '" class="astra-mobile-site-logo" />';
+                    if (!get_option('astra_nodes_use_vanilla_astra')) {
+                        $custom_logo_id = get_theme_mod('custom_logo');
+                        if ($custom_logo_id) {
+                            $logo = wp_get_attachment_image_src($custom_logo_id, 'full');
+                            if ($logo) {
+                                echo '<img src="' . esc_url($logo[0]) . '" alt="' . esc_attr(get_bloginfo('name')) . '" class="astra-mobile-site-logo" />';
+                            }
                         }
                     }
 
